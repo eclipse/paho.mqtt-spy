@@ -1,0 +1,208 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>pl.baczkowicz.spy</groupId>
+	<artifactId>spy-common</artifactId>
+	<version>0.0.3</version>
+
+	<name>spy-common</name>
+	<url>http://kamilfb.github.io/mq-spy/</url>
+
+	<scm>
+		<connection>scm:git:../.git</connection>
+		<url>../.git</url>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.number>${buildNumber}</project.build.number>
+
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+	
+	<dependencies>
+	
+		<!--=== COMMON -->
+				
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		
+		<!--=== SSL/TLS/certificates -->		
+		
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.52</version>
+		</dependency>
+	
+		<!--=== CODECS === -->
+				
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
+	
+		<!--=== LOGGING === -->
+				
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.7</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.7</version>
+		</dependency>
+		
+		<!--=== SCHEMAS/JAXB === -->
+		
+	    <dependency>
+	      <groupId>org.jvnet.jaxb2.maven2</groupId>
+	      <artifactId>maven-jaxb2-plugin</artifactId>
+	      <version>0.9.0</version>
+	      <exclusions>
+	        <exclusion>
+	          <groupId>javax.xml.bind</groupId>
+	          <artifactId>jsr173_api</artifactId>
+	        </exclusion>
+	      </exclusions>
+	    </dependency>
+
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-commons-lang</artifactId>
+			<version>2.4</version>
+		</dependency>	
+			
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>0.9.4</version>
+		</dependency>	
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>	
+	
+	</dependencies>
+	
+	<build>
+		<plugins>
+		
+			<!-- Generate JAXB clases -->			
+	        <plugin>
+	            <groupId>org.jvnet.jaxb2_commons</groupId>
+	            <artifactId>jaxb2-basics</artifactId>
+	            <version>0.9.4</version>
+	        </plugin>       
+			<plugin>
+			    <groupId>org.jvnet.jaxb2.maven2</groupId>
+			    <artifactId>maven-jaxb2-plugin</artifactId>
+			    <version>0.12.0</version>
+			    <executions>						     
+			        
+			        <execution>
+			            <id>spy-common</id>
+			            <phase>generate-resources</phase>
+			            <goals>
+			                <goal>generate</goal>
+			            </goals>
+			            <configuration>
+			            	<extension>true</extension>
+			                <schemaDirectory>src/main/resources/</schemaDirectory>
+			                <schemaIncludes>
+			                	<include>spy-common.xsd</include>
+			                </schemaIncludes>			                 
+			                <generateDirectory>src/main/java/</generateDirectory>
+			                <removeOldOutput>false</removeOldOutput>			               
+			                
+			                <episode>true</episode>
+			                
+			                <args>			                
+						        <arg>-XtoString</arg>
+						        <arg>-Xequals</arg>
+						        <arg>-XhashCode</arg>						        
+                    			<arg>-Xcopyable</arg>	
+                    			<arg>-Xvalue-constructor</arg>				    
+			                </args>						 
+			                <plugins>
+								<plugin>
+									<groupId>org.jvnet.jaxb2_commons</groupId>
+									<artifactId>jaxb2-basics</artifactId>
+									<version>0.9.4</version>
+								</plugin>
+							</plugins>
+			            </configuration>			            			          
+			        </execution>	       
+			        			 
+			    </executions>		
+			    <dependencies>
+	    			<dependency>
+						<groupId>org.jvnet.jaxb2_commons</groupId>
+						<artifactId>jaxb2-value-constructor</artifactId>
+						<version>3.0</version>
+					</dependency>
+			    </dependencies>	    
+			</plugin> 
+		
+			<plugin>
+	           <groupId>com.google.code.maven-replacer-plugin</groupId>
+	           <artifactId>replacer</artifactId>
+	           <version>1.5.3</version>	          
+	           <executions>
+	               <execution>
+	               		<id>replace</id>
+	                   <phase>prepare-package</phase>
+	                   <goals>
+	                       <goal>replace</goal>
+	                   </goals>        	                             
+	               </execution>
+	           </executions>
+	           <configuration>
+	           		<basedir>src/main/java</basedir>
+                    <includes>
+						<include>pl/baczkowicz/spy/common/generated/**/*.java</include>
+                    </includes>
+                    <replacements>   
+                        <replacement>
+                            <token>//${line.separator}// This file was generated by the JavaTM</token>
+                            <value>//
+// Copyright (c) ${maven.build.timestamp} Kamil Baczkowicz
+//
+// CSOFF: a.*
+// This file was generated by the JavaTM</value>
+                        </replacement>
+                        <replacement>
+                            <token>^ \*/</token>
+                            <value> */
+@SuppressWarnings("all")</value>
+                        </replacement>                                        
+                        <replacement>
+                            <token>^// Generated on.*$</token>
+                            <value>// Timestamp removed by maven-replacer-plugin to avoid detecting changes - see the project POM for details</value>
+                        </replacement>
+                    </replacements>
+                    <regex>true</regex>
+                    <quiet>false</quiet>
+                    <regexFlags>
+                        <regexFlag>MULTILINE</regexFlag>
+                    </regexFlags>
+                </configuration>
+            </plugin>
+
+		</plugins>
+		
+	</build>
+	
+</project>

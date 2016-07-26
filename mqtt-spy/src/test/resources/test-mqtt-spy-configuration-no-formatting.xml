@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config:MqttSpyConfiguration
+   xmlns:config="http://baczkowicz.pl/mqtt-spy-configuration"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+   <Connectivity>
+
+        <Connection>
+                <Name>user1@localhost</Name>
+                <ServerURI>tcp://127.0.0.1:1883</ServerURI>
+                <ClientID>user1</ClientID>
+                <AutoConnect>false</AutoConnect>
+        </Connection>
+
+        <Connection>
+                <Name>user2@localhost</Name>
+                <ServerURI>tcp://localhost</ServerURI>
+                <ClientID>user2</ClientID>
+                <AutoConnect>true</AutoConnect>
+                <CleanSession>true</CleanSession>
+                <ConnectionTimeout>5</ConnectionTimeout>
+                <KeepAliveInterval>10</KeepAliveInterval>
+
+                <Publication topic="/test3/" />
+                <Publication topic="/pubtest2/"/>
+                <Publication topic="/pubtest3/"/>
+                
+                <Subscription topic="/test1/" />
+                <Subscription topic="/test2/" qos="1" />
+                <Subscription topic="/test3/" qos="0" createTab="true" />
+        </Connection>
+
+   </Connectivity>
+</config:MqttSpyConfiguration>

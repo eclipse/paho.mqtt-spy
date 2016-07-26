@@ -1,0 +1,15 @@
+<jxb:bindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	version="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<jxb:globalBindings>
+		<jxb:serializable uid="1" />
+	</jxb:globalBindings>
+
+	<jxb:bindings namespace="http://baczkowicz.pl/spy/common"
+		schemaLocation="spy-common.xsd">
+		<jxb:schemaBindings>
+			<jxb:package name="pl.baczkowicz.spy.common.generated" />
+		</jxb:schemaBindings>
+	</jxb:bindings>
+
+</jxb:bindings>

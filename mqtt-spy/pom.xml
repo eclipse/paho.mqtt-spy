@@ -1,0 +1,404 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>pl.baczkowicz.mqttspy</groupId>
+	<artifactId>mqtt-spy</artifactId>
+	<version>0.4.0-beta</version>
+	<packaging>jar</packaging>
+
+	<name>mqtt-spy</name>
+	<url>http://kamilfb.github.io/mqtt-spy/</url>
+	
+	<scm>
+    	<connection>scm:git:../.git</connection>
+        <url>../.git</url>
+    </scm>
+    
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.number>${buildNumber}</project.build.number>
+		
+		<timestamp>${maven.build.timestamp}</timestamp>
+   		<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+   		<maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>   		
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>gillius-org</id>
+			<name>Gillius.org Maven Repository</name>
+			<url>http://www.gillius.org/maven2</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>pl.baczkowicz.spy</groupId>
+			<artifactId>spy-common</artifactId>
+			<version>0.0.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>pl.baczkowicz.spy</groupId>
+			<artifactId>spy-common-ui</artifactId>
+			<version>0.0.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>pl.baczkowicz.mqttspy</groupId>
+			<artifactId>mqtt-spy-common</artifactId>
+			<version>0.0.16</version>			 
+			<exclusions>
+				<exclusion>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-artifact</artifactId>
+			<version>3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.gillius</groupId>
+			<artifactId>jfxutils</artifactId>
+			<version>0.4-SNAPSHOT</version>
+		</dependency>
+
+		<!--=== TEST === -->
+	
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+	
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.1_3</version>
+			<scope>test</scope>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.objenesis</groupId>
+			<artifactId>objenesis</artifactId>
+			<version>1.0</version>
+			<scope>test</scope>
+		</dependency>   
+
+	</dependencies>
+
+	<build>
+	
+		<finalName>${project.artifactId}-${project.version}-b${buildNumber}</finalName>
+		 
+		<!-- Populate version number in the properties file -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/mqtt-spy.properties</include>
+				</includes>
+			</resource>
+			
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/mqtt-spy.properties</exclude>
+				</excludes>
+			</resource>
+			
+		</resources>
+		
+		<plugins>
+		
+			<!-- Exclude files -->
+		    <plugin>
+		        <artifactId>maven-jar-plugin</artifactId>
+		        <executions>
+		            <execution> 
+		            	<id>package-client</id>
+		                <phase>package</phase>
+		                <configuration>
+		                    <classifier>exclusions</classifier>
+		                    <excludes>
+		                        <exclude>**/log4j.properties</exclude>
+		                    </excludes>
+		                </configuration>
+		                <goals>
+		                    <goal>jar</goal>
+		                </goals>
+		            </execution>
+		        </executions>
+		    </plugin>
+			
+			<!-- Create a runnable jar with all dependencies -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>pl.baczkowicz.mqttspy.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+ 
+ 			<!-- Generate build number -->
+ 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>true</doCheck>
+					<doUpdate>true</doUpdate>
+					<buildNumberPropertiesFileLocation>buildNumber.properties</buildNumberPropertiesFileLocation>					
+					<format>{0,number,###}</format>
+					<items>
+						<item>buildNumber</item>
+					</items>					
+				</configuration>
+			</plugin>
+
+			<!-- Generate JAXB clases -->			
+	        <plugin>
+	            <groupId>org.jvnet.jaxb2_commons</groupId>
+	            <artifactId>jaxb2-basics</artifactId>
+	            <version>0.9.4</version>
+	        </plugin>        	
+			<plugin>
+			    <groupId>org.jvnet.jaxb2.maven2</groupId>
+			    <artifactId>maven-jaxb2-plugin</artifactId>
+			    <version>0.12.0</version>
+			    <executions>
+			        <execution>
+			            <id>configuration</id>
+			            <phase>generate-resources</phase>
+			            <goals>
+			                <goal>generate</goal>
+			            </goals>
+			            <configuration>
+			                <schemaDirectory>src/main/resources/</schemaDirectory>
+			                <schemaIncludes>
+			                    <include>mqtt-spy-configuration.xsd</include>
+			                </schemaIncludes>			                 
+			                <generateDirectory>src/main/java/</generateDirectory>			                
+			                <generatePackage>pl.baczkowicz.mqttspy.configuration.generated</generatePackage>
+			                <removeOldOutput>false</removeOldOutput>
+			                
+			                <catalogs>
+			                	<catalog>
+			                		<dependencyResource>
+			                			<groupId>pl.baczkowicz.mqttspy</groupId>
+			                			<artifactId>mqtt-spy-common</artifactId>
+			                			<resource>mqtt-spy-common.catalog</resource>
+			                		</dependencyResource>
+			                	</catalog>
+			                	<catalog>
+			                		<dependencyResource>
+			                			<groupId>pl.baczkowicz.spy</groupId>
+			                			<artifactId>spy-common</artifactId>
+			                			<resource>spy-common.catalog</resource>
+			                		</dependencyResource>
+			                	</catalog>
+			                </catalogs>
+			                
+			                <episode>false</episode>
+			                
+			                <episodes>
+			                	<episode>
+			                		<groupId>pl.baczkowicz.mqttspy</groupId>
+			                		<artifactId>mqtt-spy-common</artifactId>
+			                	</episode>
+			                	<episode>
+			                		<groupId>pl.baczkowicz.spy</groupId>
+			                		<artifactId>spy-common</artifactId>
+			                	</episode>
+			                </episodes>
+			                
+			                <args>			                
+						        <arg>-XtoString</arg>
+						        <arg>-Xequals</arg>
+						        <arg>-XhashCode</arg>						        
+                    			<arg>-Xcopyable</arg>		
+                    			<arg>-Xvalue-constructor</arg>			    
+			                </args>						 
+			                <plugins>
+								<plugin>
+									<groupId>org.jvnet.jaxb2_commons</groupId>
+									<artifactId>jaxb2-basics</artifactId>
+									<version>0.9.4</version>
+								</plugin>
+							</plugins>
+			            </configuration>			            			          
+			        </execution>			       
+			        
+			        <execution>
+			            <id>versions</id>
+			            <phase>generate-resources</phase>
+			            <goals>
+			                <goal>generate</goal>
+			            </goals>
+			            <configuration>
+			                <schemaDirectory>src/main/resources/</schemaDirectory>
+			                <schemaIncludes>
+			                    <include>mqtt-spy-versions.xsd</include>
+			                </schemaIncludes>			                 
+			                <generateDirectory>src/main/java/</generateDirectory>			                
+			                <generatePackage>pl.baczkowicz.mqttspy.versions.generated</generatePackage>
+			                <removeOldOutput>false</removeOldOutput>
+			                <args>			                
+						        <arg>-XtoString</arg>
+						        <arg>-Xequals</arg>
+						        <arg>-XhashCode</arg>						        
+                    			<arg>-Xcopyable</arg>					    
+			                </args>						 
+			                <plugins>
+								<plugin>
+									<groupId>org.jvnet.jaxb2_commons</groupId>
+									<artifactId>jaxb2-basics</artifactId>
+									<version>0.9.4</version>
+								</plugin>
+							</plugins>
+			            </configuration>			            			          
+			        </execution>
+			        
+			        <execution>
+			            <id>stats</id>
+			            <phase>generate-resources</phase>
+			            <goals>
+			                <goal>generate</goal>
+			            </goals>
+			            <configuration>
+			                <schemaDirectory>src/main/resources/</schemaDirectory>
+			                <schemaIncludes>
+			                    <include>mqtt-spy-stats.xsd</include>
+			                </schemaIncludes>			                 
+			                <generateDirectory>src/main/java/</generateDirectory>			                
+			                <generatePackage>pl.baczkowicz.mqttspy.stats.generated</generatePackage>
+			                <removeOldOutput>false</removeOldOutput>
+			                <args>			                
+						        <arg>-XtoString</arg>
+						        <arg>-Xequals</arg>
+						        <arg>-XhashCode</arg>						        
+                    			<arg>-Xcopyable</arg>					    
+			                </args>						 
+			                <plugins>
+								<plugin>
+									<groupId>org.jvnet.jaxb2_commons</groupId>
+									<artifactId>jaxb2-basics</artifactId>
+									<version>0.9.4</version>
+								</plugin>
+							</plugins>
+			            </configuration>			            			          
+			        </execution>
+			    </executions>	
+			    <dependencies>
+	    			<dependency>
+						<groupId>org.jvnet.jaxb2_commons</groupId>
+						<artifactId>jaxb2-value-constructor</artifactId>
+						<version>3.0</version>
+					</dependency>
+			    </dependencies>	    		    
+			</plugin> 
+			
+			<plugin>
+	           <groupId>com.google.code.maven-replacer-plugin</groupId>
+	           <artifactId>replacer</artifactId>
+	           <version>1.5.3</version>	          
+	           <executions>
+	               <execution>
+	               		<id>replace</id>
+	                   <phase>prepare-package</phase>
+	                   <goals>
+	                       <goal>replace</goal>
+	                   </goals>        	                             
+	               </execution>
+	           </executions>
+	           <configuration>
+	           		<basedir>src/main/java</basedir>
+                    <includes>
+						<include>pl/baczkowicz/mqttspy/configuration/generated/**/*.java</include>
+						<include>pl/baczkowicz/mqttspy/stats/generated/**/*.java</include>
+						<include>pl/baczkowicz/mqttspy/versions/generated/**/*.java</include>
+                    </includes>
+                    <replacements>   
+                        <replacement>
+                            <token>//${line.separator}// This file was generated by the JavaTM</token>
+                            <value>//
+// Copyright (c) ${maven.build.timestamp} Kamil Baczkowicz
+//
+// CSOFF: a.*
+// This file was generated by the JavaTM</value>
+                        </replacement>
+                        <replacement>
+                            <token>^ \*/</token>
+                            <value> */
+@SuppressWarnings("all")</value>
+                        </replacement>                                        
+                        <replacement>
+                            <token>^// Generated on.*$</token>
+                            <value>// Timestamp removed by maven-replacer-plugin to avoid detecting changes - see the project POM for details</value>
+                        </replacement>
+                    </replacements>
+                    <regex>true</regex>
+                    <quiet>false</quiet>
+                    <regexFlags>
+                        <regexFlag>MULTILINE</regexFlag>
+                    </regexFlags>
+                </configuration>
+            </plugin>
+			 
+		</plugins>
+		
+	</build>
+
+</project>

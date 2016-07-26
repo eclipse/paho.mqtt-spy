@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			xmlns:config="http://baczkowicz.pl/mqtt-spy-configuration"
+			xmlns:spycommon="http://baczkowicz.pl/spy/common"
+			xmlns:mqttspycommon="http://baczkowicz.pl/mqtt-spy/common"
+			targetNamespace="http://baczkowicz.pl/mqtt-spy-configuration">
+
+	<xs:import namespace="http://baczkowicz.pl/spy/common" />
+	<xs:import namespace="http://baczkowicz.pl/mqtt-spy/common" />
+
+	<xs:complexType name="MqttSpyConfiguration">
+		<xs:sequence>
+			<xs:element name="ConnectionGroups" type="spycommon:ConnectionGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="Connectivity" type="config:Connectivity" />
+			<xs:element name="Formatting" 	type="spycommon:Formatting"	minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- ==================== -->
+	<!-- === COMMON ========= -->
+	<!-- ==================== -->
+	<xs:complexType name="BaseMqttMessage">
+		<xs:sequence>
+			<xs:element name="Topic" 				type="xs:string" />
+			<xs:element name="Payload" 				type="xs:string" />
+			<xs:element name="QoS" 					type="mqttspycommon:qos"/>
+			<xs:element name="Retained" 			type="xs:boolean"/>				
+		</xs:sequence>
+	</xs:complexType>		
+	
+	<!-- ================== -->
+	<!-- === UI =========== -->
+	<!-- ================== -->
+	<xs:complexType name="UI">
+		<xs:sequence>
+			
+		</xs:sequence>
+	</xs:complexType>
+			
+	<!-- ==================== -->
+	<!-- === CONNECTIVITY === -->
+	<!-- ==================== -->
+	
+	<xs:complexType name="Connectivity">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">			
+			<xs:element name="Connection" 	type="config:UserInterfaceMqttConnectionDetailsV010" />
+			<xs:element name="ConnectionV2" type="config:UserInterfaceMqttConnectionDetails" />
+		</xs:choice>
+	</xs:complexType>
+		
+	<xs:complexType name="UserInterfaceMqttConnectionDetails">
+		<xs:complexContent>
+			<xs:extension base="mqttspycommon:MqttConnectionDetails">
+				<xs:sequence>										
+		        	<xs:element name="Publication" 			type="mqttspycommon:PublicationDetails" 	minOccurs="0" maxOccurs="unbounded" />
+		        	<xs:element name="Subscription"			type="config:TabbedSubscriptionDetails" 	minOccurs="0" maxOccurs="unbounded" />
+		        	
+		        	<xs:element name="UserAuthentication" 	type="config:UserAuthenticationOptions" 	minOccurs="0" maxOccurs="1" />
+		        	<xs:element name="AutoOpen" 			type="xs:boolean" 			minOccurs="0" maxOccurs="1" default="true" />
+					<xs:element name="AutoConnect" 			type="xs:boolean" 			minOccurs="0" maxOccurs="1" default="false" />
+					<xs:element name="AutoSubscribe" 		type="xs:boolean" 			minOccurs="0" maxOccurs="1" default="false" />
+			
+		        	<xs:element name="Formatter" 			type="xs:IDREF" 			minOccurs="0" maxOccurs="1" />
+					<xs:element name="MinMessagesStoredPerTopic" 	type="xs:int" 		minOccurs="0" maxOccurs="1" />
+					<xs:element name="MaxMessagesStored" 	type="xs:int" 				minOccurs="0" maxOccurs="1" />
+								
+		        	<xs:element name="PublicationScripts" 	type="xs:string" 						minOccurs="0" maxOccurs="1" />
+		        	<xs:element name="SearchScripts" 		type="xs:string" 						minOccurs="0" maxOccurs="1" />
+		        	<xs:element name="BackgroundScript"		type="spycommon:ScriptDetails" 			minOccurs="0" maxOccurs="unbounded" />
+		        	
+		        	<xs:element name="MessageLog"			type="mqttspycommon:MessageLog" 		minOccurs="0" maxOccurs="1" />		        	
+				</xs:sequence>	
+	        </xs:extension>		
+        </xs:complexContent>
+	</xs:complexType>
+		
+	<xs:complexType name="UserInterfaceMqttConnectionDetailsV010">
+		<xs:complexContent>
+			<xs:extension base="mqttspycommon:ConnectionDetails">
+				<xs:sequence>
+					<!-- <xs:element name="Name" 				type="xs:string" /> -->
+					<xs:element name="ServerURI" 			type="xs:string" />
+					<xs:element name="ClientID" 			type="xs:string" />
+					
+					<xs:element name="UserAuthentication" 	type="config:UserAuthentication" 	minOccurs="0" maxOccurs="1" />
+					<xs:element name="LastWillAndTestament" type="config:BaseMqttMessage" 		minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="AutoOpen" 			type="xs:boolean" 			minOccurs="0" maxOccurs="1" default="true" />
+					<xs:element name="AutoConnect" 			type="xs:boolean" 			minOccurs="0" maxOccurs="1" default="false" />
+					<xs:element name="CleanSession" 		type="xs:boolean" 			minOccurs="0" maxOccurs="1" />
+					<xs:element name="ConnectionTimeout" 	type="xs:int" 				minOccurs="0" maxOccurs="1" />
+					<xs:element name="KeepAliveInterval" 	type="xs:int" 				minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="Formatter" 			type="xs:IDREF" 			minOccurs="0" maxOccurs="1" />
+					<xs:element name="MinMessagesStoredPerTopic" 	type="xs:int" 		minOccurs="0" maxOccurs="1" />
+					<xs:element name="MaxMessagesStored" 	type="xs:int" 				minOccurs="0" maxOccurs="1" />
+					<xs:element name="PublicationScripts" 	type="xs:string" 			minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="Publication" 			type="mqttspycommon:PublicationDetails" 	minOccurs="0" maxOccurs="unbounded" />	
+					<xs:element name="Subscription" 		type="config:TabbedSubscriptionDetails" 	minOccurs="0" maxOccurs="unbounded" />	
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="UserAuthenticationOptions">
+		<xs:sequence>
+        	<xs:element name="AskForUsername" 		type="xs:boolean"/>
+			<xs:element name="AskForPassword" 		type="xs:boolean"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="UserAuthentication">
+		<xs:complexContent>
+			<xs:extension base="mqttspycommon:UserCredentials">
+				<xs:sequence>
+		        	<xs:element name="AskForUsername" 		type="xs:boolean"/>
+					<xs:element name="AskForPassword" 		type="xs:boolean"/>
+				</xs:sequence>	
+	        </xs:extension>		
+        </xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="TabbedSubscriptionDetails">
+		<xs:complexContent>
+			<xs:extension base="mqttspycommon:SubscriptionDetails">
+				<xs:attribute 	name="createTab" 			type="xs:boolean" default="false" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- ================ -->
+	<!-- === ELEMENTS === -->
+	<!-- ================ -->
+
+	<xs:element name="MqttSpyConfiguration" type="config:MqttSpyConfiguration" />
+
+</xs:schema>

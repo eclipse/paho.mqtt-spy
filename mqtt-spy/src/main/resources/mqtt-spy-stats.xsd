@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			xmlns:stats="http://baczkowicz.pl/mqtt-spy-stats"
+			targetNamespace="http://baczkowicz.pl/mqtt-spy-stats">
+
+	<xs:complexType name="MqttSpyStats">
+		<xs:sequence>			
+			<xs:element name="ID" 					type="xs:long" />
+			<xs:element name="StartDate" 			type="xs:dateTime" />
+			<xs:element name="Connections" 			type="xs:long" />
+			<xs:element name="Subscriptions" 		type="xs:long" />
+			<xs:element name="MessagesPublished" 	type="xs:long" />
+			<xs:element name="MessagesReceived" 	type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- ================ -->
+	<!-- === ELEMENTS === -->
+	<!-- ================ -->
+
+	<xs:element name="MqttSpyStats" type="stats:MqttSpyStats" />
+
+</xs:schema>

@@ -1,0 +1,1 @@
+PUBLIC "http://baczkowicz.pl/mqtt-spy/daemon/configuration" "maven:pl.baczkowicz.mqttspy:mqtt-spy-daemon!/mqtt-spy-daemon-configuration.xsd"

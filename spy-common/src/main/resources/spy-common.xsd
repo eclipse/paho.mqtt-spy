@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2015 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php.
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			xmlns:spycommon="http://baczkowicz.pl/spy/common"
+			targetNamespace="http://baczkowicz.pl/spy/common">
+			
+	<xs:complexType name="Property">
+		<xs:sequence>
+       		<xs:element name="Name" 	type="xs:string" 	/>
+       		<xs:element name="Value"	type="xs:string" 	/>
+   		</xs:sequence>
+	</xs:complexType>		
+	
+	<!-- ==================== -->
+	<!-- === CONNECTIVITY === -->
+	<!-- ==================== -->
+
+	<xs:complexType name="ConnectionGroup">
+		<xs:sequence>			
+			<xs:element name="ID" 			type="xs:ID" />
+			<xs:element name="Name" 		type="xs:string" />		
+			<xs:element name="Subgroups" 	type="spycommon:ConnectionGroupReference" 	minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="Connections" 	type="spycommon:ConnectionReference" 		minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>	
+	
+	<xs:complexType name="ConnectionGroupReference">
+		<xs:sequence>			
+			<xs:element name="Reference" 			type="xs:IDREF" />
+		</xs:sequence>
+	</xs:complexType>	
+	
+	<xs:complexType name="ConnectionReference">
+		<xs:sequence>			
+			<xs:element name="Reference" 			type="xs:IDREF" />
+		</xs:sequence>
+	</xs:complexType>	
+	
+	<xs:simpleType name="ProtocolEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MQTT" />
+			<xs:enumeration value="JMS" />
+		</xs:restriction>
+	</xs:simpleType>	
+	
+	<xs:simpleType name="SecureSocketModeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DISABLED" />
+			<xs:enumeration value="BASIC" />
+			<xs:enumeration value="SERVER_ONLY" />		
+			<xs:enumeration value="SERVER_AND_CLIENT" />
+			<xs:enumeration value="SERVER_KEYSTORE" />
+			<xs:enumeration value="SERVER_AND_CLIENT_KEYSTORES" />
+			<xs:enumeration value="PROPERTIES" />
+		</xs:restriction>
+	</xs:simpleType>
+				
+	<xs:simpleType name="RunningMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CONTINUOUS" />
+			<xs:enumeration value="SCRIPTS_ONLY" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- ==================== -->
+	<!-- === TASKS ========== -->
+	<!-- ==================== -->
+	
+	<xs:complexType name="Task">		
+		<!-- TODO
+		<xs:attribute 	name="name" 				type="xs:string" />
+		-->
+		<xs:attribute 	name="autoStart"			type="xs:boolean" />
+		<xs:attribute 	name="repeat"				type="xs:boolean" />
+	</xs:complexType>
+	
+	<xs:complexType name="ScriptDetails">
+		<xs:complexContent>
+			<xs:extension base="spycommon:Task">
+				<xs:choice>
+					<xs:element name="File" 				type="xs:string" />
+					<!-- TODO
+					<xs:element name="Inline" 				type="xs:string" />
+					 -->
+				</xs:choice>
+			 </xs:extension>		
+        </xs:complexContent>
+	</xs:complexType>
+	
+	<!-- ==================== -->
+	<!-- === TEST CASES ===== -->
+	<!-- ==================== -->
+	
+	<xs:complexType name="TestCasesSettings">
+		<xs:sequence>
+			<xs:element name="Location" 				type="xs:string" />
+			<xs:element name="ExportResults"			type="xs:boolean" />
+			<xs:element name="StepInterval"				type="xs:long" 		minOccurs="0" maxOccurs="1"/>
+			<xs:element name="RecordRepeatedSteps"		type="xs:boolean" 	minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+ 	
+	<!-- ================== -->
+	<!-- === FORMATTING === -->
+	<!-- ================== -->
+	
+	<xs:complexType name="Formatting">
+		<xs:sequence>
+			<xs:element name="Formatter" type="spycommon:FormatterDetails" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="FormatterDetails">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="ID" type="xs:ID" />
+			
+			<!-- Functions are executed in the order they are defined, so it is possible to perform multiple formatting functions -->
+			<xs:element name="Function" type="spycommon:FormatterFunction" minOccurs="1" maxOccurs="unbounded" />		
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="FormatterFunction">
+		<xs:choice>			
+			<xs:element name="Conversion" 			type="spycommon:ConversionFormatterDetails" />
+			<xs:element name="SubstringConversion" 	type="spycommon:SubstringConversionFormatterDetails" />
+			<xs:element name="SubstringReplace" 	type="spycommon:SubstringReplaceFormatterDetails" />
+			<xs:element name="SubstringExtract" 	type="spycommon:SubstringExtractFormatterDetails" />
+			<xs:element name="CharacterReplace" 	type="spycommon:CharacterReplaceFormatterDetails" />
+			<xs:element name="ScriptExecution" 		type="spycommon:ScriptExecutionDetails" />
+		</xs:choice>
+	</xs:complexType>
+			
+	<xs:complexType name="ScriptExecutionDetails">
+		<xs:sequence>
+			<xs:element name="InlineScript" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="SubstringFormatterDetails" abstract="true" >
+		<xs:sequence>
+			<xs:element name="StartTag" type="xs:string" />
+			<xs:element name="EndTag" 	type="xs:string" />
+			<xs:element name="KeepTags" type="xs:boolean" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Simple format conversion, as available in the GUI -->
+	<xs:complexType name="ConversionFormatterDetails" >
+		<xs:sequence>
+			<xs:element name="Format" type="spycommon:ConversionMethod" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Replaces the defined substring using the defined formatter -->
+	<xs:complexType name="CharacterReplaceFormatterDetails">
+		<xs:complexContent>
+    		<xs:extension base="spycommon:ConversionFormatterDetails">
+      			<xs:sequence>
+      				<xs:element name="CharacterRangeFrom" type="xs:int" />
+					<xs:element name="CharacterRangeTo"   type="xs:int" />
+					<xs:element name="WrapCharacter"   	  type="xs:string" minOccurs="0" />
+      			</xs:sequence>
+    		</xs:extension>
+  		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- Replaces the defined substring using the defined formatter -->
+	<xs:complexType name="SubstringConversionFormatterDetails">
+		<xs:complexContent>
+    		<xs:extension base="spycommon:SubstringFormatterDetails">
+      			<xs:sequence>
+        			<xs:element name="Format" type="spycommon:ConversionMethod" />
+      			</xs:sequence>
+    		</xs:extension>
+  		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- Replaces the defined substring with the given value -->
+	<xs:complexType name="SubstringReplaceFormatterDetails">
+		<xs:complexContent>
+    		<xs:extension base="spycommon:SubstringFormatterDetails">
+      			<xs:sequence>
+        			<xs:element name="ReplaceWith" type="xs:string" />
+      			</xs:sequence>
+    		</xs:extension>
+  		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- Extracts the defined substring from the whole message -->
+	<xs:complexType name="SubstringExtractFormatterDetails">
+		<xs:complexContent>
+    		<xs:extension base="spycommon:SubstringFormatterDetails" />
+  		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:simpleType name="ConversionMethod">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Plain"></xs:enumeration>
+			<xs:enumeration value="HexDecode"></xs:enumeration>
+			<xs:enumeration value="HexEncode"></xs:enumeration>
+			<xs:enumeration value="Base64Decode"></xs:enumeration>
+			<xs:enumeration value="Base64Encode"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+ 	
+</xs:schema>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mqttspydc:MqttSpyDaemonConfiguration xmlns:mqttspydc="http://baczkowicz.pl/mqtt-spy/daemon/configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <Connection>
+  
+	<!-- For details on multiple server URIs see http://www.eclipse.org/paho/files/javadoc/org/eclipse/paho/client/mqttv3/MqttConnectOptions.html#setServerURIs%28java.lang.String[]%29 -->
+	<ServerURI>test.mosquitto.org</ServerURI>
+  			
+	<ClientID>mqtt-spy-daemon</ClientID>
+									
+	<CleanSession>true</CleanSession>
+	<ConnectionTimeout>10</ConnectionTimeout>
+	<KeepAliveInterval>10</KeepAliveInterval>
+			
+	<SSL>
+        <Mode>SERVER_ONLY</Mode>
+        <Protocol>TLSv1.2</Protocol>
+        <CertificateAuthorityFile>/certificates/certificate_authority_files/mosquitto.org.crt</CertificateAuthorityFile>
+       	<ClientCertificateFile></ClientCertificateFile>
+        <ClientKeyFile></ClientKeyFile>
+        <ClientKeyPassword></ClientKeyPassword>
+    </SSL>
+	
+	<ReconnectionSettings>
+		<!-- How long (in ms) to wait after previous connection attempt before trying to connect again -->
+		<RetryInterval>5000</RetryInterval>				
+		<!-- Whether to resubscribe to all topics when the connection is regained -->
+		<Resubscribe>true</Resubscribe>
+	</ReconnectionSettings>
+			
+	<!-- 
+		For binary payloads, change it to XML_WITH_ENCODED_PAYLOAD.
+				
+		To log QoS, Retained flag, connection name or subscription, use:
+		logQos="true" logRetained="true" logConnection="true" logSubscription="true" 
+	-->
+	<MessageLog logBeforeScripts="false">DISABLED</MessageLog>
+
+	<!-- Note: this configuration does nothing apart from establishing a connection and keeping it - used for daemon integration to perform additional actions -->
+	<RunningMode>CONTINUOUS</RunningMode>
+  </Connection>
+  
+</mqttspydc:MqttSpyDaemonConfiguration>

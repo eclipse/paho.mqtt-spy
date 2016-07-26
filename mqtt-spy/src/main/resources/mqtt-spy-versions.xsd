@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			xmlns:versions="http://baczkowicz.pl/mqtt-spy-versions"
+			targetNamespace="http://baczkowicz.pl/mqtt-spy-versions">
+
+	<xs:complexType name="MqttSpyVersions">
+		<xs:sequence>
+			<xs:element name="ReleaseStatuses" 		type="versions:ReleaseStatuses" />
+			<xs:element name="LatestReleases" 		type="versions:LatestReleases" />
+			
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- ======================= -->
+	<!-- === Latest versions === -->
+	<!-- ======================= -->
+	
+	<xs:complexType name="LatestReleases">
+		<xs:sequence>
+			<xs:element name="LatestRelease" 		type="versions:LatestRelease" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+		
+	<xs:complexType name="LatestRelease">
+		<xs:sequence>
+			<xs:element name="Version"				type="xs:string" />
+			<xs:element name="Name"					type="xs:string" />
+			<xs:element name="Date" 				type="xs:date" />
+			<xs:element name="KeyFeatures"			type="xs:string" />
+			<xs:element name="DownloadLocation"		type="xs:string" />			
+		</xs:sequence>		
+	</xs:complexType>
+	
+	<!-- ========================= -->
+	<!-- === Released versions === -->
+	<!-- ========================= -->
+	
+	<xs:complexType name="ReleaseStatuses">
+		<xs:sequence>
+			<xs:element name="ReleaseStatus" 		type="versions:ReleaseStatus" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ReleaseStatus">
+		<xs:sequence>
+			<xs:element name="FromVersion"		type="xs:string" />
+			<xs:element name="ToVersion"		type="xs:string" />
+			<xs:element name="UpdateTitle"		type="xs:string" />
+			<xs:element name="UpdateDetails"	type="xs:string" />
+		    <xs:element name="UpdateStatus"		type="versions:UpdateStatus" />
+		</xs:sequence>		
+	</xs:complexType>	
+	
+	<xs:simpleType name="UpdateStatus">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ON_LATEST"></xs:enumeration>
+			<xs:enumeration value="NEW_AVAILABLE"></xs:enumeration>
+			<xs:enumeration value="UPDATE_RECOMMENDED"></xs:enumeration>
+			<xs:enumeration value="CRITICAL"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- ================ -->
+	<!-- === ELEMENTS === -->
+	<!-- ================ -->
+
+	<xs:element name="MqttSpyVersions" type="versions:MqttSpyVersions" />
+
+</xs:schema>

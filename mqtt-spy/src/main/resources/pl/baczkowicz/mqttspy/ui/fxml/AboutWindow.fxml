@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2015 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="aboutWindow" minHeight="350" minWidth="450" prefHeight="350" prefWidth="550" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.AboutController">
+   <children>
+      <AnchorPane prefHeight="147.0" prefWidth="429.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Label alignment="CENTER" layoutX="32.0" layoutY="46.0" prefHeight="36.0" prefWidth="199.0" text="mqtt-spy">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="logo" fitHeight="96.0" fitWidth="96.0" layoutX="305.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+               <image>
+                  <Image url="/images/large/mqtt-spy-logo.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="versionLabel" alignment="CENTER" layoutX="32.0" layoutY="94.0" prefHeight="16.0" prefWidth="199.0" text="version 0.3.1">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label alignment="TOP_LEFT" layoutX="50.0" layoutY="162.0" prefHeight="36.0" prefWidth="435.0" text="mqtt-spy is an open source utility available under the Eclipse Public License and the Eclipse Distribution License." wrapText="true" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="24.0" />
+      <Label fx:id="projectInfoLabel" alignment="TOP_LEFT" layoutX="50.0" layoutY="300.0" prefHeight="49.0" prefWidth="412.0" text="For more details about the project, wiki, copyright and licensing information see https://github.com/kamilfb/mqtt-spy." wrapText="true" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="24.0" />
+      <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="10.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/small/help-hint.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="28.0" fitWidth="28.0" layoutX="12.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/small/applications-internet.png" />
+         </image>
+      </ImageView>
+      
+      <ProgressIndicator fx:id="progressIndicator" layoutX="10.0" layoutY="208.0" maxHeight="32.0" maxWidth="32.0" />
+      <ImageView fx:id="statusIcon" fitHeight="32.0" fitWidth="32.0" layoutX="10.0" layoutY="209.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/small/button-apply.png" />
+         </image>
+      </ImageView>
+      
+      <Label fx:id="statusLabel" layoutX="50.0" layoutY="208.0" prefHeight="36.0" prefWidth="412.0" text="You are on the latest version! You are on the latest version! You are on the latest version! You are on the latest version!" wrapText="true" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="24.0" />
+      <ImageView fitHeight="28.0" fitWidth="28.0" layoutX="12.0" layoutY="258.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/small/system-run.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="javaLabel" layoutX="50.0" layoutY="254.0" prefHeight="36.0" prefWidth="412.0" text="Java: 1.8.0_66-b12; Operating system: Linux 3.11.3 Java: 1.8.0_66-b12; Operating system: Linux 3.11.3" wrapText="true" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="24.0" />
+   </children>
+</AnchorPane>

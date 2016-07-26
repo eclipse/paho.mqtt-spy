@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php.
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			xmlns:mqttspycommon="http://baczkowicz.pl/mqtt-spy/common"
+			xmlns:spycommon="http://baczkowicz.pl/spy/common"
+			targetNamespace="http://baczkowicz.pl/mqtt-spy/common">
+
+	<xs:import namespace="http://baczkowicz.pl/spy/common" />
+	
+	<!-- ====================== -->
+	<!-- === MESSAGES ========= -->
+	<!-- ====================== -->
+	
+	<xs:complexType name="SimpleMqttMessage">
+		 <xs:simpleContent>
+      		<xs:extension base="xs:string">
+        		<xs:attribute name="topic" 				type="xs:string" use="required" />
+        		<xs:attribute name="qos" 				type="mqttspycommon:qos" />
+				<xs:attribute name="retained" 			type="xs:boolean" />
+      		</xs:extension>
+    	</xs:simpleContent>
+	</xs:complexType>		
+			
+	<!-- ==================== -->
+	<!-- === CONNECTIVITY === -->
+	<!-- ==================== -->
+	
+	<xs:complexType name="ConnectionDetails">
+		<xs:sequence>
+				<xs:element name="ID" 					type="xs:ID" 						minOccurs="0" maxOccurs="1" />
+				<xs:element name="Name" 				type="xs:string" 					minOccurs="0" maxOccurs="1" />
+				<xs:element name="Protocol" 			type="mqttspycommon:ProtocolVersionEnum" 	minOccurs="0" maxOccurs="1" />
+   		</xs:sequence>
+	</xs:complexType>	
+		
+	<xs:complexType name="MqttConnectionDetails">
+		<xs:complexContent>
+			<xs:extension base="mqttspycommon:ConnectionDetails">
+				<xs:sequence>
+					<xs:element name="ServerURI" 			type="xs:string" 					minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="WebSocket" 			type="xs:boolean" 					minOccurs="0" maxOccurs="1" />
+					<xs:element name="ClientID" 			type="xs:string" />
+					
+					<xs:element name="UserCredentials" 		type="mqttspycommon:UserCredentials" 		minOccurs="0" maxOccurs="1" />
+					<xs:element name="LastWillAndTestament" type="mqttspycommon:SimpleMqttMessage"		minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="CleanSession" 		type="xs:boolean" 					minOccurs="0" maxOccurs="1" />
+					<xs:element name="ConnectionTimeout" 	type="xs:int" 						minOccurs="0" maxOccurs="1" />
+					<xs:element name="KeepAliveInterval" 	type="xs:int" 						minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="SSL" 					type="mqttspycommon:SecureSocketSettings" 	minOccurs="0" maxOccurs="1" />
+					
+					<xs:element name="ReconnectionSettings" type="mqttspycommon:ReconnectionSettings" 	minOccurs="0" maxOccurs="1" />														
+				</xs:sequence>
+			 </xs:extension>		
+        </xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="ReconnectionSettings">
+		<xs:sequence>
+       		<xs:element name="RetryInterval" 		type="xs:int" 	/>
+       		<xs:element name="Resubscribe" 			type="xs:boolean" 	/>
+   		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="SecureSocketSettings">
+		<xs:sequence>
+       		<xs:element name="Mode" 					type="spycommon:SecureSocketModeEnum" 	/>
+       		<xs:element name="Protocol" 				type="xs:string" 	minOccurs="0" />
+       		
+       		<xs:element name="CertificateAuthorityFile" type="xs:string" 	minOccurs="0" />
+       		<xs:element name="ClientCertificateFile"	type="xs:string" 	minOccurs="0" />
+       		<xs:element name="ClientKeyFile" 			type="xs:string" 	minOccurs="0" />
+       		<xs:element name="ClientKeyPassword" 		type="xs:string" 	minOccurs="0" />
+       		<xs:element name="ClientKeyPEM" 			type="xs:boolean" 	minOccurs="0" />
+       		
+       		<xs:element name="ServerKeyStoreFile" 		type="xs:string" 	minOccurs="0" />
+       		<xs:element name="ServerKeyStorePassword" 	type="xs:string" 	minOccurs="0" />
+       		<xs:element name="ClientKeyStoreFile" 		type="xs:string" 	minOccurs="0" />
+       		<xs:element name="ClientKeyStorePassword" 	type="xs:string" 	minOccurs="0" />
+       		
+       		<xs:element name="Property" 				type="spycommon:Property" 	minOccurs="0" maxOccurs="unbounded"	/>       		
+   		</xs:sequence>
+	</xs:complexType>	
+	
+	<!-- 
+	<xs:complexType name="SslProperty">
+		<xs:sequence>
+       		<xs:element name="Name" 	type="xs:string" 	/>
+       		<xs:element name="Value"	type="xs:string" 	/>
+   		</xs:sequence>
+	</xs:complexType>		
+	 -->
+	
+	<xs:complexType name="UserCredentials">
+		<xs:sequence>
+			<xs:element name="Username" 			type="xs:string" />
+			<xs:element name="Password" 			type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="SubscriptionDetails">
+		<xs:attribute 	name="topic" 				type="xs:string" use="required" />
+		<xs:attribute 	name="qos" 					type="mqttspycommon:qos" default="0" />
+		<xs:attribute 	name="scriptFile"			type="xs:string" />
+	</xs:complexType>
+	
+	<xs:complexType name="PublicationDetails">
+		<xs:attribute name="topic" 					type="xs:string" use="required" />
+	</xs:complexType>
+		
+	<xs:simpleType name="qos">
+		<xs:restriction base="xs:int" >
+			<xs:minInclusive value="0" />
+			<xs:maxInclusive value="2" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ProtocolVersionEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MQTT Default" />
+			<xs:enumeration value="MQTT 3.1.1" />		
+			<xs:enumeration value="MQTT 3.1" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- ===================== -->
+	<!-- === LOGGING ========= -->
+	<!-- ===================== -->
+
+	<xs:complexType name="LoggedMqttMessage">
+		<xs:complexContent>
+			<xs:extension base="mqttspycommon:SimpleMqttMessage">
+				<xs:attribute name="id" 			type="xs:int" use="required" />			
+				<xs:attribute name="timestamp" 		type="xs:long" use="required" />				
+				<xs:attribute name="connection" 	type="xs:string" />
+				<xs:attribute name="subscription" 	type="xs:string" />
+				<xs:attribute name="encoded" 		type="xs:boolean" />
+	        </xs:extension>		
+        </xs:complexContent>
+	</xs:complexType>
+	
+	<xs:simpleType name="MessageLogEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DISABLED" />
+			<xs:enumeration value="XML_WITH_ENCODED_PAYLOAD" />
+			<xs:enumeration value="XML_WITH_PLAIN_PAYLOAD" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="MessageLog">
+		<xs:simpleContent>
+			<xs:extension base="mqttspycommon:MessageLogEnum">
+				<xs:attribute name="logFile" 			type="xs:string" />
+	       		<xs:attribute name="logQos" 			type="xs:boolean" />
+	       		<xs:attribute name="logRetained" 		type="xs:boolean" />
+	       		<xs:attribute name="logConnection" 		type="xs:boolean" />
+	       		<xs:attribute name="logSubscription" 	type="xs:boolean" />
+	       		<xs:attribute name="logBeforeScripts" 	type="xs:boolean" />
+	        </xs:extension>		
+        </xs:simpleContent>
+	</xs:complexType>
+	
+	<!-- ================ -->
+	<!-- === ELEMENTS === -->
+	<!-- ================ -->
+	
+	<xs:element name="MqttMessage" type="mqttspycommon:LoggedMqttMessage" /> 	
+</xs:schema>

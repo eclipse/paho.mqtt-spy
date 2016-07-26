@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mqttspydc:MqttSpyDaemonConfiguration xmlns:mqttspydc="http://baczkowicz.pl/mqtt-spy/daemon/configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <Connection>
+  
+	<!-- For details on multiple server URIs see http://www.eclipse.org/paho/files/javadoc/org/eclipse/paho/client/mqttv3/MqttConnectOptions.html#setServerURIs%28java.lang.String[]%29 -->
+	<ServerURI>tcp://localhost:2000</ServerURI>
+	<!-- Server URI can be supplied without the tcp:// prefix or the port number (default is 1883) -->
+	<ServerURI>localhost</ServerURI>
+  			
+  	<!-- Leaving it empty will auto-generate it -->
+	<ClientID></ClientID>
+			
+	<UserCredentials>
+		<Username>test2</Username>
+		<!-- Password is base64 encoded -->
+		<Password>dGVzdDI=</Password>
+	</UserCredentials>
+		
+	<!-- Payload is base64 encoded -->
+	<LastWillAndTestament topic="ltw/mqtt-spy-daemon" qos="0" retained="false">R29pbmcgb2ZmbGluZS4gQnllIGJ5ZS4uLg==</LastWillAndTestament>
+									
+	<CleanSession>true</CleanSession>
+	<ConnectionTimeout>10</ConnectionTimeout>
+	<KeepAliveInterval>10</KeepAliveInterval>
+			
+	<ReconnectionSettings>
+		<!-- How long (in ms) to wait after previous connection attempt before trying to connect again -->
+		<RetryInterval>5000</RetryInterval>				
+		<!-- Whether to resubscribe to all topics when the connection is regained -->
+		<Resubscribe>true</Resubscribe>
+	</ReconnectionSettings>
+			
+	<!-- 
+		For binary payloads, change it to XML_WITH_ENCODED_PAYLOAD.
+				
+		To log QoS, Retained flag, connection name or subscription, use:
+		logQos="true" logRetained="true" logConnection="true" logSubscription="true" 
+	-->
+	<MessageLog logBeforeScripts="false">XML_WITH_PLAIN_PAYLOAD</MessageLog>
+			
+	<Subscription topic="/test/#" qos="0" />
+	<!-- Use the script file for things like auto-reply or additional logging -->
+	<Subscription topic="/home/#" qos="0" scriptFile="src/test/resources/reply.js" />
+			 
+	<!-- Use these for publishing messages -->
+	<BackgroundScript>
+		<File>src/test/resources/bedroom.js</File>
+	</BackgroundScript>
+
+	<!-- Use CONTINUOUS or SCRIPTS_ONLY -->
+	<RunningMode>SCRIPTS_ONLY</RunningMode>
+  </Connection>
+  
+</mqttspydc:MqttSpyDaemonConfiguration>

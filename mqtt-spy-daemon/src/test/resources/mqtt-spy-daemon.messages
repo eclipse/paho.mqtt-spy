@@ -1,0 +1,10 @@
+<MqttMessage id="1" timestamp="1416131327314" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.6</temp><energy>106</energy>]]></MqttMessage>
+<MqttMessage id="2" timestamp="1416131328367" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.1</temp><energy>107</energy>]]></MqttMessage>
+<MqttMessage id="3" timestamp="1416131329370" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.7</temp><energy>103</energy>]]></MqttMessage>
+<MqttMessage id="4" timestamp="1416131330372" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.8</temp><energy>108</energy>]]></MqttMessage>
+<MqttMessage id="5" timestamp="1416131331374" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.9</temp><energy>110</energy>]]></MqttMessage>
+<MqttMessage id="6" timestamp="1416131332378" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.7</temp><energy>103</energy>]]></MqttMessage>
+<MqttMessage id="7" timestamp="1416131333379" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.8</temp><energy>104</energy>]]></MqttMessage>
+<MqttMessage id="8" timestamp="1416131334383" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.2</temp><energy>107</energy>]]></MqttMessage>
+<MqttMessage id="9" timestamp="1416131335386" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.7</temp><energy>101</energy>]]></MqttMessage>
+<MqttMessage id="10" timestamp="1416131336391" topic="/home/bedroom/current" qos="0" retained="false"><![CDATA[<temp>20.8</temp><energy>103</energy>]]></MqttMessage>

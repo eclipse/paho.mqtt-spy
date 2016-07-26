@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.ComboBox?>
+
+<AnchorPane prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.NewSubscriptionController">
+	<padding><Insets bottom="3" left="6" right="6" top="6" /></padding>
+	<children>
+
+		<Label layoutX="14.0" layoutY="9.0" text="Topic" AnchorPane.topAnchor="5.0" />
+		<ComboBox fx:id="subscriptionTopicText" editable="true" layoutX="53.0" layoutY="13.0" prefHeight="25.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="327" AnchorPane.topAnchor="0.0" />		
+		
+		<Label fx:id="subscriptionQosLabel" layoutX="472.0" layoutY="5.0" text="QoS" AnchorPane.rightAnchor="291" AnchorPane.topAnchor="5.0" />								
+		<ChoiceBox fx:id="subscriptionQosChoice" layoutX="498.0" layoutY="13.0" prefHeight="25.0" prefWidth="14.0" value="0" AnchorPane.rightAnchor="244" AnchorPane.topAnchor="0.0">
+			<items>
+				<FXCollections fx:factory="observableArrayList">
+					<String fx:value="0" />
+					<String fx:value="1" />
+					<String fx:value="2" />
+				</FXCollections>
+			</items>
+		</ChoiceBox>
+		
+		<ColorPicker fx:id="subscriptionColorPicker" prefHeight="26.0" prefWidth="110.0" AnchorPane.rightAnchor="128" AnchorPane.topAnchor="0.0">
+		</ColorPicker>
+				
+		<Button fx:id="subscribeButton" disable="true" layoutX="549.0" layoutY="13.0" mnemonicParsing="false" onAction="#subscribe" prefHeight="25.0" prefWidth="120" text="Subscribe" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		<padding><Insets bottom="1.0" left="2.0" right="2.0" top="1.0" /></padding>
+		<graphic>
+      		<ImageView fitHeight="24" fitWidth="24" pickOnBounds="true">
+		         <image>
+		            <Image url="/images/small/mail-receive-2.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+		</Button>
+		
+   </children>
+</AnchorPane>

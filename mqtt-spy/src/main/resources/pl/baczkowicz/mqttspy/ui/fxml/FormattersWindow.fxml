@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2015 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="formattersWindow" minWidth="334.0" prefHeight="402.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.FormattersController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Available formatters:" />
+      <ListView fx:id="formattersList" layoutX="14.0" layoutY="37.0" prefHeight="217.0" prefWidth="233.0" AnchorPane.bottomAnchor="148.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="37.0" />
+     
+     <Button fx:id="newButton" layoutX="14.0" layoutY="300.0" mnemonicParsing="false" onAction="#newFormatter" prefHeight="25.0" prefWidth="233.0" text="New script-based formatter" AnchorPane.bottomAnchor="77.0">
+      			<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+		        <graphic>
+		      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+				         <image>
+				            <Image url="/images/small/button-add.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+      </Button>
+      
+      <Button fx:id="applyChangesButton" layoutX="14.0" layoutY="331.0" mnemonicParsing="false" onAction="#applyChanges" prefHeight="25.0" prefWidth="233.0" text="Apply changes" AnchorPane.bottomAnchor="46.0">
+         <graphic>
+            <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+               <image>
+                  <Image url="/images/small/button-apply.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+      </Button>
+      
+      <Button fx:id="deleteButton" layoutX="14.0" layoutY="249.0" mnemonicParsing="false" onAction="#deleteFormatter" prefHeight="25.0" prefWidth="233.0" text="Delete formatter" AnchorPane.bottomAnchor="14.0">
+      			<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+		        <graphic>
+		      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+				         <image>
+				            <Image url="/images/small/button-delete.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+      </Button>
+      
+      <Label layoutX="273.0" layoutY="19.0" text="Name">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+     
+      <TextField fx:id="formatterName" layoutX="381.0" layoutY="14.0" prefHeight="25.0" prefWidth="187.0" AnchorPane.leftAnchor="381.0" AnchorPane.rightAnchor="206.0">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </TextField>
+      
+      <Label layoutX="580.0" layoutY="19.0" text="Type" AnchorPane.rightAnchor="162.0">
+         <font>
+            <Font size="11.0" />
+         </font></Label>
+      
+      
+      <TextField fx:id="formatterType" editable="false" layoutX="622.0" layoutY="14.0" prefHeight="25.0" prefWidth="137.0" AnchorPane.rightAnchor="14.0">
+         <font>
+            <Font size="11.0" />
+         </font></TextField>
+      <Label fx:id="detailsLabel" layoutX="273.0" layoutY="53.0" text="Details">
+         <font>
+            <Font size="11.0" />
+         </font></Label>
+      <TextArea fx:id="formatterDetails" layoutX="381.0" layoutY="46.0" prefHeight="66.0" prefWidth="379.0" wrapText="true" AnchorPane.leftAnchor="381.0" AnchorPane.rightAnchor="14.0">
+         <font>
+            <Font size="11.0" />
+         </font></TextArea>
+      <Separator layoutX="260.0" layoutY="7.0" orientation="VERTICAL" prefHeight="160.0" AnchorPane.bottomAnchor="7.0" AnchorPane.topAnchor="7.0" />
+      <SplitPane dividerPositions="0.5" layoutX="272.0" layoutY="162.0" orientation="VERTICAL" prefHeight="226.0" prefWidth="488.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="272.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="162.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="117.0" prefWidth="511.0">
+               <children>
+                  <TextArea fx:id="sampleInput" layoutX="108.0" prefHeight="98.0" prefWidth="373.0" promptText="(put here text to convert using the formatter)" text="sample message to format" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="108.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </TextArea>
+                  <Label layoutX="12.0" layoutY="10.0" text="Sample input">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Label layoutX="12.0" layoutY="10.0" text="Sample output">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="sampleOutput" layoutX="108.0" prefHeight="98.0" prefWidth="373.0" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="108.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </TextArea>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      
+      <Label layoutX="273.0" layoutY="139.0" text="Below try the selected formatter:">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Separator layoutX="266.0" layoutY="125.0" prefHeight="3.0" prefWidth="501.0" AnchorPane.leftAnchor="262.0" AnchorPane.rightAnchor="7.0" />
+      <Label layoutX="14.0" layoutY="260.0" prefHeight="33.0" prefWidth="233.0" text="Note: reload your connection(s) for any changes to have an effect" wrapText="true" AnchorPane.bottomAnchor="109.0">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="tlsCertificatesPane" layoutX="0" layoutY="37" prefHeight="186.0" prefWidth="570.0" AnchorPane.bottomAnchor="8" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="37" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.edit.EditConnectionSecurityTlsCertificatesController"> 
+   <children>
+      <Label layoutY="5" text="Server certificate file" AnchorPane.leftAnchor="0.0" />
+      <TextField fx:id="serverCertificateFile" layoutX="176.0" layoutY="0" prefHeight="26.0" prefWidth="340.0" AnchorPane.leftAnchor="176.0" AnchorPane.rightAnchor="54.0" />
+      <Button fx:id="serverCertificateFileButton" focusTraversable="false" layoutX="512.0" mnemonicParsing="false" onAction="#editCaCrtFile" prefHeight="26.0" prefWidth="31.0" text="..." AnchorPane.rightAnchor="14.0" />
+      
+      <Label fx:id="clientCertificateFileLabel" layoutY="36" text="Client certificate file" />
+      <TextField fx:id="clientCertificateFile" layoutX="176.0" layoutY="31" prefHeight="26.0" prefWidth="340.0" AnchorPane.leftAnchor="176.0" AnchorPane.rightAnchor="54.0" />
+      <Button fx:id="clientCertificateFileButton" focusTraversable="false" layoutX="512.0" layoutY="31.0" mnemonicParsing="false" onAction="#editClientCrtFile" prefHeight="26.0" prefWidth="31.0" text="..." AnchorPane.rightAnchor="14.0" />
+      
+      <Label fx:id="clientKeyFileLabel" layoutY="67" text="Client key file" />
+      <TextField fx:id="clientKeyFile" layoutX="176.0" layoutY="62" prefHeight="26.0" prefWidth="170.0" AnchorPane.leftAnchor="176.0" AnchorPane.rightAnchor="54.0" />
+      <Button fx:id="clientKeyFileButton" focusTraversable="false" layoutX="351.0" layoutY="62.0" mnemonicParsing="false" onAction="#editClientKeyFile" prefHeight="26.0" prefWidth="31.0" text="..." AnchorPane.rightAnchor="14.0" />
+      
+      <Label fx:id="clientKeyPasswordLabel" layoutY="98" text="Client key password" />
+      <PasswordField fx:id="clientPassword" layoutX="176.0" layoutY="93" prefHeight="25.0" prefWidth="379.0" AnchorPane.leftAnchor="176.0" AnchorPane.rightAnchor="14.0" />
+      
+      <Label fx:id="clientKeyPemLabel" layoutY="129.0" text="Client key in PEM format" />
+      <CheckBox fx:id="clientKeyPemFormatted" layoutX="176.0" layoutY="128.0" mnemonicParsing="false" selected="true" AnchorPane.leftAnchor="176.0" />                              
+   </children>
+</AnchorPane>

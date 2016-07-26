@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config:MqttSpyConfiguration
+   xmlns:config="http://baczkowicz.pl/mqtt-spy-configuration"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+   <Connectivity>
+
+   </Connectivity>
+   
+   <Formatting>   		
+   		
+   		<Formatter>
+   			<!-- Name that will appear in the application -->
+   			<Name>Hex body decoder</Name>
+   			
+   			<!-- This should be unique within the file -->
+   			<ID>hex-body-decoder</ID>
+   			
+   			<!-- Convert the base64 content to plain text -->
+   			<Function>
+   				<SubstringConversion>
+   					<StartTag><![CDATA[<Body>]]></StartTag>
+   					<EndTag><![CDATA[</Body>]]></EndTag>
+   					<KeepTags>true</KeepTags>
+   					<Format>HexDecode</Format>
+   				</SubstringConversion>   				
+   			</Function>
+   			
+   			<!-- Ignore anything else but the Body tags and their content, then remove these tags, leaving only the content of the Body -->
+   			<Function>
+   				<SubstringExtract>
+   					<StartTag><![CDATA[<Body>]]></StartTag>
+   					<EndTag><![CDATA[</Body>]]></EndTag>
+   					<KeepTags>false</KeepTags>
+   				</SubstringExtract>
+   			</Function>
+   			
+   		</Formatter>
+   		
+   		<Formatter>
+   			<!-- Name that will appear in the application -->
+   			<Name>Base64 body decoder</Name>
+   			
+   			<!-- This should be unique within the file -->
+   			<ID>base64-body-decoder</ID>
+   			
+   			<!-- Convert the base64 content to plain text -->
+   			<Function>
+   				<SubstringConversion>
+   					<StartTag><![CDATA[<Body>]]></StartTag>
+   					<EndTag><![CDATA[</Body>]]></EndTag>
+   					<KeepTags>true</KeepTags>
+   					<Format>Base64Decode</Format>
+   				</SubstringConversion>   				
+   			</Function>
+   			
+   			<!-- Ignore anything else but the Body tags and their content, then remove these tags, leaving only the content of the Body -->
+   			<Function>
+   				<SubstringExtract>
+   					<StartTag><![CDATA[<Body>]]></StartTag>
+   					<EndTag><![CDATA[</Body>]]></EndTag>
+   					<KeepTags>false</KeepTags>
+   				</SubstringExtract>
+   			</Function>
+   			
+   		</Formatter>
+   </Formatting>
+   
+</config:MqttSpyConfiguration>

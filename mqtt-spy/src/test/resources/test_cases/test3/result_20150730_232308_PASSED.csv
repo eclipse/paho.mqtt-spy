@@ -1,0 +1,4 @@
+Step, "Description", Status, "Info"
+1, "Subscribe to test topic", ACTIONED, "Subscribed"
+2, "Publish a sample message", ACTIONED, "Message published"
+3, "Verify if correct message was received", PASSED, "Correct message received"

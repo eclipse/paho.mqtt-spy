@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<versions:MqttSpyVersions xmlns:versions="http://baczkowicz.pl/mqtt-spy-versions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://baczkowicz.pl/mqtt-spy-versions ../../main/resources/mqtt-spy-versions.xsd ">
+	
+  <ReleaseStatuses>
+  	
+  	<ReleaseStatus>
+      <FromVersion>0.0.1</FromVersion>
+      <ToVersion>0.0.8-beta</ToVersion>
+      <UpdateTitle>Your mqtt-spy is bit dated!</UpdateTitle>
+      <UpdateDetails>There is a new release available!</UpdateDetails>
+      <UpdateStatus>NEW_AVAILABLE</UpdateStatus>
+    </ReleaseStatus>
+    
+    <ReleaseStatus>
+      <FromVersion>0.0.8</FromVersion>
+      <ToVersion>0.0.8</ToVersion>
+      <UpdateTitle>Your mqtt-spy is up to date!</UpdateTitle>
+      <UpdateDetails>You are on the latest stable release</UpdateDetails>
+      <UpdateStatus>ON_LATEST</UpdateStatus>
+    </ReleaseStatus>
+    
+    <ReleaseStatus>
+      <FromVersion>0.0.9-beta-b1</FromVersion>
+      <ToVersion>0.0.9-beta-b22</ToVersion>
+      <UpdateTitle>Getting out of date here! Your cutting edge version is getting a bit rusty!</UpdateTitle>
+      <UpdateDetails>New experimental version is now available.</UpdateDetails>
+      <UpdateStatus>NEW_AVAILABLE</UpdateStatus>
+    </ReleaseStatus>
+    
+    <ReleaseStatus>
+      <FromVersion>0.0.9-beta-b23</FromVersion>
+      <ToVersion>0.0.9-beta-b23</ToVersion>
+      <UpdateTitle>Living on the edge!</UpdateTitle>
+      <UpdateDetails>You’re on the latest experimental version.</UpdateDetails>
+      <UpdateStatus>ON_LATEST</UpdateStatus>
+    </ReleaseStatus>
+    
+  </ReleaseStatuses>
+  
+  <LatestReleases>
+  	
+    <LatestRelease>
+      <Version>0.0.8</Version>
+      <Name>0.0.8</Name>
+      <Date>2001-09-09</Date>
+      <KeyFeatures>improved connection management, saving connections</KeyFeatures>
+      <DownloadLocation></DownloadLocation>
+    </LatestRelease>
+    
+    <LatestRelease>
+      <Version>0.0.9-beta-b23</Version>
+      <Name>0.0.9-beta</Name>
+      <Date>2001-09-10</Date>
+      <KeyFeatures>control panel, improvements, bug fixes</KeyFeatures>
+      <DownloadLocation></DownloadLocation>
+    </LatestRelease>
+    
+  </LatestReleases>
+</versions:MqttSpyVersions>

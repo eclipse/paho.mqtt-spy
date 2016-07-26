@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="mainPane" prefHeight="550.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.MainController">
+	<children>
+		<MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+			<menus>
+				<Menu mnemonicParsing="false" text="File">
+					<items>									
+	            		<MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
+					</items>
+				</Menu>
+				
+				<Menu mnemonicParsing="false" text="Configuration">
+					<items>
+						<MenuItem fx:id="openConfigFileMenu" mnemonicParsing="false" onAction="#openConfigurationFile" text="Open file" />
+                 		<SeparatorMenuItem mnemonicParsing="false" />
+                 	 	<MenuItem fx:id="restoreConfigFileMenu" mnemonicParsing="false" onAction="#restoreConfiguration" text="Restore defaults" />
+					</items>
+				</Menu>
+				
+				<Menu mnemonicParsing="false" text="Connections">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#createNewConnection" text="New connection" />
+						<MenuItem mnemonicParsing="false" onAction="#editConnections" text="Manage connections" />
+					</items>
+				</Menu>
+			
+				<Menu mnemonicParsing="false" text="Window">
+					<items>
+						<Menu mnemonicParsing="false" text="Change Perspective">
+							<items>
+								<RadioMenuItem fx:id="defaultPerspective" mnemonicParsing="false" onAction="#showPerspective" selected="true" text="Default (simplified publications and subscriptions)">
+		                           <toggleGroup>
+		                              <ToggleGroup fx:id="perspective" />
+		                           </toggleGroup>
+		                         </RadioMenuItem>
+		                        <RadioMenuItem fx:id="detailedPerspective" mnemonicParsing="false" onAction="#showPerspective" text="Detailed (publications and subscriptions)" toggleGroup="$perspective" />
+								<RadioMenuItem fx:id="spyPerspective" mnemonicParsing="false" onAction="#showPerspective" text="Baby Spy (simplified subscriptions only)" toggleGroup="$perspective" />
+								<RadioMenuItem fx:id="superSpyPerspective" mnemonicParsing="false" onAction="#showPerspective" text="Super Spy (subscriptions only)" toggleGroup="$perspective" />
+							</items>
+						</Menu>
+						
+						<Menu text="Open View">
+								<items>
+									<MenuItem mnemonicParsing="false" onAction="#openMessageLog" text="Message log browser" />
+									<!-- Converter has been replaced by Formatters -->
+									<!-- <MenuItem mnemonicParsing="false" text="Converter" onAction="#showConverter" /> -->
+									<MenuItem mnemonicParsing="false" text="Formatters" onAction="#showFormatters" />
+									<MenuItem mnemonicParsing="false" text="Test cases (no connection)" onAction="#showTestCases" />
+								</items>
+						</Menu>
+														
+						<SeparatorMenuItem mnemonicParsing="false" />
+						
+						<Menu text="Preferences">
+								<items>
+									<CheckMenuItem fx:id="resizeMessagePaneMenu" text="Resize message pane" onAction="#resizeMessagePane" />
+								</items>
+						</Menu>
+					</items>
+				</Menu>
+				
+				<!-- 
+				<Menu mnemonicParsing="false" text="Preferences">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Edit..." />
+					</items>
+				</Menu>
+				 -->
+				
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#openGettingInvolved" text="Get involved! mqtt-spy needs you!" />
+						
+						<SeparatorMenuItem mnemonicParsing="false" />
+						
+						<Menu mnemonicParsing="false" text="Wiki">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#overviewWiki" text="Overview" />
+								<MenuItem mnemonicParsing="false" onAction="#changelogWiki" text="Changelog" />
+								<MenuItem mnemonicParsing="false" onAction="#scriptingWiki" text="Scripting" />
+								<MenuItem mnemonicParsing="false" onAction="#messageSearchWiki" text="Message search" />					
+							</items>
+						</Menu>										
+						
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<TabPane fx:id="connectionTabs" layoutY="29.0" prefHeight="350.0" prefWidth="554.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
+			<tabs>
+				<Tab fx:id="firstTab" text="Control panel">
+					<content>
+						<AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<children>
+								<!-- <fx:include source="ConnectionTab.fxml" /> -->
+								<fx:include fx:id="controlPanelPane" source="ControlPanelPane.fxml" />
+							</children>
+						</AnchorPane>
+					</content>
+				</Tab>
+			</tabs>
+		</TabPane>
+	</children>
+</AnchorPane>

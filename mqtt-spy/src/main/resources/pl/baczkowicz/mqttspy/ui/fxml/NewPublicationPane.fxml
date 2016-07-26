@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.ComboBox?>
+<?import org.fxmisc.richtext.StyleClassedTextArea?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+
+<AnchorPane prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.NewPublicationController">
+	<padding><Insets top="6" right="6" bottom="3" left="6" /></padding>
+	<children>
+            
+        <!-- Topic -->
+        <Label layoutX="14.0" layoutY="15.0" text="Topic" AnchorPane.topAnchor="5.0" />
+        <ComboBox fx:id="publicationTopicText" editable="true" layoutX="53.0" layoutY="10.0" prefHeight="26.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="327" AnchorPane.topAnchor="0.0" />
+        
+        <!-- Data -->        
+        <Label fx:id="dataLabel" layoutX="14.0" text="Data" AnchorPane.topAnchor="31.0" />
+        <Label fx:id="lengthLabel" layoutX="5.0" prefWidth="47.0" text="(0B)" AnchorPane.topAnchor="44.0" alignment="CENTER" contentDisplay="CENTER" >
+         <font>
+            <Font size="11.0" />
+         </font>
+      	</Label>        		    
+        <StyleClassedTextArea fx:id="publicationData" prefHeight="25.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="326" AnchorPane.topAnchor="31.0" />
+        
+        <!-- Retained flag -->
+        <Label fx:id="retainedLabel" text="Retained" AnchorPane.rightAnchor="153" AnchorPane.topAnchor="5.0" />
+        <CheckBox fx:id="retainedBox" mnemonicParsing="false" AnchorPane.rightAnchor="123" AnchorPane.topAnchor="4.0" />
+
+		<!-- QoS -->
+        <Label fx:id="publicationQosLabel" layoutX="473.0" layoutY="5.0" text="QoS" AnchorPane.rightAnchor="291" AnchorPane.topAnchor="5.0" />        
+        <ChoiceBox fx:id="publicationQosChoice" prefHeight="25.0" prefWidth="14.0" value="0" AnchorPane.rightAnchor="244" AnchorPane.topAnchor="0.0">
+           <items>
+              <FXCollections fx:factory="observableArrayList">
+                 <String fx:value="0" />
+                 <String fx:value="1" />
+                 <String fx:value="2" />
+              </FXCollections>
+           </items>
+        </ChoiceBox>
+        
+        <MenuButton fx:id="formatMenu" mnemonicParsing="false" prefHeight="26.0" prefWidth="189.0" text="Input format: Plain" AnchorPane.rightAnchor="128" AnchorPane.topAnchor="32.0">
+		  <items>
+		      <RadioMenuItem mnemonicParsing="false" text="Plain">
+		         <toggleGroup>
+		            <ToggleGroup fx:id="formatGroup" />
+		         </toggleGroup>
+		      </RadioMenuItem>
+		      <RadioMenuItem mnemonicParsing="false" text="Hex" toggleGroup="$formatGroup" />
+		      <RadioMenuItem mnemonicParsing="false" text="Base64" toggleGroup="$formatGroup" />
+		  </items>
+		</MenuButton>        
+		
+		<SplitMenuButton fx:id="publishButton" disable="true" mnemonicParsing="false" onAction="#publish" prefHeight="58.0" prefWidth="120" text="Publish" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		
+			<!-- <padding><Insets bottom="1.0" left="2.0" right="2.0" top="1.0" /></padding> -->
+
+			<graphic>
+	      		<ImageView fitHeight="24" fitWidth="24" pickOnBounds="true">
+			         <image>
+			            <Image url="/images/small/mail-forward-6.png" />
+			         </image>
+			      </ImageView>
+	      	</graphic>
+	      	
+	      	<items>
+                  <RadioMenuItem mnemonicParsing="false" selected="true" text="Publish (default)">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="publishScript" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <SeparatorMenuItem />
+                  <Menu fx:id="publishWithScriptsMenu" mnemonicParsing="false" text="Publish with script" />
+                  <SeparatorMenuItem />
+                  <MenuItem fx:id="saveCurrentMenu" mnemonicParsing="false" text="Save current message as script" onAction="#saveCurrentAsScript"/>
+                  <Menu fx:id="saveRecentMessagesMenu" disable="true" mnemonicParsing="false" text="Save recent message as script" />
+                  <SeparatorMenuItem />
+                  <Menu fx:id="recentMessagesMenu" disable="true" mnemonicParsing="false" text="Restore recent message" />
+            </items>
+		</SplitMenuButton>
+		
+   	</children>
+</AnchorPane>

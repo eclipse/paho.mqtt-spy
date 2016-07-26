@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config:MqttSpyConfiguration
+   xmlns:config="http://baczkowicz.pl/mqtt-spy-configuration"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<ConnectionGroups>
+        <ID>default_group</ID>
+        <Name>All connections</Name>
+        <Subgroups>
+            <Reference>cg_samples</Reference>
+        </Subgroups>
+        <Subgroups>
+            <Reference>cg_public</Reference>
+        </Subgroups>
+    </ConnectionGroups>
+    <ConnectionGroups>
+        <ID>cg_samples</ID>
+        <Name>Sample local brokers</Name>
+        <Connections>
+            <Reference>conn12964088</Reference>
+        </Connections>
+    </ConnectionGroups>
+    <ConnectionGroups>
+        <ID>cg_public</ID>
+        <Name>Public MQTT brokers</Name>
+        <Connections>
+            <Reference>conn12964089</Reference>
+        </Connections>
+        <Connections>
+            <Reference>conn12964090</Reference>
+        </Connections>
+		<Connections>
+            <Reference>conn12964091</Reference>
+        </Connections>
+    </ConnectionGroups>
+    
+   <Connectivity>
+
+        <ConnectionV2>
+        	<ID>conn12964088</ID>
+            <Name>mqtt-spy@localhost</Name>
+            <Protocol>MQTT Default</Protocol>
+            <ServerURI>127.0.0.1:1883</ServerURI>
+            <ClientID>mqtt-spy</ClientID>
+			<CleanSession>true</CleanSession>
+			<Publication topic="/mqtt-spy/test/" />                
+            <Subscription createTab="true" topic="/mqtt-spy/test/" qos="0" scriptFile=""/>
+
+			<AutoOpen>false</AutoOpen>
+			<AutoConnect>true</AutoConnect>
+			<MaxMessagesStored>5000</MaxMessagesStored>
+				
+        </ConnectionV2>
+        
+        <ConnectionV2>
+        	<ID>conn12964089</ID>
+            <Name>iot.eclipse.org</Name>
+            <Protocol>MQTT 3.1.1</Protocol>
+            <ServerURI>iot.eclipse.org</ServerURI>
+            <ClientID></ClientID>
+			<CleanSession>true</CleanSession>
+			
+			<SSL>
+                <Mode>SERVER_ONLY</Mode>
+                <Protocol>TLSv1.2</Protocol>
+                <CertificateAuthorityFile>/certificates/certificate_authority_files/iot.eclipse.org.crt</CertificateAuthorityFile>
+                <ClientCertificateFile></ClientCertificateFile>
+                <ClientKeyFile></ClientKeyFile>
+                <ClientKeyPassword></ClientKeyPassword>
+            </SSL>
+			
+			<Publication topic="/mqtt-spy/test/" />                
+			<Subscription createTab="true" topic="/mqtt-spy/test/" qos="0" scriptFile=""/>
+
+            <AutoOpen>false</AutoOpen>
+            <AutoConnect>true</AutoConnect>                
+                
+			<MaxMessagesStored>5000</MaxMessagesStored>
+				
+        </ConnectionV2>
+        
+        <ConnectionV2>
+            <ID>conn12964090</ID>
+            <Name>test.mosquitto.org</Name>
+            <Protocol>MQTT 3.1.1</Protocol>
+            <ServerURI>test.mosquitto.org</ServerURI>
+            <ClientID></ClientID>
+            <CleanSession>true</CleanSession>
+            <ConnectionTimeout>30</ConnectionTimeout>
+            <KeepAliveInterval>60</KeepAliveInterval>
+            <SSL>
+                <Mode>SERVER_ONLY</Mode>
+                <Protocol>TLSv1.2</Protocol>
+                <CertificateAuthorityFile>/certificates/certificate_authority_files/mosquitto.org.crt</CertificateAuthorityFile>
+                <ClientCertificateFile></ClientCertificateFile>
+                <ClientKeyFile></ClientKeyFile>
+                <ClientKeyPassword></ClientKeyPassword>
+            </SSL>
+            <ReconnectionSettings>
+                <RetryInterval>5000</RetryInterval>
+                <Resubscribe>true</Resubscribe>
+            </ReconnectionSettings>
+            <Subscription createTab="true" topic="/test/#" qos="0" scriptFile=""/>
+            <AutoOpen>false</AutoOpen>
+            <AutoConnect>true</AutoConnect>
+            <AutoSubscribe>true</AutoSubscribe>
+            <MinMessagesStoredPerTopic>10</MinMessagesStoredPerTopic>
+            <MaxMessagesStored>5000</MaxMessagesStored>
+            <MessageLog logFile="" logQos="false" logRetained="false" logConnection="false" logSubscription="false" logBeforeScripts="false">DISABLED</MessageLog>
+        </ConnectionV2>
+
+		<ConnectionV2>
+        	<ID>conn12964091</ID>
+            <Name>broker.mqtt-dashboard.com</Name>
+            <Protocol>MQTT 3.1.1</Protocol>
+            <ServerURI>broker.mqtt-dashboard.com</ServerURI>
+            <ClientID></ClientID>
+			<CleanSession>true</CleanSession>
+			<Publication topic="/mqtt-spy/test/" />                
+			<Subscription createTab="true" topic="/mqtt-spy/test/" qos="0" scriptFile=""/>
+
+            <AutoOpen>false</AutoOpen>
+            <AutoConnect>true</AutoConnect>                
+                
+			<MaxMessagesStored>5000</MaxMessagesStored>
+				
+        </ConnectionV2>
+
+   </Connectivity>
+   
+   <Formatting />   		
+   
+</config:MqttSpyConfiguration>
