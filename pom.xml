@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+
+	<modelVersion>4.0.0</modelVersion> 
+
+	<name>mqtt-spy project</name> 
+	<groupId>pl.baczkowicz.mqttspy</groupId>
+	<artifactId>mqtt-spy-pom</artifactId>
+
+	<packaging>pom</packaging> 
+	<version>0.0.1-SNAPSHOT</version> 
+
+	<properties>
+    	<main.basedir>${project.basedir}</main.basedir>
+	</properties>
+
+	<!-- Include all modules in correct order. --> 
+	<modules> 
+		<module>spy-common</module> 
+		<module>spy-common-ui</module> 
+		<module>mqtt-spy-common</module> 
+		<module>mqtt-spy-daemon</module>
+		<module>mqtt-spy</module>  
+	</modules> 
+
+</project> 
