@@ -35,6 +35,34 @@
 	<!-- === CONNECTIVITY === -->
 	<!-- ==================== -->
 
+	<xs:complexType name="ConnectionDetails">
+		<xs:sequence>
+				<xs:element name="ID" 					type="xs:ID" 						minOccurs="0" maxOccurs="1" />
+				<xs:element name="Name" 				type="xs:string" 					minOccurs="0" maxOccurs="1" />
+   		</xs:sequence>
+	</xs:complexType>	
+	
+	<xs:complexType name="BaseSpyConfiguration">
+		<xs:sequence>
+			<xs:element name="ConnectionGroups" type="spycommon:ConnectionGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="Formatting" 	type="spycommon:Formatting"	minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ReconnectionSettings">
+		<xs:sequence>
+       		<xs:element name="RetryInterval" 		type="xs:int" 	/>
+       		<xs:element name="Resubscribe" 			type="xs:boolean" 	/>
+   		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="UserCredentials">
+		<xs:sequence>
+			<xs:element name="Username" 			type="xs:string" />
+			<xs:element name="Password" 			type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
 	<xs:complexType name="ConnectionGroup">
 		<xs:sequence>			
 			<xs:element name="ID" 			type="xs:ID" />
@@ -56,13 +84,6 @@
 		</xs:sequence>
 	</xs:complexType>	
 	
-	<xs:simpleType name="ProtocolEnum">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="MQTT" />
-			<xs:enumeration value="JMS" />
-		</xs:restriction>
-	</xs:simpleType>	
-	
 	<xs:simpleType name="SecureSocketModeEnum">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="DISABLED" />
@@ -74,6 +95,16 @@
 			<xs:enumeration value="PROPERTIES" />
 		</xs:restriction>
 	</xs:simpleType>
+	
+	<xs:simpleType name="KeyStoreTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DEFAULT" />
+			<xs:enumeration value="JKS" />
+			<xs:enumeration value="JCEKS" />
+			<xs:enumeration value="PKCS12" />		
+			<xs:enumeration value="BKS" />
+		</xs:restriction>
+	</xs:simpleType>
 				
 	<xs:simpleType name="RunningMode">
 		<xs:restriction base="xs:string">
@@ -81,6 +112,11 @@
 			<xs:enumeration value="SCRIPTS_ONLY" />
 		</xs:restriction>
 	</xs:simpleType>
+	
+	<xs:complexType name="ScriptedSubscriptionDetails">
+		<xs:attribute 	name="topic" 				type="xs:string" use="required" />
+		<xs:attribute 	name="scriptFile"			type="xs:string" />
+	</xs:complexType>
 	
 	<!-- ==================== -->
 	<!-- === TASKS ========== -->
@@ -134,6 +170,7 @@
 		<xs:sequence>
 			<xs:element name="Name" type="xs:string" />
 			<xs:element name="ID" type="xs:ID" />
+			<xs:element name="Description" type="xs:string" minOccurs="0" />
 			
 			<!-- Functions are executed in the order they are defined, so it is possible to perform multiple formatting functions -->
 			<xs:element name="Function" type="spycommon:FormatterFunction" minOccurs="1" maxOccurs="unbounded" />		

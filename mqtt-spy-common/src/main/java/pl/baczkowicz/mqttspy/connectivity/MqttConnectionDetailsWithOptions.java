@@ -88,7 +88,7 @@ public class MqttConnectionDetailsWithOptions extends MqttConnectionDetails
 		}
 		catch (IllegalArgumentException | SpyException e)
 		{
-			throw new ConfigurationException("Invalid parameters", e);
+			throw new ConfigurationException("Invalid configuration parameters", e);
 		}
 	}
 	
@@ -178,7 +178,7 @@ public class MqttConnectionDetailsWithOptions extends MqttConnectionDetails
 						getSSL().getClientCertificateFile(),
 						getSSL().getClientKeyFile(),
 						getSSL().getClientKeyPassword(),
-						getSSL().isClientKeyPEM()));
+						Boolean.TRUE.equals(getSSL().isClientKeyPEM())));
 			}
 			else if (SecureSocketModeEnum.SERVER_AND_CLIENT_KEYSTORES.equals(getSSL().getMode()))
 			{

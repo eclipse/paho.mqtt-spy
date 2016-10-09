@@ -49,6 +49,8 @@ Oxygen Icons (CQ 8949):
     * folder-yellow.png
     * folder-new.png
     
+    * view-split-top-bottom.png
+    
     * edit-find-mail.png
     * preferences-desktop-user-password.png
     * application-internet.png

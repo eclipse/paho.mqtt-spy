@@ -64,7 +64,9 @@
 	
 	<xs:complexType name="Connectivity">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">			
+			<!-- 
 			<xs:element name="Connection" 	type="config:UserInterfaceMqttConnectionDetailsV010" />
+			 -->
 			<xs:element name="ConnectionV2" type="config:UserInterfaceMqttConnectionDetails" />
 		</xs:choice>
 	</xs:complexType>
@@ -94,12 +96,11 @@
 	        </xs:extension>		
         </xs:complexContent>
 	</xs:complexType>
-		
+	<!-- 
 	<xs:complexType name="UserInterfaceMqttConnectionDetailsV010">
 		<xs:complexContent>
 			<xs:extension base="mqttspycommon:ConnectionDetails">
 				<xs:sequence>
-					<!-- <xs:element name="Name" 				type="xs:string" /> -->
 					<xs:element name="ServerURI" 			type="xs:string" />
 					<xs:element name="ClientID" 			type="xs:string" />
 					
@@ -123,7 +124,8 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
+	 -->
+	 
 	<xs:complexType name="UserAuthenticationOptions">
 		<xs:sequence>
         	<xs:element name="AskForUsername" 		type="xs:boolean"/>
@@ -133,7 +135,7 @@
 	
 	<xs:complexType name="UserAuthentication">
 		<xs:complexContent>
-			<xs:extension base="mqttspycommon:UserCredentials">
+			<xs:extension base="spycommon:UserCredentials">
 				<xs:sequence>
 		        	<xs:element name="AskForUsername" 		type="xs:boolean"/>
 					<xs:element name="AskForPassword" 		type="xs:boolean"/>

@@ -23,8 +23,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 /**
  * This class filters out events that happen too close to each other.
@@ -33,7 +33,7 @@ public class TimeBasedKeyEventFilter
 {
 	private final long minimumInterval;
 	
-	private Map<KeyCode, Long> lastEvents = new HashMap<>();
+	private Map<Object, Long> lastEvents = new HashMap<>();
 	
 	public TimeBasedKeyEventFilter(final long minimumInterval)
 	{
@@ -51,6 +51,20 @@ public class TimeBasedKeyEventFilter
 		}
 		
 		lastEvents.put(event.getCode(), now);
+		return true;
+	}
+	
+	public boolean processEvent(final MouseEvent event)
+	{
+		final Long lastEvent = lastEvents.get(event.getClickCount());
+		final long now = new Date().getTime();
+		
+		if (lastEvent != null && lastEvent + minimumInterval > now)
+		{
+			return false;
+		}
+		
+		lastEvents.put(event.getClickCount(), now);
 		return true;
 	}
 }

@@ -28,9 +28,11 @@ var step2 = function ()
 
 var step3 = function ()
 {
-	var lastMessage = mqttspy.getMessages("testcase/3/#").get(0).getPayload();
+	var messages = mqttspy.getMessages("testcase/3/#");
 	
-	if (lastMessage.equals("sample message 1"))
+	var lastMessage = messages.size() > 0 ? messages.get(0).getPayload() : "";
+	
+	if ("sample message 1".equals(lastMessage))
 	{
 		return new TestCaseStepResult(TestCaseStatus.PASSED, "Correct message received");
 	}

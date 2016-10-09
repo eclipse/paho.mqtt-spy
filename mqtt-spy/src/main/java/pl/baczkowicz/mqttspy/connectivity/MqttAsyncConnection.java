@@ -30,27 +30,30 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pl.baczkowicz.mqttspy.connectivity.reconnection.ReconnectionManager;
 import pl.baczkowicz.mqttspy.logger.MqttMessageLogger;
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.mqttspy.stats.StatisticsManager;
-import pl.baczkowicz.mqttspy.ui.events.EventManager;
 import pl.baczkowicz.mqttspy.ui.scripts.InteractiveScriptManager;
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
+import pl.baczkowicz.spy.connectivity.ConnectionStatus;
+import pl.baczkowicz.spy.connectivity.ReconnectionManager;
+import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.formatting.FormattingManager;
 import pl.baczkowicz.spy.scripts.Script;
+import pl.baczkowicz.spy.ui.connections.IUiConnection;
+import pl.baczkowicz.spy.ui.events.ConnectionStatusChangeEvent;
 import pl.baczkowicz.spy.ui.events.queuable.EventQueueManager;
+import pl.baczkowicz.spy.ui.stats.StatisticsManager;
 import pl.baczkowicz.spy.ui.storage.ManagedMessageStoreWithFiltering;
 import pl.baczkowicz.spy.utils.ConversionUtils;
 
 /**
  * Asynchronous MQTT connection with the extra UI elements required.
  */
-public class MqttAsyncConnection extends MqttConnectionWithReconnection
+public class MqttAsyncConnection extends MqttConnectionWithReconnection implements IUiConnection
 {
 	private final static Logger logger = LoggerFactory.getLogger(MqttAsyncConnection.class);
 
-	private final RuntimeConnectionProperties properties;
+	private final MqttRuntimeConnectionProperties properties;
 	
 	private boolean isOpened;
 	
@@ -63,14 +66,16 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 
 	private StatisticsManager statisticsManager;
 
-	private final EventManager<FormattedMqttMessage> eventManager;
+	// private final EventManager<FormattedMqttMessage> eventManager;
+	
+	private IKBus eventBus;
 
 	private final InteractiveScriptManager scriptManager;
 
 	private MqttMessageLogger messageLogger;
 
-	public MqttAsyncConnection(final ReconnectionManager reconnectionManager, final RuntimeConnectionProperties properties, 
-			final MqttConnectionStatus status, final EventManager<FormattedMqttMessage> eventManager, 
+	public MqttAsyncConnection(final ReconnectionManager reconnectionManager, final MqttRuntimeConnectionProperties properties, 
+			final ConnectionStatus status, final IKBus eventBus,
 			final InteractiveScriptManager scriptManager, final FormattingManager formattingManager,
 			final EventQueueManager<FormattedMqttMessage> uiEventQueue, final int summaryMaxPayloadLength)
 	{ 
@@ -82,13 +87,13 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 				properties.getConfiguredProperties().getMinMessagesStoredPerTopic(), 
 				properties.getMaxMessagesStored(), 
 				properties.getMaxMessagesStored() * 2, 
-				uiEventQueue, //eventManager,
+				uiEventQueue,
 				formattingManager,
 				summaryMaxPayloadLength);
 		
 		this.setPreferredStoreSize(properties.getMaxMessagesStored());
 		this.properties = properties;
-		this.eventManager = eventManager;
+		this.eventBus = eventBus;
 		this.scriptManager = scriptManager;
 		setConnectionStatus(status);
 	}
@@ -97,15 +102,17 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 	{		
 		// TODO: we should only delete from the topic matcher when a subscription is closed for good, not when just unsubscribed
 		final List<String> matchingSubscriptionTopics = getTopicMatcher().getMatchingSubscriptions(receivedMessage.getTopic());
-		logger.trace("Matching subscriptions = " + matchingSubscriptionTopics);
-		
-		final FormattedMqttMessage message = new FormattedMqttMessage(receivedMessage);		
+		logger.trace("Matching subscriptions = " + matchingSubscriptionTopics);		
 		
 		final List<String> matchingActiveSubscriptions = new ArrayList<String>();
 		
+		// This will modify the message if there is an onMessage
 		final BaseMqttSubscription lastMatchingSubscription = 
 				matchMessageToSubscriptions(matchingSubscriptionTopics, receivedMessage, matchingActiveSubscriptions);
 		
+		// TODO: should the copy be created after the subscription processing?
+		final FormattedMqttMessage message = new FormattedMqttMessage(receivedMessage);		
+				
 		// If logging is enabled
 		if (messageLogger != null && messageLogger.isRunning())
 		{
@@ -154,6 +161,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 		for (final String matchingSubscriptionTopic : matchingSubscriptionTopics)
 		{					
 			logger.trace("Message on topic " + receivedMessage.getTopic() + " matched to " + matchingSubscriptionTopic);
+			
 			// Get the mqtt-spy's subscription object
 			final BaseMqttSubscription mqttSubscription = getMqttSubscriptionForTopic(matchingSubscriptionTopic);
 
@@ -161,19 +169,20 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 			if (mqttSubscription != null && (anySubscription || mqttSubscription.isSubscribing() || mqttSubscription.isActive()))
 			{
 				matchingSubscriptions.add(matchingSubscriptionTopic);
-
-				// Create a copy of the message for each subscription
-				final FormattedMqttMessage message = new FormattedMqttMessage(receivedMessage);
 				
 				// Set subscription reference on the message
-				message.setSubscription(mqttSubscription.getTopic());
+				receivedMessage.setSubscription(mqttSubscription.getTopic());
 				foundMqttSubscription = mqttSubscription;
 				
+				// Run the script first, modify the source object
 				if (mqttSubscription.isScriptActive())
 				{
-					scriptManager.runScriptWithReceivedMessage(mqttSubscription.getScript(), message);
+					scriptManager.runScriptWithReceivedMessage(mqttSubscription.getScript(), receivedMessage);
 				}
 				
+				// Create a copy of the message for each subscription
+				final FormattedMqttMessage message = new FormattedMqttMessage(receivedMessage);
+								
 				// Pass the message for subscription handling
 				mqttSubscription.getStore().messageReceived(message);
 				
@@ -354,13 +363,14 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 		return subscribed;
 	}
 
-	public void setConnectionStatus(MqttConnectionStatus connectionStatus)
+	public void setConnectionStatus(ConnectionStatus connectionStatus)
 	{
 		super.setConnectionStatus(connectionStatus);
-		eventManager.notifyConnectionStatusChanged(this);
+		
+		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getConnectionStatus()));
 	}
 
-	public RuntimeConnectionProperties getProperties()
+	public MqttRuntimeConnectionProperties getProperties()
 	{
 		return properties;
 	}
@@ -399,7 +409,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 	{
 		this.isOpened = isOpened;
 		
-		eventManager.notifyConnectionStatusChanged(this);
+		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getConnectionStatus()));
 	}
 
 	public boolean isOpening()
@@ -410,7 +420,8 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection
 	public void setOpening(boolean isOpening)
 	{
 		this.isOpening = isOpening;
-		eventManager.notifyConnectionStatusChanged(this);
+		
+		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getConnectionStatus()));
 	}
 
 	public ManagedMessageStoreWithFiltering<FormattedMqttMessage> getStore()

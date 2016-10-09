@@ -33,7 +33,7 @@ public class BasicMessageStore<T> implements MessageStore<T>
 	private MessageList<T> messageList;
 		
 	/** The message format used for this message store. */
-	protected FormatterDetails messageFormat = FormattingUtils.createBasicFormatter("default", "Plain", ConversionMethod.PLAIN);
+	protected FormatterDetails messageFormat = FormattingUtils.createBasicFormatter("default", "Plain", null, ConversionMethod.PLAIN);
 
 	public BasicMessageStore(final MessageList<T> messageList)
 	{

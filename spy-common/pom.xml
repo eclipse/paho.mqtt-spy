@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pl.baczkowicz.spy</groupId>
 	<artifactId>spy-common</artifactId>
-	<version>0.0.3</version>
+	<version>0.4.0</version>
 
 	<name>spy-common</name>
 	<url>http://kamilfb.github.io/mq-spy/</url>
@@ -63,6 +63,14 @@
 			<version>1.7.7</version>
 		</dependency>
 		
+		<!--=== JSONPath === -->
+		
+		<dependency>
+		    <groupId>com.jayway.jsonpath</groupId>
+		    <artifactId>json-path</artifactId>
+		    <version>2.2.0</version>
+		</dependency>
+		
 		<!--=== SCHEMAS/JAXB === -->
 		
 	    <dependency>
@@ -94,6 +102,15 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
 		</dependency>	
+		
+		<!--=== TEST === -->
+	
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
 	
 	</dependencies>
 	
@@ -119,6 +136,7 @@
 			                <goal>generate</goal>
 			            </goals>
 			            <configuration>
+			            	<locale>en</locale>
 			            	<extension>true</extension>
 			                <schemaDirectory>src/main/resources/</schemaDirectory>
 			                <schemaIncludes>
@@ -170,7 +188,7 @@
 	               </execution>
 	           </executions>
 	           <configuration>
-	           		<basedir>src/main/java</basedir>
+	           		<basedir>${basedir}/src/main/java</basedir>
                     <includes>
 						<include>pl/baczkowicz/spy/common/generated/**/*.java</include>
                     </includes>

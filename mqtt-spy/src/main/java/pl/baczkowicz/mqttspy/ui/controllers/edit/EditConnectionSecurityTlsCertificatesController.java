@@ -33,9 +33,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.AnchorPane;
 import pl.baczkowicz.mqttspy.common.generated.SecureSocketSettings;
-import pl.baczkowicz.mqttspy.configuration.ConfiguredConnectionDetails;
+import pl.baczkowicz.mqttspy.configuration.ConfiguredMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.configuration.generated.UserInterfaceMqttConnectionDetails;
-import pl.baczkowicz.mqttspy.ui.EditConnectionController;
+import pl.baczkowicz.mqttspy.ui.controllers.EditMqttConnectionController;
 import pl.baczkowicz.spy.common.generated.SecureSocketModeEnum;
 import pl.baczkowicz.spy.ui.utils.DialogFactory;
 
@@ -46,7 +46,7 @@ import pl.baczkowicz.spy.ui.utils.DialogFactory;
 public class EditConnectionSecurityTlsCertificatesController extends AnchorPane implements Initializable
 {
 	/** The parent controller. */
-	private EditConnectionController parent;
+	private EditMqttConnectionController parent;
 	
 	@FXML
 	private AnchorPane tlsCertificatesPane;
@@ -54,10 +54,10 @@ public class EditConnectionSecurityTlsCertificatesController extends AnchorPane 
 	// Certificates
 	
 	@FXML
-	private TextField serverCertificateFile;
+	private TextField caCertificateFile;
 	
 	@FXML
-	private Button serverCertificateFileButton;
+	private Button caCertificateFileButton;
 	
 	@FXML
 	private PasswordField clientPassword;
@@ -107,12 +107,12 @@ public class EditConnectionSecurityTlsCertificatesController extends AnchorPane 
 	public void initialize(URL location, ResourceBundle resources)
 	{		
 		// Set up edit buttons
-		DialogFactory.setUpTextFieldFileOpenButton(serverCertificateFile, serverCertificateFileButton);
+		DialogFactory.setUpTextFieldFileOpenButton(caCertificateFile, caCertificateFileButton);
 		DialogFactory.setUpTextFieldFileOpenButton(clientCertificateFile, clientCertificateFileButton);
 		DialogFactory.setUpTextFieldFileOpenButton(clientKeyFile, clientKeyFileButton);
 		
 		// Certificates
-		serverCertificateFile.textProperty().addListener(basicOnChangeListener);
+		caCertificateFile.textProperty().addListener(basicOnChangeListener);
 		clientCertificateFile.textProperty().addListener(basicOnChangeListener);
 		clientKeyFile.textProperty().addListener(basicOnChangeListener);
 		clientPassword.textProperty().addListener(basicOnChangeListener);
@@ -171,7 +171,7 @@ public class EditConnectionSecurityTlsCertificatesController extends AnchorPane 
 			
 			if (certificates)
 			{			
-				sslSettings.setCertificateAuthorityFile(serverCertificateFile.getText());
+				sslSettings.setCertificateAuthorityFile(caCertificateFile.getText());
 				sslSettings.setClientCertificateFile(clientCertificateFile.getText());
 				sslSettings.setClientKeyFile(clientKeyFile.getText());
 				sslSettings.setClientKeyPassword(clientPassword.getText());				
@@ -182,42 +182,24 @@ public class EditConnectionSecurityTlsCertificatesController extends AnchorPane 
 		}
 	}
 
-	public void displayConnectionDetails(final ConfiguredConnectionDetails connection)
+	public void displayConnectionDetails(final ConfiguredMqttConnectionDetails connection)
 	{
 		if (connection.getSSL() != null)
 		{	
 			// Certificates
-			serverCertificateFile.setText(connection.getSSL().getCertificateAuthorityFile());
+			caCertificateFile.setText(connection.getSSL().getCertificateAuthorityFile());
 			clientCertificateFile.setText(connection.getSSL().getClientCertificateFile());
 			clientKeyFile.setText(connection.getSSL().getClientKeyFile());
 			clientPassword.setText(connection.getSSL().getClientKeyPassword());	
 			clientKeyPemFormatted.setSelected(Boolean.TRUE.equals(connection.getSSL().isClientKeyPEM()));
 		}
 	}
-	
-	@FXML
-	private void editCaCrtFile()
-	{
-		// TODO
-	}
-	
-	@FXML
-	private void editClientCrtFile()
-	{
-		// TODO
-	}
-	
-	@FXML
-	private void editClientKeyFile()
-	{
-		// TODO
-	}
 
 	// ===============================
 	// === Setters and getters =======
 	// ===============================
 	
-	public void setParent(final EditConnectionController controller)
+	public void setParent(final EditMqttConnectionController controller)
 	{
 		this.parent = controller;
 	}

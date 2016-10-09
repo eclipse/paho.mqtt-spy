@@ -3,7 +3,7 @@
 	
 	<groupId>pl.baczkowicz.mqttspy</groupId>
 	<artifactId>mqtt-spy-common</artifactId>
-	<version>0.0.16</version>
+	<version>0.2.0</version>
 	
 	<name>mqtt-spy-common</name>
 	<url>http://kamilfb.github.io/mqtt-spy/</url>
@@ -21,6 +21,16 @@
 		<repository>
 			<id>Eclipse Paho Repo</id>
 			<url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+		</repository>
+		
+		<repository>
+			<id>Eclipse Paho Repo Snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/paho-snapshots/</url>
+		</repository>
+		
+		<repository>
+			<id>Eclipse Kura Repo</id>
+			<url>https://repo.eclipse.org/content/repositories/kura-releases/</url>
 		</repository>
 
 		<repository>
@@ -41,20 +51,44 @@
 		<dependency>
 			<groupId>pl.baczkowicz.spy</groupId>
 			<artifactId>spy-common</artifactId>
-			<version>0.0.3</version>
+			<version>0.4.0</version>
 		</dependency>		
 		
 		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-			<version>1.0.3-20151116.050526-315</version>
+			<version>1.0.3-SNAPSHOT</version>
+		</dependency> 
+		
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.kura</groupId>
+			<artifactId>org.eclipse.kura.core.cloud</artifactId>
+			<version>1.0.6</version>	
+		</dependency> 
+		
+		<dependency>
+			<groupId>org.eclipse.kura</groupId>
+			<artifactId>org.eclipse.kura.core</artifactId>
+			<version>1.0.6</version>	
+		</dependency> 
+		
+		<dependency>
+			<groupId>org.eclipse.kura</groupId>
+			<artifactId>org.eclipse.kura.api</artifactId>
+			<version>1.0.6</version>	
 		</dependency> 
 				
 		<dependency>
-			<groupId>org.eclipse.moquette</groupId>
+			<groupId>io.moquette</groupId>
 			<artifactId>moquette-broker</artifactId>
+			<version>0.8</version>
 			<scope>compile</scope>
-			<version>0.7</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -105,12 +139,20 @@
 					<groupId>org.apache.felix</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>disruptor</artifactId>
 					<groupId>com.googlecode.disruptor</groupId>
+					<artifactId>disruptor</artifactId>					
 				</exclusion>
 				<exclusion>
+					<groupId>io.moquette</groupId>
 					<artifactId>moquette-netty-parser</artifactId>
-					<groupId>org.eclipse.moquette</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>HdrHistogram</artifactId>
+					<groupId>org.hdrhistogram</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>netty-codec-http</artifactId>
+					<groupId>io.netty</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -202,6 +244,7 @@
 			                <goal>generate</goal>
 			            </goals>
 			            <configuration>
+			            	<locale>en</locale>
 			            	<extension>true</extension>
 			                <schemaDirectory>src/main/resources/</schemaDirectory>
 			                <schemaIncludes>
@@ -210,6 +253,7 @@
 			                <generateDirectory>src/main/java/</generateDirectory>
 			                <removeOldOutput>false</removeOldOutput>			               
 
+							<strict>false</strict>
 			                <catalogs>
 			                	<catalog>
 			                		<dependencyResource>
@@ -270,7 +314,7 @@
 	               </execution>
 	           </executions>
 	           <configuration>
-	           		<basedir>src/main/java</basedir>
+	           		<basedir>${basedir}/src/main/java</basedir>
                     <includes>
 						<include>pl/baczkowicz/mqttspy/common/generated/**/*.java</include>
                     </includes>

@@ -22,12 +22,12 @@ package pl.baczkowicz.mqttspy.daemon.connectivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pl.baczkowicz.mqttspy.common.generated.ReconnectionSettings;
 import pl.baczkowicz.mqttspy.common.generated.SubscriptionDetails;
 import pl.baczkowicz.mqttspy.connectivity.BaseMqttSubscription;
 import pl.baczkowicz.mqttspy.connectivity.SimpleMqttConnection;
 import pl.baczkowicz.mqttspy.daemon.configuration.generated.DaemonMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.utils.ConnectionUtils;
+import pl.baczkowicz.spy.common.generated.ReconnectionSettings;
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
 import pl.baczkowicz.spy.scripts.BaseScriptManager;
 import pl.baczkowicz.spy.utils.ThreadingUtils;

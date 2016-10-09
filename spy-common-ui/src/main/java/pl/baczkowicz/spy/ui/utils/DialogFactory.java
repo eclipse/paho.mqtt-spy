@@ -20,6 +20,10 @@
 package pl.baczkowicz.spy.ui.utils;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -38,16 +42,24 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Pair;
+import pl.baczkowicz.spy.exceptions.ExceptionUtils;
+import pl.baczkowicz.spy.ui.configuration.BaseConfigurationManager;
+import pl.baczkowicz.spy.ui.controls.CommandLinksDialog;
+import pl.baczkowicz.spy.ui.controls.DialogAction;
 import pl.baczkowicz.spy.ui.controls.WorkerProgressPane;
 
 public class DialogFactory
@@ -67,6 +79,70 @@ public class DialogFactory
 
 		alert.showAndWait();
 	}
+	
+	public static void createExceptionDialog(final String title, final String contentText, final String multilineText)
+	{	
+		final Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(contentText);
+
+		final TextArea textArea = new TextArea(multilineText);
+		
+		textArea.setEditable(false);
+		textArea.setWrapText(true);
+
+		textArea.setMaxWidth(Double.MAX_VALUE);
+		textArea.setMaxHeight(Double.MAX_VALUE);
+		
+		GridPane.setVgrow(textArea, Priority.ALWAYS);
+		GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+		GridPane content = new GridPane();
+		content.setMaxWidth(Double.MAX_VALUE);
+		content.add(textArea, 0, 0);
+
+		alert.getDialogPane().setExpandableContent(content);
+		alert.getDialogPane().setExpanded(true);
+
+		alert.showAndWait();
+	}	
+	
+	public static void createExceptionDialog(final String title, final Exception e)
+	{
+		final StringWriter sw = new StringWriter();
+		final PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+
+		createExceptionDialog(title, e.getMessage() + " - " + ExceptionUtils.getRootCauseMessage(e), sw.toString());
+//		final Alert alert = new Alert(AlertType.ERROR);
+//		alert.setTitle(title);
+//		alert.setHeaderText(null);
+//		alert.setContentText(e.getMessage() + " - " + ExceptionUtils.getRootCauseMessage(e));
+//		
+//		final StringWriter sw = new StringWriter();
+//		final PrintWriter pw = new PrintWriter(sw);
+//		e.printStackTrace(pw);
+//
+//		final TextArea textArea = new TextArea(sw.toString());
+//		
+//		textArea.setEditable(false);
+//		textArea.setWrapText(true);
+//
+//		textArea.setMaxWidth(Double.MAX_VALUE);
+//		textArea.setMaxHeight(Double.MAX_VALUE);
+//		
+//		GridPane.setVgrow(textArea, Priority.ALWAYS);
+//		GridPane.setHgrow(textArea, Priority.ALWAYS);
+//
+//		GridPane content = new GridPane();
+//		content.setMaxWidth(Double.MAX_VALUE);
+//		content.add(textArea, 0, 0);
+//
+//		alert.getDialogPane().setExpandableContent(content);
+//
+//		alert.showAndWait();
+	}	
 
 	public static void createWarningDialog(final String title, final String message)
 	{
@@ -130,7 +206,7 @@ public class DialogFactory
 		dialog.setHeaderText(header);
 
 		// Set the icon 
-		dialog.setGraphic(ImageUtils.createLargeIcon("preferences-desktop-user-password", 48));
+		dialog.setGraphic(ImageUtils.createIcon("preferences-desktop-user-password-large", 48));
 
 		// Set the button types
 		final ButtonType loginButtonType = new ButtonType("Connect", ButtonData.OK_DONE);
@@ -183,7 +259,7 @@ public class DialogFactory
 	public static Stage createWindowWithPane(final Node pane, final Scene parentScene, 
 			final String title, final double margin)
 	{
-		final Stage stage = new Stage();
+		final Stage stage = new Stage(StageStyle.UTILITY);
 		final AnchorPane content = new AnchorPane();
 		
 		content.getChildren().add(pane);
@@ -194,6 +270,7 @@ public class DialogFactory
 		
 		final Scene scene = new Scene(content);
 		scene.getStylesheets().addAll(parentScene.getStylesheets());
+		stage.initOwner(parentScene.getWindow());
 		stage.setTitle(title);
 		stage.setScene(scene);
 		
@@ -301,5 +378,86 @@ public class DialogFactory
 				}				
 			}
 		});
-	}		
+	}	
+	
+
+	/**
+	 * Shows the choice dialog when missing configuration file is detected.
+	 * 
+	 * @param title The title of the window
+	 * @param window The parent
+	 * 
+	 * @return True when action performed / configuration file created
+	 */
+	public static boolean showDefaultConfigurationFileMissingChoice(final String title, final Scene scene)
+	{	
+		// TODO: use Java dialogs
+		final DialogAction createWithSample = new DialogAction("Create " + BaseConfigurationManager.APPLICATION_NAME
+				+ " configuration file with sample content",
+				System.getProperty("line.separator") + "This creates a configuration file " +  
+                "in \"" + BaseConfigurationManager.getDefaultHomeDirectory() + "\"" + 
+                " called \"" + BaseConfigurationManager.getDefaultConfigurationFileName() + "\"" + 
+                ", which will include sample connections to localhost and iot.eclipse.org.");
+		
+		 final DialogAction createEmpty = new DialogAction("Create empty " + BaseConfigurationManager.APPLICATION_NAME
+		 		+ " configuration file",
+				 System.getProperty("line.separator") + "This creates a configuration file " +  
+                 "in \"" + BaseConfigurationManager.getDefaultHomeDirectory() + "\"" + 
+                 " called \"" + BaseConfigurationManager.getDefaultConfigurationFileName() + "\" with no sample connections.");
+		 
+		 final DialogAction copyExisting = new DialogAction("Copy existing " + BaseConfigurationManager.APPLICATION_NAME
+		 		+ " configuration file",
+				 System.getProperty("line.separator") + "This copies an existing configuration file (selected in the next step) " +  
+                 "to \"" + BaseConfigurationManager.getDefaultHomeDirectory() + "\"" + 
+                 " and renames it to \"" + BaseConfigurationManager.getDefaultConfigurationFileName() + "\".");
+		 
+		 final DialogAction dontDoAnything = new DialogAction("Don't do anything",
+				 System.getProperty("line.separator") + "You can still point " + BaseConfigurationManager.APPLICATION_NAME
+				 		+ " at your chosen configuration file " +  
+                 "by using the \"--configuration=my_custom_path\"" + 
+                 " command line parameter or open a configuration file from the main menu.");
+		
+		final List<DialogAction> links = Arrays.asList(createWithSample, createEmpty, copyExisting, dontDoAnything);
+		
+		Optional<DialogAction> response = CommandLinksDialog.showCommandLinks(title,
+				"Please select one of the following options with regards to the " + BaseConfigurationManager.APPLICATION_NAME
+				+ " configuration file:",
+				links.get(0), links, 550, 650, 30, 110, 
+				scene.getStylesheets());
+		
+		boolean configurationFileCreated = false;
+		
+		if (!response.isPresent())
+		{
+			// Do nothing
+		}
+		else if (response.get().getHeading().toLowerCase().contains("sample"))
+		{
+			configurationFileCreated = BaseConfigurationManager.createDefaultConfigFromClassPath("sample");
+		}
+		else if (response.get().getHeading().toLowerCase().contains("empty"))
+		{
+			configurationFileCreated = BaseConfigurationManager.createDefaultConfigFromClassPath("empty");
+		}
+		else if (response.get().getHeading().toLowerCase().contains("copy"))
+		{
+			final FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Select configuration file to copy");
+			String extensions = "xml";
+			fileChooser.setSelectedExtensionFilter(new ExtensionFilter("XML file", extensions));
+
+			final File selectedFile = fileChooser.showOpenDialog(scene.getWindow());
+
+			if (selectedFile != null)
+			{
+				configurationFileCreated = BaseConfigurationManager.createDefaultConfigFromFile(selectedFile);
+			}
+		}
+		else
+		{
+			// Do nothing
+		}
+		
+		return configurationFileCreated;
+	}	
 }

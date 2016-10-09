@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pl.baczkowicz.mqttspy</groupId>
 	<artifactId>mqtt-spy-daemon</artifactId>
-	<version>0.1.1-beta</version>
+	<version>0.2.0-beta</version>
 
   	<name>mqtt-spy-daemon</name>
   	<url>http://kamilfb.github.io/mqtt-spy/</url>
@@ -28,7 +28,7 @@
   		<dependency>
 			<groupId>pl.baczkowicz.spy</groupId>
 			<artifactId>spy-common</artifactId>
-			<version>0.0.3</version>
+			<version>0.4.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>maven-jaxb2-plugin</artifactId>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>pl.baczkowicz.mqttspy</groupId>
 			<artifactId>mqtt-spy-common</artifactId>
-			<version>0.0.16</version>			 
+			<version>0.2.0</version>			 
 			<exclusions>
 				<exclusion>
 					<artifactId>maven-jaxb2-plugin</artifactId>
@@ -200,6 +200,7 @@
 			                <generatePackage>pl.baczkowicz.mqttspy.daemon.configuration.generated</generatePackage>
 			                <removeOldOutput>false</removeOldOutput>
 			                
+			                <strict>false</strict>
 			                <catalogs>
 			                	<catalog>
 			                		<dependencyResource>
@@ -265,7 +266,7 @@
 	               </execution>
 	           </executions>
 	           <configuration>
-	           		<basedir>src/main/java</basedir>
+	           		<basedir>${basedir}/src/main/java</basedir>
                     <includes>
 						<include>pl/baczkowicz/mqttspy/daemon/configuration/generated/**/*.java</include>
                     </includes>

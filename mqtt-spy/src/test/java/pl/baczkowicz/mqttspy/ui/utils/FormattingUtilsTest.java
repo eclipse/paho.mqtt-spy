@@ -21,8 +21,16 @@ package pl.baczkowicz.mqttspy.ui.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Ignore;
@@ -230,5 +238,51 @@ public class FormattingUtilsTest
 		assertEquals("23", FormattingUtils.replaceCharacters(ConversionMethod.HEX_ENCODE, "#", 0, 40, null));
 		assertEquals("-23-1", FormattingUtils.replaceCharacters(ConversionMethod.HEX_ENCODE, "#1", 0, 40, "-"));
 	}
+	
+	// TODO: create utility methods off that
+	public static byte[] compress(String text)
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try
+		{
+			OutputStream out = new DeflaterOutputStream(baos);
+			out.write(text.getBytes("UTF-8"));
+			out.close();
+		}
+		catch (IOException e)
+		{
+			throw new AssertionError(e);
+		}
+		return baos.toByteArray();
+	}
 
+	// TODO: create utility methods off that
+	public static String decompress(byte[] bytes)
+	{
+		InputStream in = new InflaterInputStream(new ByteArrayInputStream(bytes));
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try
+		{
+			ByteBuffer buffer = ByteBuffer.allocate(2048);
+			//byte[] buffer = new byte[8192];
+			int len;
+			while ((len = in.read(buffer.array())) > 0)
+				baos.write(buffer.array(), 0, len);
+			return new String(baos.toByteArray(), "UTF-8");
+		}
+		catch (IOException e)
+		{
+			throw new AssertionError(e);
+		}
+	}
+
+	@Test
+	public final void testGzip()	
+	{
+		final String payload = "{ temp: " + (20 + Math.floor((Math.random() * 10) + 1) / 10) + ", " + "energy: " + (40 + Math.floor((Math.random() * 10) + 1)) + "}";
+		
+		final byte[] gziped = compress(payload);
+		
+		assertEquals(payload, decompress(gziped));
+	}
 }

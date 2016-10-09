@@ -11,7 +11,7 @@ function publishTime()
 	{
 		var currentTime = TIME_WITH_SECONDS_SDF.format(new Date());
 		
-		mqttspy.publish("/time/", currentTime, 0, false);
+		mqttspy.publish("time/", currentTime, 0, false);
 
 		// Sleep for 1 second and handle a stop request 
 		try 

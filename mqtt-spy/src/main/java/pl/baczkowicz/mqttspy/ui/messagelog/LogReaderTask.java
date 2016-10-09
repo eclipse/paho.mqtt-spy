@@ -30,8 +30,9 @@ import org.slf4j.LoggerFactory;
 import pl.baczkowicz.mqttspy.common.generated.LoggedMqttMessage;
 import pl.baczkowicz.mqttspy.logger.MqttMessageLogParserUtils;
 import pl.baczkowicz.mqttspy.messages.BaseMqttMessage;
-import pl.baczkowicz.mqttspy.ui.MainController;
-import pl.baczkowicz.mqttspy.ui.connections.ConnectionManager;
+import pl.baczkowicz.mqttspy.ui.MqttViewManager;
+import pl.baczkowicz.mqttspy.ui.controllers.MqttSpyMainController;
+import pl.baczkowicz.spy.files.FileUtils;
 import pl.baczkowicz.spy.utils.ThreadingUtils;
 
 /**
@@ -45,11 +46,11 @@ public class LogReaderTask extends TaskWithProgressUpdater<List<BaseMqttMessage>
 	/** The file to read from. */
 	private File selectedFile;
 	
-	/** Connection manager - used for loading the message log tab. */
-	protected ConnectionManager connectionManager;
+	/** View manager - used for loading the message log tab. */
+	protected MqttViewManager viewManager;
 	
 	/** Main controller. */
-	protected MainController controller;
+	protected MqttSpyMainController controller;
 	
 	/**
 	 * Creates a LogReaderTask with the supplied parameters.
@@ -58,12 +59,12 @@ public class LogReaderTask extends TaskWithProgressUpdater<List<BaseMqttMessage>
 	 * @param connectionManager The connection manager
 	 * @param mainController The main controller
 	 */
-	public LogReaderTask(final File selectedFile, final ConnectionManager connectionManager, final MainController mainController)
+	public LogReaderTask(final File selectedFile, final MqttViewManager viewManager, final MqttSpyMainController mainController)
 	{
 		this.selectedFile = selectedFile;
-		this.connectionManager = connectionManager;
+		this.viewManager = viewManager;
 		this.controller = mainController;
-		super.updateTitle("Processing message log file " + selectedFile.getName());
+		super.updateTitle("Processing message audit log file " + selectedFile.getName());
 	}
 
 	@Override
@@ -72,9 +73,9 @@ public class LogReaderTask extends TaskWithProgressUpdater<List<BaseMqttMessage>
 		try
 		{			
 			// Read the message log
-			updateMessage("Please wait - reading message log [1/4]");
+			updateMessage("Please wait - reading message audit log [1/4]");
 			updateProgress(0, 4);
-			final List<String> fileContent = MqttMessageLogParserUtils.readMessageLog(selectedFile);					
+			final List<String> fileContent = FileUtils.readFileAsLines(selectedFile);					
 			final long totalItems = fileContent.size();
 			updateProgress(totalItems, totalItems * 4);
 			
@@ -113,7 +114,7 @@ public class LogReaderTask extends TaskWithProgressUpdater<List<BaseMqttMessage>
 				@Override
 				public void run()
 				{
-					connectionManager.loadMessageLogTab(controller, selectedFile.getName(), processedMessages);								
+					viewManager.loadMessageLogTab(controller, selectedFile.getName(), processedMessages);								
 				}
 			});	
 			
@@ -128,7 +129,7 @@ public class LogReaderTask extends TaskWithProgressUpdater<List<BaseMqttMessage>
 		}
 		catch (Exception e)
 		{
-			logger.error("Cannot process the message log - {}", selectedFile.getName(), e);
+			logger.error("Cannot process the message audit log - {}", selectedFile.getName(), e);
 		}
 		
 		return null;

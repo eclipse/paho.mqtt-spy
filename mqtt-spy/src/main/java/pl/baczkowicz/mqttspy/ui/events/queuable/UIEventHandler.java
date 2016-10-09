@@ -30,8 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.mqttspy.ui.events.EventManager;
+import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.storage.MessageList;
+import pl.baczkowicz.spy.ui.events.MessageAddedEvent;
+import pl.baczkowicz.spy.ui.events.MessageRemovedEvent;
 import pl.baczkowicz.spy.ui.events.queuable.EventQueueManager;
 import pl.baczkowicz.spy.ui.events.queuable.ui.BrowseReceivedMessageEvent;
 import pl.baczkowicz.spy.ui.events.queuable.ui.BrowseRemovedMessageEvent;
@@ -53,12 +55,14 @@ public class UIEventHandler implements Runnable
 	
 	private final EventQueueManager<FormattedMqttMessage> uiEventQueue;
 	
-	private final EventManager<FormattedMqttMessage> eventManager;
+	// private final EventManager<FormattedMqttMessage> eventManager;
 
-	public UIEventHandler(final EventQueueManager<FormattedMqttMessage> uiEventQueue, final EventManager<FormattedMqttMessage> eventManager)
+	private IKBus eventBus;
+
+	public UIEventHandler(final EventQueueManager<FormattedMqttMessage> uiEventQueue, final IKBus eventBus)
 	{
 		this.uiEventQueue = uiEventQueue;
-		this.eventManager = eventManager;
+		this.eventBus = eventBus;
 	}
 
 	@Override
@@ -151,15 +155,19 @@ public class UIEventHandler implements Runnable
 		
 		if (event instanceof BrowseReceivedMessageEvent)
 		{
-			eventManager.notifyMessageAdded(
-					(List<BrowseReceivedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
-					((BrowseReceivedMessageEvent<FormattedMqttMessage>) event).getList());
+			eventBus.publish(new MessageAddedEvent<>((List<BrowseReceivedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
+					((BrowseReceivedMessageEvent<FormattedMqttMessage>) event).getList()));
+//			eventManager.notifyMessageAdded(
+//					(List<BrowseReceivedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
+//					((BrowseReceivedMessageEvent<FormattedMqttMessage>) event).getList());
 		}
 		else if (event instanceof BrowseRemovedMessageEvent)
 		{
-			eventManager.notifyMessageRemoved(
-					(List<BrowseRemovedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
-					event.getList());
+			eventBus.publish(new MessageRemovedEvent<>((List<BrowseRemovedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
+					event.getList()));
+//			eventManager.notifyMessageRemoved(
+//					(List<BrowseRemovedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
+//					event.getList());
 		}
 		else if (event instanceof TopicSummaryNewMessageEvent)
 		{

@@ -117,10 +117,7 @@ public class MqttCallbackHandler implements MqttCallback
 	 */
 	public void messageArrived(final String topic, final MqttMessage message)
 	{
-		if (logger.isTraceEnabled())
-		{
-			logger.trace("[{}] Received message on topic \"{}\". Payload = \"{}\"", messageQueue.size(), topic, new String(message.getPayload()));
-		}
+		logger.debug("[{}] Received message on topic \"{}\". Payload = \"{}\"", messageQueue.size(), topic, new String(message.getPayload()));		
 		
 		final long newId = MessageIdGenerator.getNewId();
 		
@@ -130,10 +127,7 @@ public class MqttCallbackHandler implements MqttCallback
 		final List<String> matchingSubscriptions = connection.getTopicMatcher().getMatchingSubscriptions(receivedMessage.getTopic());
 		receivedMessage.setMatchingSubscriptionTopics(matchingSubscriptions);
 		
-		if (logger.isTraceEnabled())
-		{
-			logger.trace("Matching subscriptions for message on " + receivedMessage.getTopic() + " = " + matchingSubscriptions);
-		}
+		logger.trace("Matching subscriptions for message on {} = {}", receivedMessage.getTopic(), matchingSubscriptions);
 		
 		// Before scripts
 		if (connectionSettings.getMessageLog().isLogBeforeScripts())
@@ -193,10 +187,7 @@ public class MqttCallbackHandler implements MqttCallback
 	 */
 	public void deliveryComplete(final IMqttDeliveryToken token)
 	{
-		if (logger.isTraceEnabled())
-		{
-			logger.trace("Delivery complete for " + token.getMessageId());
-		}
+		logger.trace("Delivery complete for {}", token.getMessageId());		
 	}
 	
 	/**

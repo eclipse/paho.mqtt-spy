@@ -25,7 +25,7 @@ import java.io.FileNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
-import pl.baczkowicz.mqttspy.configuration.ConfigurationManager;
+import pl.baczkowicz.mqttspy.configuration.MqttConfigurationManager;
 import pl.baczkowicz.spy.exceptions.XMLException;
 import pl.baczkowicz.spy.xml.XMLParser;
 
@@ -37,8 +37,8 @@ public class XMLParserTest
 	public void setUp() throws Exception
 	{
 		parser = new XMLParser(
-				ConfigurationManager.PACKAGE, 
-				new String[] {ConfigurationManager.SPY_COMMON_SCHEMA, ConfigurationManager.MQTT_COMMON_SCHEMA, ConfigurationManager.SCHEMA});
+				MqttConfigurationManager.PACKAGE, 
+				new String[] {MqttConfigurationManager.SPY_COMMON_SCHEMA, MqttConfigurationManager.MQTT_COMMON_SCHEMA, MqttConfigurationManager.SCHEMA});
 	}
 
 	@Test

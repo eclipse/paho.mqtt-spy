@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2015 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="288.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.edit.EditConnectionPublicationsController">
+   <children>
+      <TabPane prefHeight="200.0" prefWidth="200.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+        <tabs>
+          <Tab text="Topics">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                     
+                        <TableView fx:id="publicationsTable" editable="true" layoutY="13.0" prefHeight="145.0" prefWidth="525.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                          <columns>
+                            <TableColumn fx:id="publicationTopicColumn" minWidth="300.0" prefWidth="500.0" text="Topic" />
+                          </columns>
+                        </TableView>
+                        <Button fx:id="removePublicationButton" disable="true" focusTraversable="false" layoutX="394.0" mnemonicParsing="false" onAction="#removePublication" prefHeight="25.0" prefWidth="145" text="Remove topic" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                    <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+					        <graphic>
+					      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+							         <image>
+							            <Image url="/ui/images/button-delete.png" />
+							         </image>
+							      </ImageView>
+					      	</graphic>
+		      			</Button>
+		      			
+                        <Button fx:id="addPublicationButton" focusTraversable="false" mnemonicParsing="false" onAction="#addPublication" prefHeight="25.0" prefWidth="145" text="Add topic" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="171.0">
+                                    <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+					        <graphic>
+					      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+							         <image>
+							            <Image url="/ui/images/button-add.png" />
+							         </image>
+							      </ImageView>
+					      	</graphic>
+			            </Button>
+                        <Label styleClass="vsmall-font" layoutX="14.0" prefHeight="43.0" prefWidth="214.0" text="Note: double click  to edit a table row, then Enter to submit the new value." textFill="#5e5e5e" wrapText="true" AnchorPane.bottomAnchor="10" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Scripts">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="19.0" text="Directory with publication scripts" />
+                        <TextField fx:id="publicationScriptsText" layoutX="237.0" layoutY="14.0" prefHeight="25.0" prefWidth="302.0" promptText="when empty, mqtt-spy's home dir is used" />
+                        <Button fx:id="addScriptButton" focusTraversable="false" layoutX="237.0" layoutY="168.0" mnemonicParsing="false" onAction="#addScript" prefHeight="25.0" prefWidth="145" text="Add script" AnchorPane.bottomAnchor="14.0">
+                           <graphic>
+                              <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+                                 <image>
+                                    <Image url="/ui/images/button-add.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="removeScriptButton" disable="true" focusTraversable="false" layoutX="394.0" layoutY="168.0" mnemonicParsing="false" onAction="#removeScript" prefHeight="25.0" prefWidth="145" text="Remove script" AnchorPane.bottomAnchor="14.0">
+                           <graphic>
+                              <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+                                 <image>
+                                    <Image url="/ui/images/button-delete.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                        </Button>
+                        <TableView fx:id="backgroundPublicationScriptsTable" editable="true" layoutY="78.0" prefHeight="79.0" prefWidth="525.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="78.0">
+                           <columns>
+                              <TableColumn fx:id="publicationScriptColumn" prefWidth="300.0" text="Script location" />
+                              <TableColumn fx:id="publicationAutoStartColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Auto-start" />
+                              <TableColumn fx:id="publicationRepeatColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Repeat" />
+                           </columns>
+                        </TableView>
+                        <Label styleClass="vsmall-font" layoutX="14.0" prefHeight="43.0" prefWidth="214.0" text="Note: double click  to edit a table row, then Enter to submit the new value." textFill="#5e5e5e" wrapText="true" AnchorPane.bottomAnchor="10" />
+
+                        <Label styleClass="vsmall-font" layoutX="30.0" layoutY="32.0" prefHeight="15.0" prefWidth="207.0" text="(only used for auto-discovery of scripts)" textFill="#5e5e5e" wrapText="true" />
+
+                        <Separator layoutX="14.0" layoutY="51.0" prefHeight="3.0" prefWidth="525.0" />
+                        <Label layoutX="14.0" layoutY="59.0" text="Predefined scripts:" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

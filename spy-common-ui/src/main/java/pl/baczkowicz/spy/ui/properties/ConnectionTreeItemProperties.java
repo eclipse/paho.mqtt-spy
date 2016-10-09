@@ -32,9 +32,9 @@ public class ConnectionTreeItemProperties
 
 	private String name;
 	
-	private ModifiableItem connectionGroup; 
+	private ModifiableConnection connectionGroup; 
 	
-	private ModifiableItem connection;
+	private ModifiableConnection connection;
 
 	private List<ConnectionTreeItemProperties> children = new ArrayList<>();
 
@@ -85,7 +85,7 @@ public class ConnectionTreeItemProperties
 	/**
 	 * @return the connectionGroup
 	 */
-	public ModifiableItem getGroup()
+	public ModifiableConnection getGroup()
 	{
 		return connectionGroup;
 	}
@@ -93,7 +93,7 @@ public class ConnectionTreeItemProperties
 	/**
 	 * @param connectionGroup the connectionGroup to set
 	 */
-	public void setGroup(ModifiableItem connectionGroup)
+	public void setGroup(ModifiableConnection connectionGroup)
 	{
 		this.connectionGroup = connectionGroup;
 		grouping = true;
@@ -103,7 +103,7 @@ public class ConnectionTreeItemProperties
 	/**
 	 * @return the connection
 	 */
-	public ModifiableItem getConnection()
+	public ModifiableConnection getConnection()
 	{
 		return connection;
 	}
@@ -111,7 +111,7 @@ public class ConnectionTreeItemProperties
 	/**
 	 * @param connection the connection to set
 	 */
-	public void setConnection(ModifiableItem connection)
+	public void setConnection(ModifiableConnection connection)
 	{
 		this.connection = connection;
 		grouping = false;

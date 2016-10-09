@@ -22,22 +22,22 @@ package pl.baczkowicz.mqttspy;
 import java.io.File;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import org.slf4j.LoggerFactory;
 
-import pl.baczkowicz.mqttspy.configuration.ConfigurationManager;
-import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.mqttspy.ui.MainController;
-import pl.baczkowicz.mqttspy.ui.events.EventManager;
-import pl.baczkowicz.spy.ui.configuration.UiProperties;
+import pl.baczkowicz.mqttspy.configuration.MqttConfigurationManager;
+import pl.baczkowicz.mqttspy.connectivity.MqttConnectionFactory;
+import pl.baczkowicz.mqttspy.scripts.MqttScriptManager;
+import pl.baczkowicz.mqttspy.ui.MqttConnectionViewManager;
+import pl.baczkowicz.mqttspy.ui.MqttViewManager;
+import pl.baczkowicz.mqttspy.ui.stats.MqttStatsFileIO;
+import pl.baczkowicz.spy.eventbus.IKBus;
+import pl.baczkowicz.spy.eventbus.KBus;
+import pl.baczkowicz.spy.ui.events.LoadConfigurationFileEvent;
+import pl.baczkowicz.spy.ui.stats.StatisticsManager;
 import pl.baczkowicz.spy.ui.utils.FxmlUtils;
+import pl.baczkowicz.spy.ui.versions.VersionManager;
 
 /** 
  * The main class, loading the app.
@@ -55,48 +55,39 @@ public class Main extends Application
 	 * Starts the application.
 	 */
 	public void start(final Stage primaryStage)
-	{
-		final EventManager<FormattedMqttMessage> eventManager = new EventManager<FormattedMqttMessage>();			
+	{			
+		final IKBus eventBus = new KBus();
 				
 		try
 		{
-			final ConfigurationManager configurationManager = new ConfigurationManager(eventManager);			
+			final MqttConfigurationManager configurationManager = new MqttConfigurationManager();			
 			
-			// Load the main window
-			FxmlUtils.setParentClass(getClass());
-			final FXMLLoader loader = FxmlUtils.createFxmlLoaderForProjectFile("MainWindow.fxml");
+			FxmlUtils.setParentClass(getClass());									
+			
+			final StatisticsManager statisticsManager = new StatisticsManager(new MqttStatsFileIO());
+			final VersionManager versionManager = new VersionManager(configurationManager.getDefaultPropertyFile());
+			
+			final MqttViewManager viewManager = new MqttViewManager();
+									
+			final MqttConnectionViewManager connectionManager = new MqttConnectionViewManager(eventBus, statisticsManager, configurationManager);										
+			connectionManager.setViewManager(viewManager);			
 
-			// Get the associated pane
-			AnchorPane pane = (AnchorPane) loader.load();
-			
-			final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-			
-			// Set scene width, height and style
-			final double height = Math.min(UiProperties.getApplicationHeight(configurationManager.getUiPropertyFile()), primaryScreenBounds.getHeight());			
-			final double width = Math.min(UiProperties.getApplicationWidth(configurationManager.getUiPropertyFile()), primaryScreenBounds.getWidth());
-			
-			final Scene scene = new Scene(pane, width, height);			
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
-			// Get the associated controller
-			final MainController mainController = (MainController) loader.getController();
-			mainController.setEventManager(eventManager);
-			mainController.setConfigurationManager(configurationManager);
-			mainController.setSelectedPerspective(UiProperties.getApplicationPerspective(configurationManager.getUiPropertyFile()));
-			mainController.getResizeMessagePaneMenu().setSelected(UiProperties.getResizeMessagePane(configurationManager.getUiPropertyFile()));
+			final MqttConnectionFactory connectionFactory = new MqttConnectionFactory();
+			connectionFactory.setConfigurationManager(configurationManager);
+			connectionFactory.setConnectionManager(connectionManager);
+			connectionFactory.setEventBus(eventBus);
 
-			// Set the stage's properties
-			primaryStage.setScene(scene);	
-			primaryStage.setMaximized(UiProperties.getApplicationMaximized(configurationManager.getUiPropertyFile()));
+			viewManager.setConnectionFactory(connectionFactory);
+			viewManager.setGenericScriptManager(new MqttScriptManager(null, null, null));
+			viewManager.setEventBus(eventBus);
+			viewManager.setConfigurationManager(configurationManager);
+			viewManager.setConnectionManager(connectionManager);
+			viewManager.setStatisticsManager(statisticsManager);
+			viewManager.setVersionManager(versionManager);
+			viewManager.setApplication(this);
+			viewManager.init();
 			
-			// Initialise resources in the main controller			
-			mainController.setApplication(this);
-			mainController.setStage(primaryStage);
-			mainController.setLastHeight(height);
-			mainController.setLastWidth(width);
-			mainController.init();
-			final Image applicationIcon = new Image(getClass().getResourceAsStream("/images/large/mqtt-spy-logo.png"));
-		    primaryStage.getIcons().add(applicationIcon);
+			viewManager.createMainWindow(primaryStage);
 			
 			// Show the main window
 			primaryStage.show();
@@ -111,12 +102,12 @@ public class Main extends Application
 			}
 			else if (configurationFileLocation != null)
 			{
-				mainController.loadConfigurationFileAndShowErrorWhenApplicable(new File(configurationFileLocation));				
+				eventBus.publish(new LoadConfigurationFileEvent(new File(configurationFileLocation)));				
 			}
 			else
 			{
 				// If no configuration parameter is specified, use the user's home directory and the default configuration file name
-				mainController.loadDefaultConfigurationFile();						
+				viewManager.loadDefaultConfigurationFile();						
 			}
 		}
 		catch (Exception e)

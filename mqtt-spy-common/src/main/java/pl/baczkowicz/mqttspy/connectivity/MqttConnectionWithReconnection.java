@@ -25,14 +25,16 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pl.baczkowicz.mqttspy.common.generated.ReconnectionSettings;
-import pl.baczkowicz.mqttspy.connectivity.reconnection.ReconnectionManager;
+import pl.baczkowicz.spy.common.generated.ReconnectionSettings;
+import pl.baczkowicz.spy.connectivity.ConnectionStatus;
+import pl.baczkowicz.spy.connectivity.IConnectionWithReconnect;
+import pl.baczkowicz.spy.connectivity.ReconnectionManager;
 import pl.baczkowicz.spy.exceptions.SpyException;
 
 /**
  * MQTT connection with reconnection.
  */
-public abstract class MqttConnectionWithReconnection extends BaseMqttConnection
+public abstract class MqttConnectionWithReconnection extends BaseMqttConnection implements IConnectionWithReconnect
 {
 	/** Diagnostic logger. */
 	private static final Logger logger = LoggerFactory.getLogger(MqttConnectionWithReconnection.class);
@@ -75,6 +77,17 @@ public abstract class MqttConnectionWithReconnection extends BaseMqttConnection
 			reconnectionManager.addConnection(this, connectionRunnable);
 		}
 	}
+	
+// TODO:
+//	/**
+//	 * Disconnect from the currently connected server.
+//	 * 
+//	 * @throws SpyException Thrown if anything goes wrong
+//	 */
+//	public void disconnect() throws SpyException
+//	{
+//		
+//	}
 
 	/**
 	 * Disconnect from the currently connected server.
@@ -89,7 +102,7 @@ public abstract class MqttConnectionWithReconnection extends BaseMqttConnection
 
 		// TODO: check if connected?
 
-		setConnectionStatus(MqttConnectionStatus.DISCONNECTING);
+		setConnectionStatus(ConnectionStatus.DISCONNECTING);
 		unsubscribeAll(true);
 
 		try

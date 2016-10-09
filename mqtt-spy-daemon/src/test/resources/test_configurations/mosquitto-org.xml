@@ -5,20 +5,28 @@
   
 	<!-- For details on multiple server URIs see http://www.eclipse.org/paho/files/javadoc/org/eclipse/paho/client/mqttv3/MqttConnectOptions.html#setServerURIs%28java.lang.String[]%29 -->
 	<ServerURI>test.mosquitto.org</ServerURI>
-  			
+  	
 	<ClientID>mqtt-spy-daemon</ClientID>
 									
 	<CleanSession>true</CleanSession>
 	<ConnectionTimeout>10</ConnectionTimeout>
 	<KeepAliveInterval>10</KeepAliveInterval>
 			
+	<!-- Optional -->
 	<SSL>
+		<!-- Available modes are (see https://github.com/kamilfb/mqtt-spy/wiki/TLS for more info): 
+			  -	DISABLED 
+			  -	BASIC (externally provided values)
+			  -	SERVER_ONLY (CertificateAuthorityFile) 
+			  -	SERVER_AND_CLIENT (CertificateAuthorityFile, ClientCertificateFile, ClientKeyFile, ClientKeyPassword, ClientKeyPEM [boolean])
+			  -	SERVER_KEYSTORE (ServerKeyStoreFile, ServerKeyStorePassword) 
+			  -	SERVER_AND_CLIENT_KEYSTORES (ClientKeyPassword, ServerKeyStoreFile, ServerKeyStorePassword, ClientKeyStoreFile, ClientKeyStorePassword)
+			  -	PROPERTIES (Property -> Name/Value)
+		-->
         <Mode>SERVER_ONLY</Mode>
         <Protocol>TLSv1.2</Protocol>
+        <!-- This uses the built-in mosquitto.org certificate file -->
         <CertificateAuthorityFile>/certificates/certificate_authority_files/mosquitto.org.crt</CertificateAuthorityFile>
-       	<ClientCertificateFile></ClientCertificateFile>
-        <ClientKeyFile></ClientKeyFile>
-        <ClientKeyPassword></ClientKeyPassword>
     </SSL>
 	
 	<ReconnectionSettings>
@@ -34,7 +42,7 @@
 		To log QoS, Retained flag, connection name or subscription, use:
 		logQos="true" logRetained="true" logConnection="true" logSubscription="true" 
 	-->
-	<MessageLog logBeforeScripts="false">DISABLED</MessageLog>
+	<MessageLog>DISABLED</MessageLog>
 
 	<!-- Note: this configuration does nothing apart from establishing a connection and keeping it - used for daemon integration to perform additional actions -->
 	<RunningMode>CONTINUOUS</RunningMode>

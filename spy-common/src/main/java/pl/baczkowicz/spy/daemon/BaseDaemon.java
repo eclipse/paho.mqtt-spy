@@ -158,6 +158,14 @@ public abstract class BaseDaemon implements IDaemon
 	protected void runScripts(final List<ScriptDetails> scriptSettings, final TestCasesSettings testCasesSettings, 
 			final RunningMode runningMode) throws SpyException
 	{
+		runScripts(scriptSettings, testCasesSettings, runningMode, null);
+	}
+	
+	protected void runScripts(final List<ScriptDetails> scriptSettings, final TestCasesSettings testCasesSettings, 
+			final RunningMode runningMode, final Map<String, Object> parameters) throws SpyException
+	{
+		scriptManager.addCustomParameters(parameters);
+
 		// Run all configured scripts
 		final List<Script> backgroundScripts = scriptManager.addScripts(scriptSettings);
 		for (final Script script : backgroundScripts)
@@ -234,5 +242,5 @@ public abstract class BaseDaemon implements IDaemon
 	
 	public abstract void loadAndRun(final String configurationFile) throws SpyException;
 	
-	protected abstract boolean canPublish();	
+	public abstract boolean canPublish();	
 }

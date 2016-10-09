@@ -47,17 +47,19 @@ public class SecureSocketFactoryBuilder
 	/**
 	 * Creates an SSL/TLS socket factory with the given CA certificate file and protocol version.
 	 */
-	public static SSLSocketFactory getSocketFactory(final String protocolVersion, final String serverCrtFile) throws SpyException
+	public static SSLSocketFactory getSocketFactory(final String protocolVersion, final String caCertificateFile) throws SpyException
 	{
 		try
 		{
-			final TrustManager[] tm = SecureSocketUtils.getTrustManagerFactory(serverCrtFile).getTrustManagers();
+			Security.addProvider(new BouncyCastleProvider());
+			
+			final TrustManager[] tm = SecureSocketUtils.getTrustManagerFactory(caCertificateFile).getTrustManagers();
 			
 			return getSocketFactory(protocolVersion, null, tm, null);
 		}
 		catch (Exception e)
 		{
-			throw new SpyException("Cannot create SSL/TLS connection", e);
+			throw new SpyException("Cannot create TLS/SSL connection", e);
 		}
 	}
 	
@@ -65,17 +67,21 @@ public class SecureSocketFactoryBuilder
 	 * Creates an SSL/TLS socket factory with the given key store details and protocol version.
 	 */
 	public static SSLSocketFactory getSocketFactory(final String protocolVersion, 
-			final String serverKeyStoreFile, final String serverKeyStorePassword) throws SpyException
+			final String caKeyStoreFile, final String caKeyStorePassword) throws SpyException
 	{
 		try
 		{
-			final TrustManager[] tm = SecureSocketUtils.getTrustManagerFactory(serverKeyStoreFile, serverKeyStorePassword).getTrustManagers();
+			Security.addProvider(new BouncyCastleProvider());
+			
+			final TrustManager[] tm = SecureSocketUtils.getTrustManagerFactory(
+					caKeyStoreFile, caKeyStorePassword, SecureSocketUtils.getTypeFromFilename(caKeyStoreFile))
+					.getTrustManagers();
 			
 			return getSocketFactory(protocolVersion, null, tm, null);
 		}
 		catch (Exception e)
 		{
-			throw new SpyException("Cannot create SSL/TLS connection", e);
+			throw new SpyException("Cannot create TLS/SSL connection", e);
 		}
 	}
 	
@@ -88,6 +94,8 @@ public class SecureSocketFactoryBuilder
 	{
 		try
 		{
+			Security.addProvider(new BouncyCastleProvider());
+			
 			final KeyManager[] km = SecureSocketUtils.getKeyManagerFactory(clientCrtFile, clientKeyFile, clientKeyPassword, pemFormat).getKeyManagers();
 			final TrustManager[] tm = SecureSocketUtils.getTrustManagerFactory(serverCrtFile).getTrustManagers();
 			
@@ -95,7 +103,7 @@ public class SecureSocketFactoryBuilder
 		}
 		catch (Exception e)
 		{
-			throw new SpyException("Cannot create SSL/TLS connection", e);
+			throw new SpyException("Cannot create TLS/SSL connection", e);
 		}		
 	}
 	
@@ -103,20 +111,27 @@ public class SecureSocketFactoryBuilder
 	 * Creates an SSL/TLS socket factory with the given key store details and protocol version.
 	 */
 	public static SSLSocketFactory getSocketFactory(final String protocolVersion, 
-			final String serverKeyStoreFile, final String serverKeyStorePassword,
+			final String caKeyStoreFile, final String caKeyStorePassword,
 			final String clientKeyStoreFile, final String clientKeyStorePassword, final String clientKeyPassword) 
 					throws SpyException
 	{
 		try
 		{
-			final KeyManager[] km = SecureSocketUtils.getKeyManagerFactory(clientKeyStoreFile, clientKeyStorePassword, clientKeyPassword).getKeyManagers();
-			final TrustManager[] tm = SecureSocketUtils.getTrustManagerFactory(serverKeyStoreFile, serverKeyStorePassword).getTrustManagers();
+			Security.addProvider(new BouncyCastleProvider());
+			
+			final KeyManager[] km = SecureSocketUtils.getKeyManagerFactory(
+					clientKeyStoreFile, clientKeyStorePassword, clientKeyPassword, SecureSocketUtils.getTypeFromFilename(clientKeyStoreFile))
+					.getKeyManagers();
+			
+			final TrustManager[] tm = SecureSocketUtils.getTrustManagerFactory(
+					caKeyStoreFile, caKeyStorePassword, SecureSocketUtils.getTypeFromFilename(caKeyStoreFile))
+					.getTrustManagers();
 			
 			return getSocketFactory(protocolVersion, km, tm, null);
 		}
 		catch (Exception e)
 		{
-			throw new SpyException("Cannot create SSL/TLS connection", e);
+			throw new SpyException("Cannot create TLS/SSL connection", e);
 		}		
 	}
 
@@ -136,7 +151,7 @@ public class SecureSocketFactoryBuilder
 		}
 		catch (Exception e)
 		{
-			throw new SpyException("Cannot create SSL/TLS connection", e);
+			throw new SpyException("Cannot create TLS/SSL connection", e);
 		}		
 	}
 }

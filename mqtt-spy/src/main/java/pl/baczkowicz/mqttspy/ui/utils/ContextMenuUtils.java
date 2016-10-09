@@ -32,22 +32,25 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.paint.Color;
-import pl.baczkowicz.mqttspy.configuration.ConfigurationManager;
 import pl.baczkowicz.mqttspy.configuration.generated.TabbedSubscriptionDetails;
 import pl.baczkowicz.mqttspy.connectivity.MqttAsyncConnection;
 import pl.baczkowicz.mqttspy.connectivity.MqttSubscription;
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.mqttspy.stats.StatisticsManager;
-import pl.baczkowicz.mqttspy.ui.ConnectionController;
-import pl.baczkowicz.mqttspy.ui.SubscriptionController;
-import pl.baczkowicz.mqttspy.ui.charts.ChartFactory;
-import pl.baczkowicz.mqttspy.ui.charts.ChartMode;
-import pl.baczkowicz.mqttspy.ui.connections.ConnectionManager;
-import pl.baczkowicz.mqttspy.ui.connections.SubscriptionManager;
-import pl.baczkowicz.mqttspy.ui.events.EventManager;
+import pl.baczkowicz.mqttspy.ui.MqttConnectionViewManager;
+import pl.baczkowicz.mqttspy.ui.MqttSubscriptionViewManager;
+import pl.baczkowicz.mqttspy.ui.controllers.MqttConnectionController;
+import pl.baczkowicz.mqttspy.ui.controllers.SubscriptionController;
+import pl.baczkowicz.spy.eventbus.IKBus;
+import pl.baczkowicz.spy.ui.charts.ChartFactory;
+import pl.baczkowicz.spy.ui.charts.ChartMode;
+import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
+import pl.baczkowicz.spy.ui.events.ClearTabEvent;
+import pl.baczkowicz.spy.ui.events.ShowEditConnectionsWindowEvent;
 import pl.baczkowicz.spy.ui.panes.PaneVisibilityStatus;
 import pl.baczkowicz.spy.ui.panes.TitledPaneStatus;
+import pl.baczkowicz.spy.ui.stats.StatisticsManager;
 import pl.baczkowicz.spy.ui.utils.DialogFactory;
+import pl.baczkowicz.spy.ui.utils.StylingUtils;
 import pl.baczkowicz.spy.ui.utils.TabUtils;
 import pl.baczkowicz.spy.ui.utils.UiUtils;
 
@@ -72,10 +75,10 @@ public class ContextMenuUtils
 	 */
 	public static ContextMenu createSubscriptionTabContextMenu(
 			final MqttAsyncConnection connection, 
-			final MqttSubscription subscription, 
-			final EventManager<FormattedMqttMessage> eventManager, 
-			final SubscriptionManager subscriptionManager,
-			final ConfigurationManager configurationManager,
+			final MqttSubscription subscription,  
+			final IKBus eventBus,
+			final MqttSubscriptionViewManager subscriptionManager,
+			final IConfigurationManager configurationManager,
 			final SubscriptionController subscriptionController)
 	{
 		final ContextMenu contextMenu = new ContextMenu();
@@ -143,7 +146,8 @@ public class ContextMenuUtils
 		{
 			public void handle(ActionEvent e)
 			{				
-				eventManager.notifyClearHistory(subscription.getStore());
+				eventBus.publish(new ClearTabEvent(subscription.getStore()));
+				// eventManager.notifyClearHistory(subscription.getStore());
 				StatisticsManager.resetMessagesReceived(connection.getId(), subscription.getTopic());
 				subscription.getStore().clear();
 			}
@@ -169,7 +173,7 @@ public class ContextMenuUtils
 						ChartMode.USER_DRIVEN_MSG_PAYLOAD,
 						"Series", "Load", "msgs/s", 
 						"Message load statistics for " + subscription.getTopic() + " - " + connection.getName(), 
-						subscriptionController.getScene(), eventManager);
+						subscriptionController.getScene(), eventBus);
 			}
 		});			
 		chartsMenu.getItems().add(messageLoadChartItem);
@@ -199,7 +203,7 @@ public class ContextMenuUtils
 		{
 			public void handle(ActionEvent e)
 			{
-				configurationManager.updateSubscriptionConfiguration(connection, subscription);
+				configurationManager.updateSubscriptionConfiguration(connection.getId(), subscription);
 			}
 		});
 		configuration.getItems().add(addItem);
@@ -210,20 +214,14 @@ public class ContextMenuUtils
 		{
 			public void handle(ActionEvent e)
 			{
-				configurationManager.deleteSubscriptionConfiguration(connection, subscription);
+				configurationManager.deleteSubscriptionConfiguration(connection.getId(), subscription);
 			}
 		});
 		configuration.getItems().add(removeItem);
-		
-		// Separator
-		configuration.getItems().add(new SeparatorMenuItem());
-		
 
 		final Menu view = new Menu("View");
 		contextMenu.getItems().add(view);
-		
-		// Separator
-		//contextMenu.getItems().add(new SeparatorMenuItem());
+	
 		
 		// Change color
 		final MenuItem changeColorMenu = new MenuItem("Change tab color");
@@ -246,7 +244,7 @@ public class ContextMenuUtils
 					
 					// Update 'all' tab				
 					subscriptionManager.getSubscriptionControllersMap().
-						get(SubscriptionManager.ALL_SUBSCRIPTIONS_TAB_TITLE).getSummaryTablePaneController().refreshRowStyling();
+						get(MqttSubscriptionViewManager.ALL_SUBSCRIPTIONS_TAB_TITLE).getSummaryTablePaneController().refreshRowStyling();
 				}
 			}
 		});
@@ -274,9 +272,9 @@ public class ContextMenuUtils
 	 */
 	public static ContextMenu createAllSubscriptionsTabContextMenu(
 			final MqttAsyncConnection connection, 
-			final EventManager<FormattedMqttMessage> eventManager,
-			final SubscriptionManager subscriptionManager,
-			final ConfigurationManager configurationManager,
+			final IKBus eventBus,
+			final MqttSubscriptionViewManager subscriptionManager,
+			final IConfigurationManager configurationManager,
 			final SubscriptionController subscriptionController)
 	{
 		final ContextMenu contextMenu = new ContextMenu();
@@ -312,7 +310,8 @@ public class ContextMenuUtils
 		{
 			public void handle(ActionEvent e)
 			{
-				eventManager.notifyClearHistory(connection.getStore());
+				eventBus.publish(new ClearTabEvent(connection.getStore()));
+				// eventManager.notifyClearHistory(connection.getStore());
 				StatisticsManager.resetMessagesReceived(connection.getId());
 				connection.getStore().clear();
 			}
@@ -334,7 +333,7 @@ public class ContextMenuUtils
 						ChartMode.USER_DRIVEN_MSG_PAYLOAD,
 						"Series", "Load", "msgs/s", 
 						"Message load statistics for all subscriptions - " + connection.getName(), 
-						subscriptionController.getScene(), eventManager);
+						subscriptionController.getScene(), eventBus);
 			}
 		});
 		contextMenu.getItems().add(charts);
@@ -352,7 +351,7 @@ public class ContextMenuUtils
 				{
 					if (controller.getSubscription() != null)
 					{
-						configurationManager.updateSubscriptionConfiguration(connection, controller.getSubscription());
+						configurationManager.updateSubscriptionConfiguration(connection.getId(), controller.getSubscription());
 					}
 				}
 			}
@@ -371,7 +370,7 @@ public class ContextMenuUtils
 				{
 					if (controller.getSubscription() != null)
 					{
-						configurationManager.deleteSubscriptionConfiguration(connection, controller.getSubscription());
+						configurationManager.deleteSubscriptionConfiguration(connection.getId(), controller.getSubscription());
 					}
 				}
 			}
@@ -382,7 +381,7 @@ public class ContextMenuUtils
 	}
 	
 	private static Menu createConnectionPaneMenu(final String name, 
-			final ConnectionController connectionController, 
+			final MqttConnectionController connectionController, 
 			final TitledPaneStatus status)
 	{
 		final Menu menu = new Menu(name);
@@ -434,20 +433,20 @@ public class ContextMenuUtils
 	 * 
 	 * @return Created context menu
 	 */
-	public static ContextMenu createConnectionMenu(final MqttAsyncConnection connection, 
-			final ConnectionController connectionController, final ConnectionManager connectionManager)
+	public static ContextMenu createConnectionMenu(final MqttAsyncConnection connection, final IKBus eventBus,
+			final MqttConnectionController connectionController, final MqttConnectionViewManager connectionManager)
 	{
 		// Context menu
 		ContextMenu contextMenu = new ContextMenu();
 
 		MenuItem reconnectItem = new MenuItem("Connect / reconnect");
-		reconnectItem.setOnAction(ActionUtils.createConnectAction(connectionManager, connection));
+		reconnectItem.setOnAction(MqttConnectionViewManager.createConnectAction(connectionManager, connection));
 		
 		MenuItem disconnectItem = new MenuItem("Disconnect (and keep tab)");
-		disconnectItem.setOnAction(ActionUtils.createDisconnectAction(connectionManager, connection));
+		disconnectItem.setOnAction(MqttConnectionViewManager.createDisconnectAction(connectionManager, connection));
 
 		MenuItem disconnectAndCloseItem = new MenuItem("Disconnect (and close tab)");
-		disconnectAndCloseItem.setOnAction(ActionUtils.createDisconnectAndCloseAction(connectionManager, connection));
+		disconnectAndCloseItem.setOnAction(MqttConnectionViewManager.createDisconnectAndCloseAction(connectionManager, connection));
 
 		contextMenu.getItems().add(reconnectItem);
 
@@ -531,6 +530,23 @@ public class ContextMenuUtils
 		});
 		view.getItems().add(panes);
 		
+		// Separator
+		contextMenu.getItems().add(new SeparatorMenuItem());
+		
+		MenuItem editItem = new MenuItem("Edit...");
+		editItem.setOnAction(new EventHandler<ActionEvent>()
+		{			
+			@Override
+			public void handle(ActionEvent event)
+			{
+				eventBus.publish(new ShowEditConnectionsWindowEvent(
+						connectionController.getTab().getTabPane().getScene().getWindow(), 
+						false, 
+						connection.getProperties().getConfiguredProperties()));
+			}
+		});		
+		contextMenu.getItems().add(editItem);
+		
 		return contextMenu;
 	}
 	
@@ -544,8 +560,8 @@ public class ContextMenuUtils
 	 */
 	public static ContextMenu createMessageLogMenu(
 			final Tab tab, 
-			final ConnectionController connectionController, 
-			final ConnectionManager connectionManager)
+			final MqttConnectionController connectionController, 
+			final MqttConnectionViewManager connectionManager)
 	{
 		// Context menu
 		ContextMenu contextMenu = new ContextMenu();
@@ -572,7 +588,7 @@ public class ContextMenuUtils
 		final MenuItem detachMenu = new MenuItem("Detach to a separate window");
 		detachMenu.setOnAction(TabUtils.createTabDetachEvent(
 				detachMenu, connectionController, 
-				"Message log " + tab.getText(), 0));
+				"Message audit " + tab.getText(), 0));
 		view.getItems().add(detachMenu);
 		
 		final CheckMenuItem resizeMessageContent = connectionController.getResizeMessageContentMenu();

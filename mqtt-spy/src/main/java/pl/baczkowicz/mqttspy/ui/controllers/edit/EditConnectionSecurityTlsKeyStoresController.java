@@ -32,9 +32,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.AnchorPane;
 import pl.baczkowicz.mqttspy.common.generated.SecureSocketSettings;
-import pl.baczkowicz.mqttspy.configuration.ConfiguredConnectionDetails;
+import pl.baczkowicz.mqttspy.configuration.ConfiguredMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.configuration.generated.UserInterfaceMqttConnectionDetails;
-import pl.baczkowicz.mqttspy.ui.EditConnectionController;
+import pl.baczkowicz.mqttspy.ui.controllers.EditMqttConnectionController;
 import pl.baczkowicz.spy.common.generated.SecureSocketModeEnum;
 import pl.baczkowicz.spy.ui.utils.DialogFactory;
 
@@ -45,7 +45,7 @@ import pl.baczkowicz.spy.ui.utils.DialogFactory;
 public class EditConnectionSecurityTlsKeyStoresController extends AnchorPane implements Initializable
 {
 	/** The parent controller. */
-	private EditConnectionController parent;
+	private EditMqttConnectionController parent;
 	
 	@FXML
 	private AnchorPane tlsKeyStoresPane;
@@ -53,10 +53,10 @@ public class EditConnectionSecurityTlsKeyStoresController extends AnchorPane imp
 	// Key stores
 	
 	@FXML
-	private TextField serverKeyStoreFile;
+	private TextField trustStoreFile;
 	
 	@FXML
-	private PasswordField serverKeyStorePassword;
+	private PasswordField trustStorePassword;
 	
 	@FXML
 	private TextField clientKeyStoreFile;
@@ -77,7 +77,7 @@ public class EditConnectionSecurityTlsKeyStoresController extends AnchorPane imp
 	private Label clientKeyFileLabel;
 
 	@FXML
-	private Button editServerKeyStoreFileButton;
+	private Button editTrustStoreFileButton;
 	
 	@FXML
 	private Button editClientKeyStoreFileButton;
@@ -98,12 +98,12 @@ public class EditConnectionSecurityTlsKeyStoresController extends AnchorPane imp
 	public void initialize(URL location, ResourceBundle resources)
 	{		
 		// Set up edit buttons
-		DialogFactory.setUpTextFieldFileOpenButton(serverKeyStoreFile, editServerKeyStoreFileButton);
+		DialogFactory.setUpTextFieldFileOpenButton(trustStoreFile, editTrustStoreFileButton);
 		DialogFactory.setUpTextFieldFileOpenButton(clientKeyStoreFile, editClientKeyStoreFileButton);
 				
 		// Key stores
-		serverKeyStoreFile.textProperty().addListener(basicOnChangeListener);
-		serverKeyStorePassword.textProperty().addListener(basicOnChangeListener);
+		trustStoreFile.textProperty().addListener(basicOnChangeListener);
+		trustStorePassword.textProperty().addListener(basicOnChangeListener);
 		clientKeyStoreFile.textProperty().addListener(basicOnChangeListener);
 		clientKeyStorePassword.textProperty().addListener(basicOnChangeListener);
 		clientKeyPassword.textProperty().addListener(basicOnChangeListener);	
@@ -158,8 +158,8 @@ public class EditConnectionSecurityTlsKeyStoresController extends AnchorPane imp
 			
 			if (keyStores)
 			{
-				sslSettings.setServerKeyStoreFile(serverKeyStoreFile.getText());
-				sslSettings.setServerKeyStorePassword(serverKeyStorePassword.getText());				
+				sslSettings.setServerKeyStoreFile(trustStoreFile.getText());
+				sslSettings.setServerKeyStorePassword(trustStorePassword.getText());				
 				sslSettings.setClientKeyStoreFile(clientKeyStoreFile.getText());
 				sslSettings.setClientKeyStorePassword(clientKeyStorePassword.getText());
 				sslSettings.setClientKeyPassword(clientKeyPassword.getText());
@@ -169,36 +169,24 @@ public class EditConnectionSecurityTlsKeyStoresController extends AnchorPane imp
 		}
 	}
 	
-	public void displayConnectionDetails(final ConfiguredConnectionDetails connection)
+	public void displayConnectionDetails(final ConfiguredMqttConnectionDetails connection)
 	{
 		if (connection.getSSL() != null)
 		{
 			// Key stores
-			serverKeyStoreFile.setText(connection.getSSL().getServerKeyStoreFile());
-			serverKeyStorePassword.setText(connection.getSSL().getServerKeyStorePassword());				
+			trustStoreFile.setText(connection.getSSL().getServerKeyStoreFile());
+			trustStorePassword.setText(connection.getSSL().getServerKeyStorePassword());				
 			clientKeyStoreFile.setText(connection.getSSL().getClientKeyStoreFile());
 			clientKeyStorePassword.setText(connection.getSSL().getClientKeyStorePassword());
 			clientKeyPassword.setText(connection.getSSL().getClientKeyPassword());
 		}			
 	}	
-	
-	@FXML
-	private void editServerKeyStoreFile()
-	{
-		// TODO
-	}
-	
-	@FXML
-	private void editClientKeyStoreFile()
-	{
-		// TODO
-	}
 
 	// ===============================
 	// === Setters and getters =======
 	// ===============================
 	
-	public void setParent(final EditConnectionController controller)
+	public void setParent(final EditMqttConnectionController controller)
 	{
 		this.parent = controller;
 	}

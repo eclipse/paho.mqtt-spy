@@ -27,6 +27,7 @@ import java.util.concurrent.Executor;
 
 import javax.script.ScriptEngine;
 
+import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.utils.TimeUtils;
 import pl.baczkowicz.spy.utils.tasks.StoppableTask;
 
@@ -52,9 +53,6 @@ public class Script extends BasicScriptProperties
 	
 	/** Script engine instance. */
 	private ScriptEngine scriptEngine;
-
-	/** The publication script IO. */
-	//private ScriptIO scriptIO;
 	
 	/** The script runner - dedicated runnable for that script. */
 	private ScriptRunner scriptRunner;
@@ -69,6 +67,8 @@ public class Script extends BasicScriptProperties
 
 	private boolean asynchronous;
 
+	private String rootDirectory;
+
 	/**
 	 * Creates a script.
 	 */
@@ -77,6 +77,15 @@ public class Script extends BasicScriptProperties
 		// Default
 	}
 	
+	public String getNameWithSubdirectory()
+	{
+		if (rootDirectory != null)
+		{
+			return BaseScriptManager.getScriptNameWithSubdirectory(getScriptFile(), rootDirectory);
+		}
+		
+		return getName();
+	}
 	
 	/**
 	 * Stops any running tasks (threads).
@@ -108,21 +117,21 @@ public class Script extends BasicScriptProperties
 	/**
 	 * Creates a script runner for the script if it doesn't exist yet.
 	 * 
-	 * @param eventManager The event manager to use
+	 * @param eventBus The event bus to use
 	 * @param executor The executor to use
 	 */
-	public void createScriptRunner(final IScriptEventManager eventManager, final Executor executor)
+	public void createScriptRunner(final IKBus eventBus, final Executor executor)
 	{
 		if (scriptRunner == null)
 		{
-			this.scriptRunner = new ScriptRunner(eventManager, this, executor);
+			this.scriptRunner = new ScriptRunner(eventBus, this, executor);
 		}
 	}
 	
 	/**
 	 * Notifies an observer a change has occurred.
 	 */
-	protected void nofityChange()
+	public void nofityChange()
 	{
 		if (observer != null)
 		{
@@ -130,8 +139,6 @@ public class Script extends BasicScriptProperties
 		}
 	}
 	
-	
-
 	public void addTask(final StoppableTask task)
 	{
 		backgroundTasks.add(task);
@@ -156,6 +163,12 @@ public class Script extends BasicScriptProperties
 	public void setStatus(final ScriptRunningState status)
 	{
 		this.status = status;
+	}
+	
+	// TODO: replace the notifyChange with the EventBus
+	public void setStatusAndNotify(final ScriptRunningState status)
+	{
+		setStatus(status);
 		nofityChange();
 	}
 	
@@ -183,16 +196,6 @@ public class Script extends BasicScriptProperties
 	{
 		return status;
 	}
-
-//	public void setScriptIO(final ScriptIO scriptIO)
-//	{
-//		this.scriptIO = scriptIO;
-//	}
-//	
-//	public ScriptIO getScriptIO()
-//	{
-//		return scriptIO;
-//	}
 
 	public void setScriptEngine(final ScriptEngine scriptEngine)
 	{
@@ -262,5 +265,11 @@ public class Script extends BasicScriptProperties
 	public boolean isAsynchronous()
 	{
 		return this.asynchronous;
+	}
+
+
+	public void setRootDirectory(final String rootDirectory)
+	{
+		this.rootDirectory = rootDirectory;		
 	}
 }

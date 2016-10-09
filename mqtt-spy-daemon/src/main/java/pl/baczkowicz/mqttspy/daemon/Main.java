@@ -46,13 +46,20 @@ public class Main
 		{		
 			daemon.initialise();
 			
-			if (args.length != 1)
+			if (args.length == 0)
+			{
+				logger.warn("!!! Using sample configuration for localhost - to use your own configuration file, specify its location as a parameter !!!");
+				daemon.loadAndRun("/sample-configuration.xml");
+			}
+			else if (args.length != 1)
 			{
 				logger.error("Expecting only 1 parameter with the configuration file location");
 				return;
 			}	
-									
-			daemon.loadAndRun(args[0]);
+			else
+			{
+				daemon.loadAndRun(args[0]);
+			}							
 		}
 		catch (XMLException e)
 		{

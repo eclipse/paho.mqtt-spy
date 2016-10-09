@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="parentPane" prefHeight="79.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.MessageController">
+   <children>
+   
+	  <TextField fx:id="topicField" styleClass="small-font" editable="false" layoutX="48.0" layoutY="10.0" prefHeight="22.0" prefWidth="196.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="342.0" AnchorPane.topAnchor="11.0" />
+         
+      <Label styleClass="small-font" layoutX="10.0" layoutY="15.0" text="Topic" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="15.0" />
+      
+      <Label styleClass="small-font" layoutX="335.0" layoutY="15.0" text="Time" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="15.0" />
+         
+      <TextField fx:id="timeField" editable="false" styleClass="small-font" layoutX="365.0" layoutY="11.0" prefHeight="22.0" prefWidth="161.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="11.0" />
+
+      <Label fx:id="qosFieldLabel" styleClass="small-font" layoutX="275.0" layoutY="15.0" text="QoS" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="15.0" />
+         
+      <TextField fx:id="qosField" editable="false" styleClass="small-font" layoutX="301.0" layoutY="11.0" prefHeight="22.0" prefWidth="27.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="11.0" />
+
+      <TextArea fx:id="dataField" styleClass="small-font" minHeight="39" prefHeight="39" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="38.0" />
+
+      <Label fx:id="dataLabel" styleClass="small-font" layoutX="10.0" layoutY="40.0" text="Data" AnchorPane.leftAnchor="10.0" />
+         
+      <Label fx:id="lengthLabel" styleClass="small-font" alignment="CENTER" contentDisplay="CENTER" layoutY="56.0" prefHeight="13.0" prefWidth="47.0" text="(0B)" />
+         
+      <CheckBox fx:id="retainedField" disable="true" styleClass="small-font" layoutX="305.0" layoutY="14.0" mnemonicParsing="false" style="-fx-opacity: 1;" AnchorPane.rightAnchor="260.0" />
+
+      <Label fx:id="retainedFieldLabel" styleClass="small-font" layoutX="251.0" layoutY="15.0" text="Retained" AnchorPane.rightAnchor="285.0" AnchorPane.topAnchor="15.0" />
+         
+   </children>
+</AnchorPane>

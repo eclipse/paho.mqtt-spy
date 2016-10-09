@@ -71,7 +71,10 @@ public class ScriptIO implements IScriptIO
 	@Override
 	public void touch()
 	{
-		script.touch();
+		if (script != null)
+		{
+			script.touch();
+		}
 	}
 	
 	@Override

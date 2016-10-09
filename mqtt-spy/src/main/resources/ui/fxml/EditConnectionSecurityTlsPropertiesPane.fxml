@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="propertiesPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.edit.EditConnectionSecurityTlsPropertiesController">
+   <children>
+      <Label styleClass="vsmall-font" layoutY="116.0" prefHeight="43.0" prefWidth="214.0" text="Note: double click  to edit a table row, then Enter to submit the new value." textFill="#5e5e5e" wrapText="true" />
+
+      <Button fx:id="addPropertyButton" focusTraversable="false" layoutX="258.0" layoutY="126.0" mnemonicParsing="false" onAction="#addProperty" prefHeight="25.0" prefWidth="145" text="Add property" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="166.0">
+         <graphic>
+            <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+               <image>
+                  <Image url="/ui/images/button-add.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+      </Button>
+      <Button fx:id="removePropertyButton" disable="true" focusTraversable="false" layoutX="410.0" layoutY="126.0" mnemonicParsing="false" onAction="#removeProperty" prefHeight="25.0" prefWidth="145" text="Remove property" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="14.0">
+         <graphic>
+            <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+               <image>
+                  <Image url="/ui/images/button-delete.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+      </Button>
+      <TableView fx:id="sslPropertiesTable" editable="true" layoutY="4.0" prefHeight="116.0" prefWidth="556.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="6.0">
+         <columns>
+            <TableColumn fx:id="propertyNameColumn" minWidth="150.0" prefWidth="250.0" text="Property" />
+            <TableColumn fx:id="propertyValueColumn" prefWidth="244.0" text="Value" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>
+  
+              

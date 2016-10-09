@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="210.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.edit.EditConnectionSecurityController">
+   <children>
+      <TabPane side="LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <tabs>
+         	<Tab fx:id="authTab" closable="false" text="User auth.">
+            <!-- <Tab fx:id="authTab" closable="false" text="Authentication"> -->
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="210.0" prefWidth="424.0">
+                     <children>
+                     	<Label layoutX="23.0" layoutY="20.0" text="Enable user authentication" />
+                     	<CheckBox fx:id="userAuthentication" layoutX="279.0" layoutY="18.0" mnemonicParsing="false" />
+                     	
+                        <Label layoutX="23.0" layoutY="70.0" text="User name" />
+                        <TextField fx:id="username" disable="true" layoutX="279.0" layoutY="63.0" AnchorPane.leftAnchor="279.0" AnchorPane.rightAnchor="14.0" />
+                        <Label layoutX="23.0" layoutY="136.0" text="Password" />
+                        <PasswordField fx:id="password" disable="true" layoutX="279.0" layoutY="131.0" prefHeight="25.0" prefWidth="302.0" AnchorPane.leftAnchor="279.0" AnchorPane.rightAnchor="14.0" />
+                        <RadioButton fx:id="predefinedPassword" disable="true" layoutX="164.0" layoutY="135.0" mnemonicParsing="false" selected="true" text="Predefined">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="passwordMode" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="askForPassword" disable="true" layoutX="164.0" layoutY="166.0" mnemonicParsing="false" text="Ask before connecting" toggleGroup="$passwordMode" />                                                
+                        <RadioButton fx:id="predefinedUsername" disable="true" layoutX="164.0" layoutY="67.0" mnemonicParsing="false" selected="true" text="Predefined">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="usernameMode" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="askForUsername" disable="true" layoutX="164.0" layoutY="98.0" mnemonicParsing="false" text="Ask before connecting" toggleGroup="$usernameMode" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="tlsTab" closable="false" text="TLS">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="23.0" layoutY="20.0" text="TLS/SSL mode" />
+                        <ComboBox fx:id="modeCombo" layoutX="129.0" layoutY="15.0" prefHeight="25.0" prefWidth="449.0" AnchorPane.leftAnchor="199" AnchorPane.rightAnchor="14.0" />
+                     
+                        <AnchorPane fx:id="customSocketFactoryPane" layoutX="23.0" layoutY="43.0" prefHeight="159.0" prefWidth="570.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
+                           <children>
+                              <Label layoutY="10.0" text="Protocol" AnchorPane.leftAnchor="0.0" />
+                              <ComboBox fx:id="protocolCombo" layoutX="176.0" layoutY="5.0" prefHeight="25.0" prefWidth="176.0" AnchorPane.leftAnchor="176.0" AnchorPane.rightAnchor="14.0" />
+                              
+                              <fx:include fx:id="certificatesPane" 	source="EditConnectionSecurityTlsCertificatesPane.fxml" />
+                              <fx:include fx:id="keyStoresPane" 	source="EditConnectionSecurityTlsKeyStoresPane.fxml" />                            
+                           </children>
+                        </AnchorPane>
+                        
+                        <fx:include fx:id="propertiesPane" source="EditConnectionSecurityTlsPropertiesPane.fxml" />
+                        
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

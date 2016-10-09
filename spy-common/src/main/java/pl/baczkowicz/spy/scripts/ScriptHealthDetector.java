@@ -24,6 +24,7 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.utils.ThreadingUtils;
 import pl.baczkowicz.spy.utils.TimeUtils;
 
@@ -41,8 +42,8 @@ public class ScriptHealthDetector implements Runnable
 	/** The script. */
 	private final Script script;
 
-	/** Event manager. */
-	private IScriptEventManager eventManager;
+	/** Event bus. */
+	private IKBus eventBus;
 
 	/** Executor. */
 	private Executor executor;
@@ -50,14 +51,14 @@ public class ScriptHealthDetector implements Runnable
 	/**
 	 * Creates a ScriptHealthDetector.
 	 * 
-	 * @param eventManager The Event Manager to use
+	 * @param eventBus The event bus to use
 	 * @param script The script
 	 * @param executor The executor to use
 	 */
-	public ScriptHealthDetector(final IScriptEventManager eventManager, final Script script, final Executor executor)
+	public ScriptHealthDetector(final IKBus eventBus, final Script script, final Executor executor)
 	{
 		this.script = script;
-		this.eventManager = eventManager;
+		this.eventBus = eventBus;
 		this.executor = executor;
 	}
 	
@@ -80,7 +81,7 @@ public class ScriptHealthDetector implements Runnable
 			{
 				logger.warn("Script {} detected as frozen, last touch = {}, current time = {}", script.getName(), 
 						script.getLastTouch(), TimeUtils.getMonotonicTime());
-				ScriptRunner.changeState(eventManager, script.getName(), ScriptRunningState.FROZEN, script, executor);
+				ScriptRunner.changeState(eventBus, script.getName(), ScriptRunningState.FROZEN, script, executor);
 			}
 			
 			if (ThreadingUtils.sleep(1000))			

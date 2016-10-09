@@ -22,17 +22,25 @@ package pl.baczkowicz.spy.ui.utils;
 import javafx.scene.image.ImageView;
 
 public class ImageUtils
-{
+{	
+	private static final String IMG_EXT = ".png";
+	
+	public static ImageView createIcon(final String name, final int size, final String style)
+	{
+		final String location = ResourcePaths.IMAGES_PATH + name + IMG_EXT;
+		return createImage(location, size, style);
+	}
+	
 	public static ImageView createIcon(final String name, final int size)
 	{
-		final String location = "images/small/" + name + ".png";
+		final String location = ResourcePaths.IMAGES_PATH + name + IMG_EXT;
 		return createImage(location, size);
 	}
 	
-	public static ImageView createLargeIcon(final String name, final int size)
+	public static ImageView createIcon(final String name)
 	{
-		final String location = "images/large/" + name + ".png";
-		return createImage(location, size);
+		final String location = ResourcePaths.IMAGES_PATH + name + IMG_EXT;
+		return createImage(location);
 	}
 	
 	public static String getLocationFromResource(final String location)
@@ -40,7 +48,13 @@ public class ImageUtils
 		return ImageUtils.class.getResource(location).toString();
 	}
 	
-	public static ImageView createImage(final String iconLocation, final int size)
+	private static ImageView createImage(final String iconLocation)
+	{
+		final ImageView icon = new ImageView(iconLocation);
+		return icon;
+	}
+	
+	private static ImageView createImage(final String iconLocation, final int size)
 	{
 		final ImageView icon = new ImageView(iconLocation);
 		icon.setFitHeight(size);
@@ -48,7 +62,7 @@ public class ImageUtils
 		return icon;
 	}
 	
-	public static ImageView createImage(final String iconLocation, final int size, final String style)
+	private static ImageView createImage(final String iconLocation, final int size, final String style)
 	{
 		final ImageView icon = new ImageView(iconLocation);
 		icon.setFitHeight(size);

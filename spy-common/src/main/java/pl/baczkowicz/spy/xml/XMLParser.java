@@ -36,6 +36,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.io.IOUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -221,6 +222,10 @@ public class XMLParser
 		Object readObject = null;
 		try
 		{
+			if (xml == null || xml.isEmpty())
+			{
+				throw new XMLException("Cannot parse empty XML");
+			}
 	        final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 	        final InputSource is = new InputSource();
 	        is.setCharacterStream(new StringReader(xml));
@@ -254,6 +259,38 @@ public class XMLParser
 
 		return readObject;
 	}
+	
+	/**
+	 * Loads an XML document from a stream and unmarshals it.
+	 * 
+	 * @param inputStream The stream to load from
+	 * 
+	 * @return The unmarshalled XML document
+	 * 
+	 * @throws XMLException When cannot unmarshal the XML document 
+	 */
+	public Object loadFromString(final String xml) throws XMLException
+	{
+		Object readObject = null;
+		try
+		{
+			readObject = unmarshaller.unmarshal(new StringReader(xml));
+			if (readObject instanceof JAXBElement)
+			{
+				readObject = ((JAXBElement) readObject).getValue();
+			}			
+		}
+		catch (JAXBException e)		
+		{
+			throw new XMLException("Cannot unmarshal the XML", e);			
+		}
+		catch (IllegalArgumentException e)
+		{
+			throw new XMLException("Cannot unmarshal the XML", e);
+		}
+
+		return readObject;
+	}
 
 	/**
 	 * Loads an XML document from a stream and unmarshals it.
@@ -277,11 +314,25 @@ public class XMLParser
 		}
 		catch (JAXBException e)		
 		{
-			throw new XMLException("Cannot unmarshal the XML ", e);
+			try
+			{
+				throw new XMLException("Cannot unmarshal the XML: " + IOUtils.toString(inputStream), e);
+			}
+			catch (IOException e1)
+			{
+				throw new XMLException("Cannot unmarshal the XML", e1);
+			}
 		}
 		catch (IllegalArgumentException e)
 		{
-			throw new XMLException("Cannot unmarshal the XML ", e);
+			try
+			{
+				throw new XMLException("Cannot unmarshal the XML: " + IOUtils.toString(inputStream), e);
+			}
+			catch (IOException e1)
+			{
+				throw new XMLException("Cannot unmarshal the XML", e1);
+			}
 		}
 
 		return readObject;

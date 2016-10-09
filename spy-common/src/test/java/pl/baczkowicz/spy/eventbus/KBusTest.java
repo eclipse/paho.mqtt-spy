@@ -63,7 +63,7 @@ public class KBusTest extends TestCase
 		final SampleSubscriber subscriber = new SampleSubscriber();
 		
 		// Subscription with filter value - no need for cast because onAnyEvents excepts Object type
-		eventBus.subscribe(subscriber, subscriber::onAnyEvent, FilterableEvent.class, "keepMe");
+		eventBus.subscribeWithFilterOnly(subscriber, subscriber::onAnyEvent, FilterableEvent.class, "keepMe");
 		
 		// Only one subscriber configured - has the right filter content
 		final SampleInfoChangeEvent filteredEvent = new SampleInfoChangeEvent("hello", 41);
@@ -79,24 +79,4 @@ public class KBusTest extends TestCase
 		
 		assertEquals(1, subscriber.getMessageCount());
 	}
-	
-//	@Test
-//	public void testInvalidType()
-//	{
-//		final IKBus eventBus = new KBus();
-//		
-//		// Subscription and removal of subscriptions or consumers could be also done in the subscriber class - see commented out code
-//		final SampleSubscriber subscriber = new SampleSubscriber();
-//		
-//		eventBus.subscribe(subscriber, (Consumer<SampleCountChangeEvent>) subscriber::onCountChange, Object.class);
-//		
-//		// Valid
-//		eventBus.publish(new SampleCountChangeEvent("hello", 42));
-//		
-//		// Invalid
-//		eventBus.publish(new Integer(42));
-//		eventBus.publish("hello");
-//		
-//		assertEquals(1, subscriber.getMessageCount());
-//	}
 }

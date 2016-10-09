@@ -25,9 +25,9 @@ import java.util.List;
 import pl.baczkowicz.spy.common.generated.ConnectionGroup;
 import pl.baczkowicz.spy.common.generated.ConnectionGroupReference;
 import pl.baczkowicz.spy.common.generated.ConnectionReference;
-import pl.baczkowicz.spy.ui.properties.ModifiableItem;
+import pl.baczkowicz.spy.ui.properties.ModifiableConnection;
 
-public class ConfiguredConnectionGroupDetails extends ConnectionGroup implements ModifiableItem
+public class ConfiguredConnectionGroupDetails extends ConnectionGroup implements ModifiableConnection
 {
 	private static final long serialVersionUID = 7400105091442371397L;
 
@@ -251,5 +251,17 @@ public class ConfiguredConnectionGroupDetails extends ConnectionGroup implements
 			}
 		}
 		connections.remove(refToDelete);
+	}
+
+	@Override
+	public void setDeleted(boolean value)
+	{
+		// Not used		
+	}
+
+	@Override
+	public boolean isBeingCreated()
+	{
+		return false;
 	}
 }

@@ -40,15 +40,21 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import pl.baczkowicz.spy.utils.FileUtils;
+import pl.baczkowicz.spy.common.generated.KeyStoreTypeEnum;
+import pl.baczkowicz.spy.files.FileUtils;
 
 /**
  * Utility class for handling SSL/TLS connections.
  */
 public class SecureSocketUtils
 {
+	private final static Logger logger = LoggerFactory.getLogger(SecureSocketUtils.class);
+			
 	private final static String ALGORITHM = "RSA";
 	
 	/**
@@ -60,10 +66,12 @@ public class SecureSocketUtils
 	 * 
 	 * @throws IOException Thrown when cannot read the file
 	 */
-    public static byte[] loadPemFile(final String file) throws IOException 
+    public static byte[] loadPemFileAsBytes(final String file) throws IOException 
     {
         final PemReader pemReader = new PemReader(new FileReader(file));
-        final byte[] content = pemReader.readPemObject().getContent();
+        final PemObject pemObject = pemReader.readPemObject();
+        final byte[] content = pemObject.getContent();
+        logger.debug("Reading PEM file {}, type = {}", file, pemObject.getType());
         pemReader.close();
         return content;        
     }
@@ -77,7 +85,7 @@ public class SecureSocketUtils
 	 * 
 	 * @throws IOException Thrown when cannot read the file
 	 */
-    public static byte[] loadBinaryFile(final String file) throws IOException 
+    public static byte[] loadBinaryFileAsBytes(final String file) throws IOException 
     {
         final FileInputStream inputStream = new FileInputStream(file);
         final byte[] data = new byte[inputStream.available()];
@@ -91,7 +99,7 @@ public class SecureSocketUtils
      */
     public static PrivateKey loadPrivateKeyFromPemFile(final String keyFile) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException 
     {
-        final PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(loadPemFile(keyFile));
+        final PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(loadPemFileAsBytes(keyFile));
         final PrivateKey privateKey = KeyFactory.getInstance(ALGORITHM).generatePrivate(privateKeySpec);
         return privateKey;
     }
@@ -101,7 +109,7 @@ public class SecureSocketUtils
      */
     public static PrivateKey loadPrivateKeyFromBinaryFile(final String keyFile) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException 
     {
-        final PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(loadBinaryFile(keyFile));
+        final PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(loadBinaryFileAsBytes(keyFile));
         final PrivateKey privateKey = KeyFactory.getInstance(ALGORITHM).generatePrivate(privateKeySpec);
         return privateKey;
     }
@@ -121,14 +129,14 @@ public class SecureSocketUtils
     /**
      * Creates a trust manager factory.
      */
-	public static TrustManagerFactory getTrustManagerFactory(final String serverCertificateFile) 
+	public static TrustManagerFactory getTrustManagerFactory(final String caCertificateFile) 
 			throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException
 	{
 		// Load CA certificate
-		final X509Certificate caCertificate = (X509Certificate) loadX509Certificate(serverCertificateFile);
+		final X509Certificate caCertificate = (X509Certificate) loadX509Certificate(caCertificateFile);
 		
 		// CA certificate is used to authenticate server
-		final KeyStore keyStore = getKeyStoreInstance();
+		final KeyStore keyStore = getKeyStoreInstance(KeyStoreTypeEnum.DEFAULT);
 		keyStore.load(null, null);
 		keyStore.setCertificateEntry("ca-certificate", caCertificate);
 		
@@ -141,11 +149,12 @@ public class SecureSocketUtils
     /**
      * Creates a trust manager factory.
      */
-	public static TrustManagerFactory getTrustManagerFactory(final String keyStoreFile, final String keyStorePassword) 
+	public static TrustManagerFactory getTrustManagerFactory(final String keyStoreFile, final String keyStorePassword,
+			final KeyStoreTypeEnum keyStoreType) 
 			throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException
 	{
 		// Load key store
-		final KeyStore keyStore = loadKeystore(keyStoreFile, keyStorePassword);
+		final KeyStore keyStore = loadKeystore(keyStoreFile, keyStorePassword, keyStoreType);
 		
 		final TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 		tmf.init(keyStore);
@@ -156,14 +165,15 @@ public class SecureSocketUtils
 	/**
 	 * Creates a key manager factory using a key store.
 	 */
-	public static KeyManagerFactory getKeyManagerFactory(final String keyStoreFile, final String keyStorePassword, final String clientKeyPassword) 
+	public static KeyManagerFactory getKeyManagerFactory(final String keyStoreFile, final String keyStorePassword, 
+			final String keyPassword, final KeyStoreTypeEnum keyStoreType) 
 			throws IOException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException, InvalidKeySpecException
 	{
 		// Load key store
-		final KeyStore keyStore = loadKeystore(keyStoreFile, keyStorePassword);			
+		final KeyStore keyStore = loadKeystore(keyStoreFile, keyStorePassword, keyStoreType);			
 		
 		final KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-		kmf.init(keyStore, clientKeyPassword.toCharArray());
+		kmf.init(keyStore, keyPassword.toCharArray());
 		
 		return kmf;
 	}
@@ -182,7 +192,7 @@ public class SecureSocketUtils
 		final PrivateKey privateKey = pemFormat ? loadPrivateKeyFromPemFile(clientKeyFile) : loadPrivateKeyFromBinaryFile(clientKeyFile);
 
 		// Client key and certificate are sent to server
-		final KeyStore keyStore = getKeyStoreInstance();
+		final KeyStore keyStore = getKeyStoreInstance(KeyStoreTypeEnum.DEFAULT);
 		keyStore.load(null, null);
 		keyStore.setCertificateEntry("certificate", clientCertificate);
 		keyStore.setKeyEntry("private-key", privateKey, clientKeyPassword.toCharArray(), new Certificate[] { clientCertificate });
@@ -196,7 +206,7 @@ public class SecureSocketUtils
 	/**
 	 * Loads a key store from the specified location and using the given password.
 	 */
-	public static KeyStore loadKeystore(final String keyStoreFile, final String keyStorePassword)
+	public static KeyStore loadKeystore(final String keyStoreFile, final String keyStorePassword, final KeyStoreTypeEnum keyStoreType)
 			throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException
 	{
 		final FileInputStream inputStream = new FileInputStream(keyStoreFile);
@@ -205,8 +215,7 @@ public class SecureSocketUtils
 		
 		try
 		{
-			// TODO: add support for other key store types
-			keyStore = getKeyStoreInstance();
+			keyStore = getKeyStoreInstance(keyStoreType);
 			keyStore.load(inputStream, keyStorePassword.toCharArray());
 		}
 		finally
@@ -219,19 +228,56 @@ public class SecureSocketUtils
 		
 		return keyStore;
 	}
+	
+	public static KeyStore getKeyStoreInstance(final KeyStoreTypeEnum type) throws KeyStoreException
+	{			
+		if (type == null || KeyStoreTypeEnum.DEFAULT.equals(type))
+		{
+			return KeyStore.getInstance(KeyStore.getDefaultType());
+		}
 		
-	public static KeyStore getKeyStoreInstance() throws KeyStoreException
+		return KeyStore.getInstance(type.value());
+	}
+	
+	public static KeyStore getKeyStoreInstance(final KeyStoreTypeEnum type, final Provider provider) throws KeyStoreException
+	{			
+		if (type == null || KeyStoreTypeEnum.DEFAULT.equals(type))
+		{
+			return KeyStore.getInstance(KeyStore.getDefaultType());
+		}
+		
+		return KeyStore.getInstance(type.value(), provider);
+	}
+	
+	public static KeyStoreTypeEnum getTypeFromFilename(final String filename)
 	{
-		return KeyStore.getInstance(KeyStore.getDefaultType());
-	}
-	
-	public static KeyStore getKeyStoreInstance(final String type) throws KeyStoreException
-	{			
-		return KeyStore.getInstance(type);
-	}
-	
-	public static KeyStore getKeyStoreInstance(final String type, final Provider provider) throws KeyStoreException
-	{			
-		return KeyStore.getInstance(type, provider);
+		if (filename == null || filename.isEmpty())
+		{
+			return KeyStoreTypeEnum.DEFAULT;
+		}
+		else if (filename.toLowerCase().endsWith("jks"))
+		{
+			return KeyStoreTypeEnum.JKS;
+		}
+		else if (filename.toLowerCase().endsWith("jceks"))
+		{
+			return KeyStoreTypeEnum.JCEKS;
+		}
+		else if (filename.toLowerCase().endsWith("p12"))
+		{
+			return KeyStoreTypeEnum.PKCS_12;
+		}
+		else if (filename.toLowerCase().endsWith("pfx"))
+		{
+			return KeyStoreTypeEnum.PKCS_12;
+		}
+		else if (filename.toLowerCase().endsWith("bks"))
+		{
+			return KeyStoreTypeEnum.BKS;
+		}
+		else
+		{
+			return KeyStoreTypeEnum.DEFAULT;
+		}
 	}
 }

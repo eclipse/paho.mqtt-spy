@@ -19,6 +19,7 @@
  */
 package pl.baczkowicz.mqttspy.ui.controllers.edit;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -45,23 +46,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.mqttspy.common.generated.PublicationDetails;
-import pl.baczkowicz.mqttspy.configuration.ConfiguredConnectionDetails;
+import pl.baczkowicz.mqttspy.configuration.ConfiguredMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.configuration.generated.UserInterfaceMqttConnectionDetails;
-import pl.baczkowicz.mqttspy.ui.EditConnectionController;
+import pl.baczkowicz.mqttspy.ui.controllers.EditMqttConnectionController;
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
 import pl.baczkowicz.spy.ui.properties.BackgroundScriptProperties;
 import pl.baczkowicz.spy.ui.properties.BaseTopicProperty;
+import pl.baczkowicz.spy.ui.utils.DialogFactory;
 
 /**
  * Controller for editing a single connection - publications tab.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class EditConnectionPublicationsController extends AnchorPane implements Initializable, EditConnectionSubController
+public class EditConnectionPublicationsController extends AnchorPane implements Initializable, IEditConnectionSubController
 {
 	private final static Logger logger = LoggerFactory.getLogger(EditConnectionPublicationsController.class);
 	
 	/** The parent controller. */
-	private EditConnectionController parent;
+	private EditMqttConnectionController parent;
 
 	// Action buttons
 	
@@ -135,100 +137,118 @@ public class EditConnectionPublicationsController extends AnchorPane implements 
 		publicationScriptsText.textProperty().addListener(basicOnChangeListener);
 		publicationAutoStartColumn.setCellValueFactory(new PropertyValueFactory<BackgroundScriptProperties, Boolean>("autoStart"));
 		publicationAutoStartColumn.setCellFactory(new Callback<TableColumn<BackgroundScriptProperties, Boolean>, TableCell<BackgroundScriptProperties, Boolean>>()
+		{
+			public TableCell<BackgroundScriptProperties, Boolean> call(
+					TableColumn<BackgroundScriptProperties, Boolean> p)
+			{
+				final TableCell<BackgroundScriptProperties, Boolean> cell = new TableCell<BackgroundScriptProperties, Boolean>()
 				{
-					public TableCell<BackgroundScriptProperties, Boolean> call(
-							TableColumn<BackgroundScriptProperties, Boolean> p)
+					@Override
+					public void updateItem(final Boolean item, boolean empty)
 					{
-						final TableCell<BackgroundScriptProperties, Boolean> cell = new TableCell<BackgroundScriptProperties, Boolean>()
+						super.updateItem(item, empty);
+						if (!isEmpty())
 						{
-							@Override
-							public void updateItem(final Boolean item, boolean empty)
-							{
-								super.updateItem(item, empty);
-								if (!isEmpty())
+							final BackgroundScriptProperties shownItem = getTableView().getItems().get(getIndex());
+							CheckBox box = new CheckBox();
+							box.selectedProperty().bindBidirectional(shownItem.autoStartProperty());
+							box.setOnAction(new EventHandler<ActionEvent>()
+							{										
+								@Override
+								public void handle(ActionEvent event)
 								{
-									final BackgroundScriptProperties shownItem = getTableView().getItems().get(getIndex());
-									CheckBox box = new CheckBox();
-									box.selectedProperty().bindBidirectional(shownItem.autoStartProperty());
-									box.setOnAction(new EventHandler<ActionEvent>()
-									{										
-										@Override
-										public void handle(ActionEvent event)
-										{
-											logger.info("New value = {} {}", 
-													shownItem.scriptProperty().getValue(),
-													shownItem.autoStartProperty().getValue());
-											onChange();
-										}
-									});
-									setGraphic(box);
+									logger.info("New value = {} {}", 
+											shownItem.scriptProperty().getValue(),
+											shownItem.autoStartProperty().getValue());
+									onChange();
 								}
-								else
-								{
-									setGraphic(null);
-								}
-							}
-						};
-						cell.setAlignment(Pos.CENTER);
-						return cell;
+							});
+							setGraphic(box);
+						}
+						else
+						{
+							setGraphic(null);
+						}
 					}
-				});
+				};
+				cell.setAlignment(Pos.CENTER);
+				return cell;
+			}
+		});
 		
 		publicationRepeatColumn.setCellValueFactory(new PropertyValueFactory<BackgroundScriptProperties, Boolean>("repeat"));
 		publicationRepeatColumn.setCellFactory(new Callback<TableColumn<BackgroundScriptProperties, Boolean>, TableCell<BackgroundScriptProperties, Boolean>>()
+		{
+			public TableCell<BackgroundScriptProperties, Boolean> call(
+					TableColumn<BackgroundScriptProperties, Boolean> p)
+			{
+				final TableCell<BackgroundScriptProperties, Boolean> cell = new TableCell<BackgroundScriptProperties, Boolean>()
 				{
-					public TableCell<BackgroundScriptProperties, Boolean> call(
-							TableColumn<BackgroundScriptProperties, Boolean> p)
+					@Override
+					public void updateItem(final Boolean item, boolean empty)
 					{
-						final TableCell<BackgroundScriptProperties, Boolean> cell = new TableCell<BackgroundScriptProperties, Boolean>()
+						super.updateItem(item, empty);
+						if (!isEmpty())
 						{
-							@Override
-							public void updateItem(final Boolean item, boolean empty)
-							{
-								super.updateItem(item, empty);
-								if (!isEmpty())
+							final BackgroundScriptProperties shownItem = getTableView().getItems().get(getIndex());
+							CheckBox box = new CheckBox();
+							box.selectedProperty().bindBidirectional(shownItem.repeatProperty());
+							box.setOnAction(new EventHandler<ActionEvent>()
+							{										
+								@Override
+								public void handle(ActionEvent event)
 								{
-									final BackgroundScriptProperties shownItem = getTableView().getItems().get(getIndex());
-									CheckBox box = new CheckBox();
-									box.selectedProperty().bindBidirectional(shownItem.repeatProperty());
-									box.setOnAction(new EventHandler<ActionEvent>()
-									{										
-										@Override
-										public void handle(ActionEvent event)
-										{
-											logger.info("New value = {} {}", 
-													shownItem.scriptProperty().getValue(),
-													shownItem.repeatProperty().getValue());
-											onChange();
-										}
-									});
-									setGraphic(box);
+									logger.info("New value = {} {}", 
+											shownItem.scriptProperty().getValue(),
+											shownItem.repeatProperty().getValue());
+									onChange();
 								}
-								else
-								{
-									setGraphic(null);
-								}
-							}
-						};
-						cell.setAlignment(Pos.CENTER);
-						return cell;
+							});
+							setGraphic(box);
+						}
+						else
+						{
+							setGraphic(null);
+						}
 					}
-				});
+				};
+				cell.setAlignment(Pos.CENTER);
+				return cell;
+			}
+		});
 		
 		publicationScriptColumn.setCellValueFactory(new PropertyValueFactory<BackgroundScriptProperties, String>("script"));
 		publicationScriptColumn.setCellFactory(TextFieldTableCell.<BackgroundScriptProperties>forTableColumn());
 		publicationScriptColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<BackgroundScriptProperties, String>>()
+		{
+			@Override
+			public void handle(CellEditEvent<BackgroundScriptProperties, String> event)
+			{						
+	            String newValue = event.getNewValue();
+	            
+	            final File scriptFile = new File(newValue);
+	            
+	            if (!newValue.isEmpty() && !scriptFile.exists())
 				{
-					@Override
-					public void handle(CellEditEvent<BackgroundScriptProperties, String> event)
-					{
-						BackgroundScriptProperties p = event.getRowValue();
-			            String newValue = event.getNewValue();
-			            p.scriptProperty().set(newValue);            
-						logger.debug("New value = {}", backgroundPublicationScriptsTable.getSelectionModel().getSelectedItem().scriptProperty().getValue());
-						onChange();
-					}		
-				});
+					DialogFactory.createExceptionDialog(
+							"File does not exist", 
+							"Could not locate the specified file - please check the name and the path.",
+							"File named " + scriptFile.getName() + " does not exist at " + scriptFile.getAbsolutePath() + "!");
+					
+					event.consume();
+					
+					// TODO: clear the content
+					backgroundPublicationScriptsTable.getSelectionModel().getSelectedItem().scriptProperty().setValue("");
+				}						
+				else
+				{
+		            BackgroundScriptProperties p = event.getRowValue();
+		            p.scriptProperty().set(newValue);            
+					logger.debug("New value = {}", backgroundPublicationScriptsTable.getSelectionModel().getSelectedItem().scriptProperty().getValue());
+					onChange();
+				}
+			}		
+		});
 	}
 
 	public void init()
@@ -313,7 +333,7 @@ public class EditConnectionPublicationsController extends AnchorPane implements 
 	}
 	
 	@Override
-	public void displayConnectionDetails(final ConfiguredConnectionDetails connection)
+	public void displayConnectionDetails(final ConfiguredMqttConnectionDetails connection)
 	{
 		// Publications topics
 		removePublicationButton.setDisable(true);
@@ -355,7 +375,7 @@ public class EditConnectionPublicationsController extends AnchorPane implements 
 	// ===============================
 	
 	@Override
-	public void setParent(final EditConnectionController controller)
+	public void setParent(final EditMqttConnectionController controller)
 	{
 		this.parent = controller;
 	}

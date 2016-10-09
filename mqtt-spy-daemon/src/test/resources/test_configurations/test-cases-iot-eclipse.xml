@@ -3,7 +3,6 @@
 
   <Connection>
   
-	<!-- For details on multiple server URIs see http://www.eclipse.org/paho/files/javadoc/org/eclipse/paho/client/mqttv3/MqttConnectOptions.html#setServerURIs%28java.lang.String[]%29 -->
 	<ServerURI>iot.eclipse.org</ServerURI>
   			
 	<ClientID>mqtt-spy-daemon</ClientID>
@@ -16,9 +15,6 @@
         <Mode>SERVER_ONLY</Mode>
         <Protocol>TLSv1.2</Protocol>
         <CertificateAuthorityFile>/certificates/certificate_authority_files/iot.eclipse.org.crt</CertificateAuthorityFile>
-        <ClientCertificateFile></ClientCertificateFile>
-        <ClientKeyFile></ClientKeyFile>
-        <ClientKeyPassword></ClientKeyPassword>
     </SSL>
 	
 	<ReconnectionSettings>
@@ -27,14 +23,8 @@
 		<!-- Whether to resubscribe to all topics when the connection is regained -->
 		<Resubscribe>true</Resubscribe>
 	</ReconnectionSettings>
-			
-	<!-- 
-		For binary payloads, change it to XML_WITH_ENCODED_PAYLOAD.
-				
-		To log QoS, Retained flag, connection name or subscription, use:
-		logQos="true" logRetained="true" logConnection="true" logSubscription="true" 
-	-->
-	<MessageLog logBeforeScripts="false">DISABLED</MessageLog>
+		
+	<MessageLog>DISABLED</MessageLog>
 	
 	<!-- Run all test cases that have been defined in the given directory -->
 	<TestCases>

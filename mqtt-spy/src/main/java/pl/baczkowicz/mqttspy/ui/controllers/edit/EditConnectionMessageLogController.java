@@ -30,18 +30,18 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import pl.baczkowicz.mqttspy.common.generated.MessageLogEnum;
-import pl.baczkowicz.mqttspy.configuration.ConfiguredConnectionDetails;
+import pl.baczkowicz.mqttspy.configuration.ConfiguredMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.configuration.generated.UserInterfaceMqttConnectionDetails;
-import pl.baczkowicz.mqttspy.ui.EditConnectionController;
+import pl.baczkowicz.mqttspy.ui.controllers.EditMqttConnectionController;
 
 /**
  * Controller for editing a single connection - message log tab.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class EditConnectionMessageLogController extends AnchorPane implements Initializable, EditConnectionSubController
+public class EditConnectionMessageLogController extends AnchorPane implements Initializable, IEditConnectionSubController
 {
 	/** The parent controller. */
-	private EditConnectionController parent;	
+	private EditMqttConnectionController parent;	
 	
 	// Log
 	
@@ -98,7 +98,7 @@ public class EditConnectionMessageLogController extends AnchorPane implements In
 	}
 	
 	@Override
-	public void displayConnectionDetails(final ConfiguredConnectionDetails connection)
+	public void displayConnectionDetails(final ConfiguredMqttConnectionDetails connection)
 	{		
 		// Log
 		loggingMode.setValue(connection.getMessageLog() == null ? MessageLogEnum.DISABLED : connection.getMessageLog().getValue());
@@ -110,7 +110,7 @@ public class EditConnectionMessageLogController extends AnchorPane implements In
 	// ===============================
 	
 	@Override
-	public void setParent(final EditConnectionController controller)
+	public void setParent(final EditMqttConnectionController controller)
 	{
 		this.parent = controller;
 	}

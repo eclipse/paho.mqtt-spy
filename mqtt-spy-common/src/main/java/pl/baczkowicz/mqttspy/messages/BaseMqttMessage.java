@@ -117,7 +117,7 @@ public class BaseMqttMessage extends FormattedMessage implements IBaseMqttMessag
 		return this.rawMessage.isRetained();
 	}
 	
-	public byte[] getRawBinaryPayload()
+	public byte[] getRawPayload()
 	{
 		return getRawMessage().getPayload();
 	}

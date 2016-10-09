@@ -37,6 +37,8 @@ public class BaseMessage implements IBaseMessage
 
 	private String payload;
 	
+	private byte[] rawPayload;
+	
 	/**
 	 * Creates a BaseMessage from the given parameters.
 	 * 
@@ -114,5 +116,21 @@ public class BaseMessage implements IBaseMessage
 	public void setPayload(final String payload)
 	{
 		this.payload = payload;
+	}
+
+	/**
+	 * @return the rawPayload
+	 */
+	public byte[] getRawPayload()
+	{
+		return rawPayload;
+	}
+
+	/**
+	 * @param rawPayload the rawPayload to set
+	 */
+	public void setRawPayload(byte[] rawPayload)
+	{
+		this.rawPayload = rawPayload;
 	}	
 }

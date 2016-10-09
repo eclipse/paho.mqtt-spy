@@ -1,0 +1,233 @@
+.vsmall-font
+{
+	-fx-font-size: 10px;
+}
+
+.small-font
+{
+	-fx-font-size: 11px;
+}
+
+.normal-font
+{
+	-fx-font-size: 13px;
+}
+
+.tab:selected
+{
+	-fx-font-weight: bold;
+}
+
+/* Color picker */
+
+#subscriptionColorPicker .color-picker-label .text 
+{
+    -fx-font: 11px "System";
+}
+
+.command-link-message
+{
+	-fx-font: 20px "System";
+}
+
+.line-1
+{
+	-fx-font: 15px "System";
+}
+
+.line-2
+{
+	-fx-font: 13px "System";
+}
+
+.messageIndex
+{
+	-fx-font-weight: bold;
+}
+
+.filterOff
+{
+	-fx-text-fill: 	black;
+	-fx-stroke: 	black;
+}
+
+.filterOn
+{
+	-fx-text-fill: 	red;
+	-fx-stroke: 	red;
+}
+
+.noNewLines
+{
+	-fx-text-fill: 	black;
+	-fx-stroke: 	black;
+}
+
+.newLinesPresent
+{
+	-fx-text-fill: 	red;
+	-fx-stroke: 	red;
+}
+
+.valid
+{
+	-fx-text-fill: 	black;
+	-fx-stroke: 	black;
+}
+
+.invalid
+{
+	-fx-text-fill: 	red;
+	-fx-stroke: 	red;
+}
+
+.buttonArea
+{
+	-fx-background-color: white; 
+}
+
+#subscriptionTabs .tab-header-area 
+{
+    -fx-padding: 5 0 0 88;
+}
+
+/* Rich text area */
+
+.styled-text-area
+{	
+    -fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 3, 2, 2;
+    -fx-padding: 4;	
+}
+
+.messageText
+{
+	-fx-font: 11px "System";
+	-fx-font-weight: normal;
+}
+
+.messageTextHighlighted
+{
+	-fx-font: 		11px "System";
+	-fx-fill: 	red;
+	-fx-font-weight: normal;
+}
+
+#newSubTab:disabled, #newSubTab:disabled > * 
+{
+  -fx-opacity: 1.0;
+}
+
+#connectionList .list-cell:filled:selected 
+{
+   -fx-background-color: -fx-focus-color;   
+}
+
+#connectionList .list-cell:filled:selected .text 
+{
+   -fx-fill: white;
+}
+
+#connectionList .list-cell:filled:odd 
+{
+    -fx-background-radius: 7;
+}
+
+#connectionList .list-cell:filled:even 
+{
+     -fx-background-radius: 7;
+}
+
+.table-row-cell:selected 
+{
+	-fx-background-color: -fx-focus-color;
+}
+
+.seriesNoMessages
+{
+	-fx-background-color: white;
+}
+
+.seriesError
+{
+	-fx-background-color: rgba(255, 0, 0, 0.6);
+}
+
+.seriesOK
+{
+	-fx-background-color: lightgreen;
+}
+
+/* Connections */
+
+.connection-connected
+{
+	-fx-base: lightgreen;
+}
+
+.connection-disconnected
+{
+	-fx-base: red;
+}
+
+.connection-connecting
+{
+	-fx-base: yellow;
+}
+
+.connection-not-connected
+{
+	-fx-base: white;
+}
+
+.connection-default
+{
+	-fx-base: grey;
+}	
+
+.connection-replay
+{
+	-fx-base: tan;
+}
+
+.pane-settings-menu-item {
+	-fx-font: 11px "System"; 
+	-fx-padding: 5;
+}
+
+.pane-settings-menu-graphic {
+	-fx-padding: 5;
+}
+ 
+#pane-settings-button {
+	/* This is a workaround for the MenuButton which forces you having padding - seems to be based on default font size. */
+	-fx-font: 1px "System";
+}
+
+#pane-settings-button > .arrow-button {
+    -fx-padding: 0;
+}
+
+#pane-settings-button > .arrow-button > .arrow {
+    -fx-padding: 0;
+}
+
+/* Subscriptions */
+
+.subscribed .text
+{
+	-fx-underline: false;
+	-fx-font-style: normal;
+}
+
+.unsubscribed
+{
+	-fx-text-fill: 	grey;	
+}
+
+.unsubscribed .text
+{
+	-fx-underline: true;
+	-fx-font-style: italic;
+}

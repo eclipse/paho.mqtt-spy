@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import pl.baczkowicz.mqttspy.connectivity.BaseMqttSubscription;
 import pl.baczkowicz.mqttspy.connectivity.IMqttConnection;
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.spy.scripts.IScriptEventManager;
+import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.scripts.ScriptIO;
 
@@ -44,24 +44,6 @@ public class MqttScriptIO extends ScriptIO implements IMqttScriptIO
 	/** Reference to the MQTT connection. */
 	private final IMqttConnection connection;
 	
-	/** Script properties. */
-	//private Script script;
-	
-	// TODO: could possibly replace that with a local variable
-	/** The number of messages published by the script. */
-	//private int publishedMessages;	
-
-	/** Event manager for notifying about various events. */
-	// private final IScriptEventManager eventManager;
-
-	/** Task executor. */
-	//private Executor executor;
-
-	/** The messageLog object, as seen by the script. */
-	//private final IMqttMessageLogIO messageLog;
-	
-	//private String scriptName = "n/a";
-	
 	/**
 	 * Creates the PublicationScriptIO.
 	 * 
@@ -71,70 +53,12 @@ public class MqttScriptIO extends ScriptIO implements IMqttScriptIO
 	 * @param executor Task executor
 	 */
 	public MqttScriptIO(
-			final IMqttConnection connection, final IScriptEventManager eventManager, 
+			final IMqttConnection connection, final IKBus eventBus, 
 			final Script script, final Executor executor)
 	{
-		super(/*connection, eventManager, */script, executor);	
+		super(script, executor);	
 		this.connection = connection;
-		// this.eventManager = eventManager;
 	}
-
-//	@Override
-//	public void touch()
-//	{
-//		script.touch();
-//	}
-//	
-//	@Override
-//	public void setScriptTimeout(final long customTimeout)
-//	{
-//		script.setScriptTimeout(customTimeout);
-//		logger.debug("Timeout for script {} changed to {}", scriptName, customTimeout);
-//	}
-	
-//	@Override
-//	// TODO: deprecate?
-//	public boolean instantiate(final String className)
-//	{
-//		try
-//		{
-//			final Bindings bindings = script.getScriptEngine().getBindings(ScriptContext.ENGINE_SCOPE);
-//			bindings.put(className.replace(".", "_"), Class.forName(className).newInstance());
-//			script.getScriptEngine().setBindings(bindings, ScriptContext.ENGINE_SCOPE);
-//			return true;
-//		}
-//		catch (Exception e)
-//		{
-//			logger.error("Cannot instantiate class " + className, e);
-//			return false;
-//		}
-//	}
-//	
-//	@Override
-//	public String execute(final String command) throws IOException, InterruptedException
-//	{
-//		Runtime rt = Runtime.getRuntime();
-//		Process p = rt.exec(command);
-//		p.waitFor();
-//		BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//		String line = null;
-//
-//		try
-//		{
-//			final StringBuffer sb = new StringBuffer();
-//			while ((line = input.readLine()) != null)
-//			{
-//				sb.append(line);
-//			}
-//			return sb.toString();
-//		}
-//		catch (IOException e)
-//		{
-//			e.printStackTrace();
-//		}			
-//		
-//		return null;
-//	}
 	
 	@Override
 	public void publish(final String publicationTopic, final String data)
@@ -146,12 +70,6 @@ public class MqttScriptIO extends ScriptIO implements IMqttScriptIO
 	public void publish(final String publicationTopic, final byte[] data, final int qos, final boolean retained)
 	{
 		touch();
-
-		// TODO: commented out - not sure why this was here
-//		if (!script.getStatus().equals(ScriptRunningState.RUNNING))
-//		{
-//			ScriptRunner.changeState(eventManager, scriptName, ScriptRunningState.RUNNING, script, executor);
-//		}
 		
 		logger.debug("[JS {}] Publishing message to {} with payload size = {}, qos = {}, retained = {}", 
 				scriptName, publicationTopic, data.length, qos, retained);
@@ -169,12 +87,6 @@ public class MqttScriptIO extends ScriptIO implements IMqttScriptIO
 	public void publish(final String publicationTopic, final String data, final int qos, final boolean retained)
 	{
 		touch();
-
-		// TODO: commented out - not sure why this was here
-//		if (script != null && !script.getStatus().equals(ScriptRunningState.RUNNING))
-//		{
-//			ScriptRunner.changeState(eventManager, scriptName, ScriptRunningState.RUNNING, script, executor);
-//		}
 		
 		logger.debug("[JS {}] Publishing message to {} with payload = {}, qos = {}, retained = {}", 
 				scriptName, publicationTopic, data, qos, retained);
@@ -188,40 +100,6 @@ public class MqttScriptIO extends ScriptIO implements IMqttScriptIO
 		
 		// TODO: change state to finished?
 	}
-//	
-//	
-//	private void updatePublished()
-//	{
-//		publishedMessages++;
-//		
-//		if (executor != null)
-//		{
-//			executor.execute(new Runnable()
-//			{			
-//				public void run()
-//				{
-//					script.setLastPublished(new Date());
-//					script.setMessagesPublished(publishedMessages);				
-//				}
-//			});
-//		}
-//		else if (script != null)
-//		{
-//			script.setLastPublished(new Date());
-//			script.setMessagesPublished(publishedMessages);		
-//		}
-//	}
-
-	/**
-	 * Gets the messageLog object.
-	 * 
-	 * @return The messageLog object
-	 */
-//	public IMqttMessageLogIO getMessageLog()
-//	{
-//		return messageLog;
-//	}
-
 
 	@Override
 	public boolean subscribe(final String topic, final int qos)

@@ -44,6 +44,14 @@ public class MqttSpyDaemonTest
 	}
 	
 	@Test
+	public void testLocalhostConfiguration()
+	{
+		final MqttSpyDaemon daemon = new MqttSpyDaemon();
+		
+		assertTrue(daemon.start("src/test/resources/test_configurations/localhost-configuration.xml"));
+	}
+	
+	@Test
 	public void testSslWithTestCasesConfiguration()
 	{
 		final MqttSpyDaemon daemon = new MqttSpyDaemon();

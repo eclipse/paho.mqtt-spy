@@ -19,14 +19,15 @@
  */
 package pl.baczkowicz.mqttspy.connectivity.topicmatching;
 
+import io.moquette.spi.ISessionsStore.ClientTopicCouple;
+import io.moquette.spi.impl.subscriptions.Subscription;
+import io.moquette.spi.impl.subscriptions.SubscriptionsStore;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.moquette.spi.impl.subscriptions.Subscription;
-import org.eclipse.moquette.spi.impl.subscriptions.SubscriptionsStore;
-import org.eclipse.moquette.proto.messages.AbstractMessage.QOSType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,9 +87,9 @@ public class TopicMatcher
 	 */
 	public void addSubscriptionToStore(final String topic, final String clientId)
 	{
-		final Subscription subscription = new Subscription(clientId, topic, QOSType.MOST_ONE, true);
+		final ClientTopicCouple subscription = new ClientTopicCouple(clientId, topic);
 		
-		if (!topics.contains(subscription))
+		if (!topics.contains(topic))
 		{
 			logger.debug("Added subscription " + topic + " (" + clientId + ") to store");
 			// Store the subscription topic for further matching

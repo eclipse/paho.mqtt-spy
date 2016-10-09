@@ -50,16 +50,25 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
+
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
 import pl.baczkowicz.spy.ui.utils.ImageUtils;
 
 public class CommandLinksDialog
 {
+	/** Diagnostic logger. */
+	// private final static Logger logger = LoggerFactory.getLogger(CommandLinksDialog.class);
+	
 	/**
      * Show a dialog filled with provided command links. Command links are used instead of button bar and represent 
      * a set of available 'radio' buttons
@@ -71,16 +80,16 @@ public class CommandLinksDialog
      */
     public static Optional<DialogAction> showCommandLinks(final String title, final String message, 
     		final DialogAction defaultCommandLink, final List<DialogAction> links, 
-    		final int minWidth, final int longMessageMinHeight, double maxHeight, final List<String> stylesheets) 
+    		final double windowHeight, final int minWidth, final int longMessageMinHeight, double maxHeight, final List<String> stylesheets) 
     {
         final Dialog<DialogAction> dialog = new Dialog<DialogAction>();
         dialog.setTitle(title);
         dialog.getDialogPane().getScene().getStylesheets().addAll(stylesheets);
         dialog.getDialogPane().getButtonTypes().clear();
         
-     	dialog.setGraphic(ImageUtils.createLargeIcon("dialog-information", 55));
+     	dialog.setGraphic(ImageUtils.createIcon("dialog-information-large", 55));
         dialog.setResizable(true);
-        // dialog.setHeaderText(message);
+        dialog.setHeight(windowHeight);
         
         Label label = new Label(message);
 		label.setAlignment(Pos.TOP_LEFT);
@@ -121,9 +130,12 @@ public class CommandLinksDialog
 				return ph * 1.5;
 			}
 		};
+        
 		int row = 0;
 		content.add(label, 0, row++);
 		content.setMinWidth(minWidth);
+		content.setMaxHeight(windowHeight);
+		content.setPrefHeight(windowHeight);
         content.setHgap(gapSize);
         content.setVgap(gapSize);
         
@@ -156,6 +168,8 @@ public class CommandLinksDialog
         GridPane.setMargin(buttons.get(buttons.size() - 1), new Insets(0,0,10,0));
         
         dialog.getDialogPane().setContent(content);
+        ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(cancel);
         
         return dialog.showAndWait();
     }    
@@ -188,12 +202,10 @@ public class CommandLinksDialog
         Label messageLabel = new Label(commandLink.getLongText() );
         messageLabel.setMinHeight(longMessageMinHeight);
         messageLabel.setPrefHeight(longMessageMinHeight + 10);
-        //messageLabel.setMaxHeight(longMessageMaxHeight);
         messageLabel.getStyleClass().addAll("line-2");
         messageLabel.setWrapText(true);
         messageLabel.setAlignment(Pos.TOP_LEFT);
         messageLabel.setMaxHeight(Double.MAX_VALUE);
-        // GridPane.setVgrow(messageLabel, Priority.SOMETIMES);
         GridPane.setVgrow(messageLabel, Priority.ALWAYS);
         
         Pane graphicContainer = new Pane(ImageUtils.createIcon("go-next-green", 20));

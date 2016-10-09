@@ -101,7 +101,7 @@ public class MqttMessageLogger implements Runnable
 	
 	public void run()
 	{
-		ThreadingUtils.logThreadStarting("Message Logger");
+		ThreadingUtils.logThreadStarting("Message Audit Logger");
 		running = true;
 		
 		while (running)

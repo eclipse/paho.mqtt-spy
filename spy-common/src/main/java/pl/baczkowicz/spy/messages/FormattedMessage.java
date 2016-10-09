@@ -26,7 +26,7 @@ import pl.baczkowicz.spy.common.generated.FormatterDetails;
 /**
  * Represents a formatted message, e.g. received on a topic.
  */
-public abstract class FormattedMessage extends BaseMessage
+public class FormattedMessage extends BaseMessage
 {	
 	/** The first matching subscription. */ 
 	private String subscription;
@@ -34,6 +34,8 @@ public abstract class FormattedMessage extends BaseMessage
 	private FormatterDetails lastUsedFormatter;
 	
 	private String formattedPayload;
+
+	private String prettyPayload;
 
 	public FormattedMessage(final long id, final String topic)
 	{
@@ -74,6 +76,14 @@ public abstract class FormattedMessage extends BaseMessage
 	{
 		this.lastUsedFormatter = formatter;		
 	}
+
+	public void setPrettyPayload(final String prettyPayload)
+	{
+		this.prettyPayload = prettyPayload;		
+	}
 	
-	public abstract byte[] getRawBinaryPayload();
+	public String getPrettyPayload()
+	{
+		return prettyPayload;
+	}
 }

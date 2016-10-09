@@ -24,9 +24,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
+import pl.baczkowicz.spy.files.FileUtils;
 import pl.baczkowicz.spy.scripts.BaseScriptManager;
 import pl.baczkowicz.spy.scripts.ScriptRunningState;
-import pl.baczkowicz.spy.utils.FileUtils;
 import pl.baczkowicz.spy.utils.ThreadingUtils;
 import pl.baczkowicz.spy.utils.TimeUtils;
 
@@ -54,7 +55,7 @@ public class TestCaseManager
 	
 	protected final BaseScriptManager scriptManager;
 	
-	protected List<TestCase> testCases = new ArrayList<>();
+	protected Map<String, TestCase> testCases = new HashMap<>();
 			
 	protected int running = 0;
 	
@@ -79,12 +80,10 @@ public class TestCaseManager
 		final ScriptDetails scriptDetails = new ScriptDetails();					
 		scriptDetails.setFile(scriptFile.getAbsolutePath());
 		scriptDetails.setRepeat(false);
-							
-		final String scriptName = BaseScriptManager.getScriptName(scriptFile);
 		
 		final TestCase testCase = new TestCase();
 				
-		scriptManager.createFileBasedScript(testCase, scriptName, scriptFile, scriptDetails);
+		scriptManager.createFileBasedScript(testCase, scriptFile, scriptDetails);
 		
 		try
 		{	
@@ -115,7 +114,7 @@ public class TestCaseManager
 			testCase.setName(scriptFile.getParentFile().getName());
 		}
 		
-		testCases.add(testCase);
+		testCases.put(testCase.getScriptId(), testCase);
 		return testCase;
 	}
 	
@@ -197,7 +196,7 @@ public class TestCaseManager
 		// Before
 		if (!scriptManager.invokeBefore(testCase))
 		{
-			testCase.setStatus(ScriptRunningState.FAILED);					
+			testCase.setStatusAndNotify(ScriptRunningState.FAILED);					
 		}
 		
 		// Test steps
@@ -206,7 +205,7 @@ public class TestCaseManager
 		// After
 		if (!scriptManager.invokeAfter(testCase))
 		{
-			testCase.setStatus(ScriptRunningState.FAILED);					
+			testCase.setStatusAndNotify(ScriptRunningState.FAILED);					
 		}
 		
 		final TestCaseStepResult testCaseStatus = lastResult;
@@ -218,7 +217,7 @@ public class TestCaseManager
 		else
 		{
 			testCase.setTestCaseStatus(testCaseStatus.getStatus());
-			testCase.setStatus(ScriptRunningState.FINISHED);
+			testCase.setStatusAndNotify(ScriptRunningState.FINISHED);
 		}
 		
 		testCase.getTestCaseResult().setInfo(testCase.getInfo());
@@ -238,7 +237,7 @@ public class TestCaseManager
 	
 	public void runTestCase(final TestCase testCase, final Map<String, Object> args)
 	{				
-		testCase.setStatus(ScriptRunningState.RUNNING);
+		testCase.setStatusAndNotify(ScriptRunningState.RUNNING);
 		testCase.setTestCaseStatus(TestCaseStatus.IN_PROGRESS);
 		
 		// Set test case args
@@ -276,7 +275,7 @@ public class TestCaseManager
 			{
 				ThreadingUtils.logThreadStarting("runAllTestCases");
 
-				for (final TestCase testCase : testCases)
+				for (final TestCase testCase : testCases.values())
 				{
 					runTestCase(testCase, null);
 					running--;
@@ -289,7 +288,7 @@ public class TestCaseManager
 
 	public void stopTestCase(final TestCase testCase)
 	{
-		testCase.setStatus(ScriptRunningState.STOPPED);		
+		testCase.setStatusAndNotify(ScriptRunningState.STOPPED);		
 		
 		final TestCaseStep step = testCase.getSteps().get(testCase.getCurrentStep());
 		
@@ -301,9 +300,9 @@ public class TestCaseManager
 		return testCases.size();
 	}
 
-	public List<TestCase> getTestCases()
+	public Collection<TestCase> getTestCases()
 	{
-		return testCases;
+		return testCases.values();
 	}
 
 	// *** Export methods ***

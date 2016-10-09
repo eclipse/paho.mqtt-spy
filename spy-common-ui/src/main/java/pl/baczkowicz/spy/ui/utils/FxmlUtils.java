@@ -31,12 +31,6 @@ import pl.baczkowicz.spy.exceptions.CriticalException;
 @SuppressWarnings("rawtypes")
 public class FxmlUtils
 {
-	/** Package with all FXML files. */
-	public final static String FXML_PACKAGE = "ui/";
-
-	/** Folder with all FXML files. */
-	public static final String FXML_LOCATION = "fxml/";
-	
 	/** The parent class to be used for getting resources. */
 	private static Class parentClass;
 
@@ -49,7 +43,7 @@ public class FxmlUtils
 	 */
 	public static FXMLLoader createFxmlLoaderForProjectFile(final String localFxmlFile)
 	{
-		return createFxmlLoader(parentClass, FxmlUtils.FXML_PACKAGE + FxmlUtils.FXML_LOCATION + localFxmlFile);
+		return createFxmlLoader(parentClass, ResourcePaths.FXML_PATH + localFxmlFile);
 	}
 	
 	/**

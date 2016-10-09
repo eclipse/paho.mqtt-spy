@@ -24,6 +24,7 @@ import java.io.File;
 import javax.script.ScriptException;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
@@ -41,8 +42,9 @@ import pl.baczkowicz.spy.utils.ConversionUtils;
 
 public class FormattingPerformanceTest
 {
-	private FormatterDetails defaultFormatter = FormattingUtils.createBasicFormatter("default", "Plain", ConversionMethod.PLAIN);
+	private FormatterDetails defaultFormatter = FormattingUtils.createBasicFormatter("default", "Plain", null, ConversionMethod.PLAIN);
 	
+	@Ignore
 	@Test
 	public void compareFormattingMethods() throws NoSuchMethodException, ScriptException
 	{
@@ -124,7 +126,7 @@ public class FormattingPerformanceTest
 		String result = "";
 		for (int i = 0; i < repeat; i++)
 		{
-			result = scriptFormatter.formatMessage(scriptFunctionBased, message);
+			result = scriptFormatter.formatMessage(scriptFunctionBased, message, true);
 		}
 		System.out.println("Message payload = " + result);
 		

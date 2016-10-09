@@ -49,23 +49,23 @@ import javafx.util.StringConverter;
 import javax.net.ssl.SSLContext;
 
 import pl.baczkowicz.mqttspy.common.generated.SecureSocketSettings;
-import pl.baczkowicz.mqttspy.common.generated.UserCredentials;
-import pl.baczkowicz.mqttspy.configuration.ConfiguredConnectionDetails;
+import pl.baczkowicz.mqttspy.configuration.ConfiguredMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.configuration.generated.UserAuthenticationOptions;
 import pl.baczkowicz.mqttspy.configuration.generated.UserInterfaceMqttConnectionDetails;
-import pl.baczkowicz.mqttspy.ui.ConnectionController;
-import pl.baczkowicz.mqttspy.ui.EditConnectionController;
+import pl.baczkowicz.mqttspy.ui.controllers.EditMqttConnectionController;
 import pl.baczkowicz.spy.common.generated.SecureSocketModeEnum;
+import pl.baczkowicz.spy.common.generated.UserCredentials;
 import pl.baczkowicz.spy.configuration.BaseConfigurationUtils;
+import pl.baczkowicz.spy.ui.utils.UiUtils;
 
 /**
  * Controller for editing a single connection - security tab.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class EditConnectionSecurityController extends AnchorPane implements Initializable, EditConnectionSubController
+public class EditConnectionSecurityController extends AnchorPane implements Initializable, IEditConnectionSubController
 {
 	/** The parent controller. */
-	private EditConnectionController parent;
+	private EditMqttConnectionController parent;
 	
 	/**
 	 * The name of this field needs to be set to the name of the pane +
@@ -166,11 +166,21 @@ public class EditConnectionSecurityController extends AnchorPane implements Init
 		
 		final Map<SecureSocketModeEnum, String> modeEnumText = new HashMap<>();
 		modeEnumText.put(SecureSocketModeEnum.DISABLED, 			"Disabled");
-		modeEnumText.put(SecureSocketModeEnum.BASIC, 				"Basic (no certificates or key stores required)");
-		modeEnumText.put(SecureSocketModeEnum.SERVER_ONLY, 			"Server certificate only");
-		modeEnumText.put(SecureSocketModeEnum.SERVER_KEYSTORE, 		"Server key store and password");
-		modeEnumText.put(SecureSocketModeEnum.SERVER_AND_CLIENT, 	"Server and client certificates");
-		modeEnumText.put(SecureSocketModeEnum.SERVER_AND_CLIENT_KEYSTORES, "Server and client key stores");
+		
+		// Certificates and keys provided externally, e.g.
+		// -Djavax.net.ssl.trustStore=/home/kamil/certificates/public_brokers.jks
+		// -Djavax.net.ssl.trustStorePassword=password
+		modeEnumText.put(SecureSocketModeEnum.BASIC, 				"Certificates & keys provided externally");
+		
+		// Server only - cert / trust store
+		modeEnumText.put(SecureSocketModeEnum.SERVER_ONLY, 			"CA certificate");
+		modeEnumText.put(SecureSocketModeEnum.SERVER_KEYSTORE, 		"CA trust store");
+		
+		// Server and client
+		modeEnumText.put(SecureSocketModeEnum.SERVER_AND_CLIENT, 	"CA certificate & client certificate/key");
+		modeEnumText.put(SecureSocketModeEnum.SERVER_AND_CLIENT_KEYSTORES, "CA trust store & client key store");
+		
+		// SSL&TLS properties
 		modeEnumText.put(SecureSocketModeEnum.PROPERTIES, 			"TLS/SSL properties");
 		
 		try
@@ -394,7 +404,7 @@ public class EditConnectionSecurityController extends AnchorPane implements Init
 	}
 	
 	@Override
-	public void displayConnectionDetails(final ConfiguredConnectionDetails connection)
+	public void displayConnectionDetails(final ConfiguredMqttConnectionDetails connection)
 	{
 		// Security
 		userAuthentication.setSelected(connection.getUserAuthentication() != null && connection.getUserCredentials() != null);
@@ -453,18 +463,18 @@ public class EditConnectionSecurityController extends AnchorPane implements Init
 	private void updateAuthIcon(boolean authEnabled)
 	{
 		final HBox authIcon = new HBox();
-		ConnectionController.createAuthIcon(authIcon, authEnabled, true);
+		UiUtils.createAuthIcon(authIcon, authEnabled, true);
 		authTab.setGraphic(authIcon);
 	}
 	
 	private void updateTlsIcon(boolean tlsEnabled)
 	{
 		final HBox tlsIcon = new HBox();
-		ConnectionController.createTlsIcon(tlsIcon, tlsEnabled, true);
+		UiUtils.createTlsIcon(tlsIcon, tlsEnabled, true);
 		tlsTab.setGraphic(tlsIcon);		
 	}
 	
-	private void showIcons(final ConfiguredConnectionDetails connection)
+	private void showIcons(final ConfiguredMqttConnectionDetails connection)
 	{
 		updateTlsIcon(connection.getSSL() != null);
 		updateAuthIcon(connection.getUserCredentials() != null);
@@ -475,7 +485,7 @@ public class EditConnectionSecurityController extends AnchorPane implements Init
 	// ===============================
 	
 	@Override
-	public void setParent(final EditConnectionController controller)
+	public void setParent(final EditMqttConnectionController controller)
 	{
 		this.parent = controller;
 	}

@@ -36,23 +36,27 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import pl.baczkowicz.mqttspy.configuration.ConfigurationManager;
-import pl.baczkowicz.mqttspy.configuration.ConfiguredConnectionDetails;
+import pl.baczkowicz.mqttspy.configuration.ConfiguredMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.configuration.generated.UserInterfaceMqttConnectionDetails;
-import pl.baczkowicz.mqttspy.ui.EditConnectionController;
-import pl.baczkowicz.mqttspy.ui.FormattersController;
+import pl.baczkowicz.mqttspy.ui.controllers.EditMqttConnectionController;
 import pl.baczkowicz.spy.common.generated.FormatterDetails;
+import pl.baczkowicz.spy.eventbus.IKBus;
+import pl.baczkowicz.spy.formatting.FormattingManager;
 import pl.baczkowicz.spy.formatting.FormattingUtils;
+import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
+import pl.baczkowicz.spy.ui.controllers.FormattersController;
+import pl.baczkowicz.spy.ui.events.FormattersChangedEvent;
+import pl.baczkowicz.spy.ui.events.ShowFormattersWindowEvent;
 import pl.baczkowicz.spy.ui.keyboard.KeyboardUtils;
 
 /**
  * Controller for editing a single connection - other/ui tab.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class EditConnectionOtherController extends AnchorPane implements Initializable, EditConnectionSubController
+public class EditConnectionOtherController extends AnchorPane implements Initializable, IEditConnectionSubController
 {
 	/** The parent controller. */
-	private EditConnectionController parent;
+	private EditMqttConnectionController parent;
 
 	// UI & Formatting
 		
@@ -77,7 +81,7 @@ public class EditConnectionOtherController extends AnchorPane implements Initial
 	@FXML
 	private ComboBox<FormatterDetails> formatter;
 	
-	private ConfigurationManager configurationManager;
+	private IConfigurationManager configurationManager;
 
 	private final ChangeListener basicOnChangeListener = new ChangeListener()
 	{
@@ -88,14 +92,16 @@ public class EditConnectionOtherController extends AnchorPane implements Initial
 		}		
 	};
 
-	private ConfiguredConnectionDetails currentConnection;
+	private ConfiguredMqttConnectionDetails currentConnection;
+
+	private IKBus eventBus;
 	
 	// ===============================
 	// === Initialisation ============
 	// ===============================
 
 	public void initialize(URL location, ResourceBundle resources)
-	{				
+	{		
 		// UI
 		autoConnect.selectedProperty().addListener(basicOnChangeListener);
 		autoOpen.selectedProperty().addListener(basicOnChangeListener);
@@ -156,14 +162,25 @@ public class EditConnectionOtherController extends AnchorPane implements Initial
 
 	public void init()
 	{
-		formatter.getItems().clear();		
-		formatter.getItems().addAll(FormattingUtils.createBaseFormatters());
-
+		eventBus.subscribe(this, this::handleFormattersChange, FormattersChangedEvent.class);
+				
+		refreshFormattersList();
+		
 		// Populate those from the configuration file
-		FormattersController.addFormattersToList(
-				configurationManager.getConfiguration().getFormatting().getFormatter(), formatter.getItems());		
+		FormattersController.addFormattersToList(configurationManager.getFormatters(), formatter.getItems());		
 	}
 	
+	public void handleFormattersChange(final FormattersChangedEvent event)	
+	{
+		refreshFormattersList();
+	}
+	
+	public void refreshFormattersList()
+	{
+		formatter.getItems().clear();		
+		formatter.getItems().addAll(FormattingUtils.createBaseFormatters());
+		formatter.getItems().addAll(FormattingManager.createDefaultScriptFormatters());		
+	}
 
 	// ===============================
 	// === Logic =====================
@@ -172,7 +189,7 @@ public class EditConnectionOtherController extends AnchorPane implements Initial
 	@FXML
 	private void editFormatters()
 	{
-		parent.getMainController().showFormatters(true, parent.getMainController().getEditConnectionsStage());
+		eventBus.publish(new ShowFormattersWindowEvent(this.getScene().getWindow(), true));
 		
 		// In case there was a change
 		init();
@@ -198,7 +215,7 @@ public class EditConnectionOtherController extends AnchorPane implements Initial
 	}
 	
 	@Override
-	public void displayConnectionDetails(final ConfiguredConnectionDetails connection)
+	public void displayConnectionDetails(final ConfiguredMqttConnectionDetails connection)
 	{
 		this.currentConnection = connection;
 		
@@ -230,14 +247,24 @@ public class EditConnectionOtherController extends AnchorPane implements Initial
 	// === Setters and getters =======
 	// ===============================
 	
-	public void setConfigurationManager(final ConfigurationManager configurationManager)
+	public void setConfigurationManager(final IConfigurationManager configurationManager)
 	{
 		this.configurationManager = configurationManager;
 	}
 
 	@Override
-	public void setParent(final EditConnectionController controller)
+	public void setParent(final EditMqttConnectionController controller)
 	{
 		this.parent = controller;
+	}
+	
+	/**
+	 * Sets the event bus.
+	 *  
+	 * @param eventBus the eventBus to set
+	 */
+	public void setEventBus(final IKBus eventBus)
+	{
+		this.eventBus = eventBus;
 	}
 }

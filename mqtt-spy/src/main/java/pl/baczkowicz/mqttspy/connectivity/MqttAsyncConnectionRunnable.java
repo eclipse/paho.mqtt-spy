@@ -27,6 +27,7 @@ import javafx.application.Platform;
 import pl.baczkowicz.mqttspy.connectivity.handlers.MqttConnectionResultHandler;
 import pl.baczkowicz.mqttspy.connectivity.handlers.MqttEventHandler;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttConnectionAttemptFailureEvent;
+import pl.baczkowicz.spy.connectivity.ConnectionStatus;
 import pl.baczkowicz.spy.exceptions.SpyException;
 import pl.baczkowicz.spy.utils.ThreadingUtils;
 
@@ -47,7 +48,7 @@ public class MqttAsyncConnectionRunnable implements Runnable
 	public void run()
 	{
 		ThreadingUtils.logThreadStarting("ConnectionRunnable for " + connection.getName());
-		connection.setConnectionStatus(MqttConnectionStatus.CONNECTING);
+		connection.setConnectionStatus(ConnectionStatus.CONNECTING);
 		
 		try
 		{

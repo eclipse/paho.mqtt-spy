@@ -39,9 +39,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
+import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.exceptions.CriticalException;
+import pl.baczkowicz.spy.exceptions.SpyException;
+import pl.baczkowicz.spy.files.FileUtils;
 import pl.baczkowicz.spy.messages.IBaseMessage;
-import pl.baczkowicz.spy.utils.FileUtils;
 
 /**
  * This class manages script creation and execution.
@@ -69,21 +71,23 @@ public abstract class BaseScriptManager
 	private Map<String, Script> scripts = new HashMap<String, Script>();
 	
 	/** Used for notifying events related to script execution. */
-	protected IScriptEventManager eventManager;
+	protected IKBus eventBus;
 
 	/** Executor for tasks. */
 	protected Executor executor;
+
+	private Map<String, Object> customParameters;
 	
 	/**
 	 * Creates the script manager.
 	 * 
-	 * @param eventManager The event manager to be used
+	 * @param eventBus The event bus to be used
 	 * @param executor The executor to be used
 	 * @param connection The connection for which to run the scripts
 	 */
-	public BaseScriptManager(final IScriptEventManager eventManager, final Executor executor)
+	public BaseScriptManager(final IKBus eventBus, final Executor executor)
 	{
-		this.eventManager = eventManager;
+		this.eventBus = eventBus;
 		this.executor = executor;
 	}
 	
@@ -100,6 +104,22 @@ public abstract class BaseScriptManager
 	}
 	
 	/**
+	 * Gets the file (script) name for the given file object, including the subdirectory it's in.
+	 * 
+	 * @param file The file from which to get the filename
+	 * 
+	 * @return The name of the script file, including the subdirectory
+	 */
+	public static String getScriptNameWithSubdirectory(final File file, final String rootDirectory)
+	{
+		final String filePathSeparator = System.getProperty("file.separator");
+		
+		final String valueToReplace = rootDirectory.endsWith(filePathSeparator) ? rootDirectory : rootDirectory + filePathSeparator;
+		
+		return file.getAbsolutePath().replace(valueToReplace, "").replace(file.getName(), getScriptName(file));
+	}
+	
+	/**
 	 * Creates and records a script with the given details.
 	 * 
 	 * @param scriptDetails The script details
@@ -110,13 +130,11 @@ public abstract class BaseScriptManager
 	{
 		final File scriptFile = new File(scriptDetails.getFile());
 		
-		final String scriptName = getScriptName(scriptFile);
-		
 		final Script script = new Script();
 				
-		createFileBasedScript(script, scriptName, scriptFile, scriptDetails);
+		createFileBasedScript(script, scriptFile, scriptDetails);
 		
-		logger.info("Adding script {} at {}", scriptName, scriptFile.getAbsolutePath());
+		logger.info("Adding script {} at {}", script.getName(), scriptFile.getAbsolutePath());
 		scripts.put(scriptFile.getAbsolutePath(), script);
 		
 		return script;
@@ -204,11 +222,10 @@ public abstract class BaseScriptManager
 			Script script = scripts.get(Script.getScriptIdFromFile(scriptFile));
 			
 			if (script == null)					
-			{
-				final String scriptName = getScriptName(scriptFile);				
+			{			
 				script = new Script();
 				
-				createFileBasedScript(script, scriptName, scriptFile, new ScriptDetails(true, false, scriptFile.getName())); 			
+				createFileBasedScript(script, scriptFile, new ScriptDetails(true, false, scriptFile.getName())); 			
 				
 				addedScripts.add(script);
 				addScript(script);
@@ -245,10 +262,9 @@ public abstract class BaseScriptManager
 				
 				if (script == null)					
 				{
-					final String scriptName = getScriptName(scriptFile);
 					script = new Script();
 					
-					createFileBasedScript(script, scriptName, scriptFile, details); 			
+					createFileBasedScript(script, scriptFile, details); 			
 					
 					addedScripts.add(script);
 					addScript(script);
@@ -263,14 +279,14 @@ public abstract class BaseScriptManager
 	 * Populates the script object with the necessary values and references.
 	 * 
 	 * @param script The script object to be populated
-	 * @param scriptName The name of the script
 	 * @param scriptFile The script's file name 
 	 * @param connection The connection for which this script will be running
 	 * @param scriptDetails Script details
 	 */
-	public void createFileBasedScript(final Script script,
-			final String scriptName, final File scriptFile, final ScriptDetails scriptDetails)
+	public void createFileBasedScript(final Script script, final File scriptFile, final ScriptDetails scriptDetails)
 	{
+		final String scriptName = BaseScriptManager.getScriptName(scriptFile);
+		
 		createScript(script, scriptName);
 		script.setScriptFile(scriptFile);
 		script.setScriptDetails(scriptDetails);
@@ -289,44 +305,31 @@ public abstract class BaseScriptManager
 	 */
 	public void createScript(final Script script, final String scriptName)
 	{
-		final ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");										
-		
-		if (scriptEngine != null)
+		try
 		{
-			script.setName(scriptName);			
-			script.setStatus(ScriptRunningState.NOT_STARTED);
-			script.setScriptEngine(scriptEngine);		
+			final ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");										
 			
-			populateEngineVariables(script);
-//			final MqttScriptIO scriptIO = new MqttScriptIO(connection, eventManager, script, executor); 
-//			//script.setScriptIO(scriptIO);
-//			
-//			final Map<String, Object> scriptVariables = new HashMap<String, Object>();
-//			
-//			// This should be considered deprecated
-//			scriptVariables.put("mqttspy", scriptIO);
-//			// This should be used for general script-related actions
-//			scriptVariables.put("spy", scriptIO);
-//			// Going forward, this should only have mqtt-specific elements, e.g. pub/sub
-//			scriptVariables.put("mqtt", scriptIO);
-//			
-//			scriptVariables.put("logger", LoggerFactory.getLogger(ScriptRunner.class));
-//			
-//			final IMqttMessageLogIO mqttMessageLog = new MqttMessageLogIO();
-//			// Add it to the script IO so that it gets stopped when requested
-//			script.addTask(mqttMessageLog);			
-//			scriptVariables.put("messageLog", mqttMessageLog);
-//			
-//			putJavaVariablesIntoEngine(scriptEngine, scriptVariables);
+			if (scriptEngine != null)
+			{
+				script.setName(scriptName);			
+				script.setStatusAndNotify(ScriptRunningState.NOT_STARTED);
+				script.setScriptEngine(scriptEngine);		
+				
+				populateEngineVariables(script);
+			}
+			else
+			{
+				throw new CriticalException("Cannot instantiate the nashorn javascript engine - most likely you don't have Java 8 installed. "
+						+ "Please either disable scripts in your configuration file or install the appropriate JRE/JDK.");
+			}
 		}
-		else
+		catch (SpyException e)
 		{
-			throw new CriticalException("Cannot instantiate the nashorn javascript engine - most likely you don't have Java 8 installed. "
-					+ "Please either disable scripts in your configuration file or install the appropriate JRE/JDK.");
+			throw new CriticalException("Cannot initialise the script objects");
 		}
 	}
 	
-	abstract public void populateEngineVariables(final Script script);
+	abstract public void populateEngineVariables(final Script script) throws SpyException;
 				
 	/**
 	 * Puts a the given map of variables into the engine.
@@ -370,13 +373,20 @@ public abstract class BaseScriptManager
 		// Only start if not running already
 		if (!ScriptRunningState.RUNNING.equals(script.getStatus()))
 		{
-			script.createScriptRunner(eventManager, executor);
+			script.createScriptRunner(eventBus, executor);
 			script.setAsynchronous(asynchronous);
-			// Set test case args
+			
+			final Map<String, Object> scriptArgs = new HashMap<>();			
 			if (args != null)
+			{				
+				scriptArgs.putAll(args);
+			}			
+			if (customParameters != null)
 			{
-				setVariable(script, "args", args);
-			}
+				scriptArgs.putAll(customParameters);		
+			}			
+			setVariable(script, "args", scriptArgs);
+
 			
 			if (asynchronous)
 			{
@@ -610,5 +620,10 @@ public abstract class BaseScriptManager
 	public boolean containsScript(final Script script)
 	{
 		return scripts.containsKey(script.getScriptId());
+	}
+
+	public void addCustomParameters(final Map<String, Object> parameters)
+	{
+		this.customParameters = parameters;
 	}
 }

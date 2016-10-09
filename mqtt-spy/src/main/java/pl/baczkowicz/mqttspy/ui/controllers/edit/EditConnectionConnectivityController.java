@@ -24,6 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -39,18 +42,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import pl.baczkowicz.mqttspy.common.generated.ProtocolVersionEnum;
-import pl.baczkowicz.mqttspy.common.generated.ReconnectionSettings;
 import pl.baczkowicz.mqttspy.configuration.ConfigurationUtils;
-import pl.baczkowicz.mqttspy.configuration.ConfiguredConnectionDetails;
+import pl.baczkowicz.mqttspy.configuration.ConfiguredMqttConnectionDetails;
 import pl.baczkowicz.mqttspy.configuration.generated.UserInterfaceMqttConnectionDetails;
-import pl.baczkowicz.mqttspy.ui.EditConnectionController;
+import pl.baczkowicz.mqttspy.ui.controllers.EditMqttConnectionController;
 import pl.baczkowicz.mqttspy.utils.ConnectionUtils;
 import pl.baczkowicz.mqttspy.utils.MqttUtils;
+import pl.baczkowicz.spy.common.generated.ReconnectionSettings;
 import pl.baczkowicz.spy.ui.keyboard.KeyboardUtils;
 import pl.baczkowicz.spy.ui.panes.SpyPerspective;
 
@@ -58,7 +57,7 @@ import pl.baczkowicz.spy.ui.panes.SpyPerspective;
  * Controller for editing a single connection - connectivity tab.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class EditConnectionConnectivityController extends AnchorPane implements Initializable, EditConnectionSubController
+public class EditConnectionConnectivityController extends AnchorPane implements Initializable, IEditConnectionSubController
 {
 	private final static Logger logger = LoggerFactory.getLogger(EditConnectionConnectivityController.class);
 
@@ -127,7 +126,7 @@ public class EditConnectionConnectivityController extends AnchorPane implements 
 	};
 
 	/** The parent controller. */
-	private EditConnectionController parent;
+	private EditMqttConnectionController parent;
 	
 	// ===============================
 	// === Initialisation ============
@@ -369,7 +368,7 @@ public class EditConnectionConnectivityController extends AnchorPane implements 
 	}
 	
 	@Override
-	public void displayConnectionDetails(final ConfiguredConnectionDetails connection)
+	public void displayConnectionDetails(final ConfiguredMqttConnectionDetails connection)
 	{	
 		// Connectivity			
 		protocolCombo.getSelectionModel().select(connection.getProtocol());
@@ -405,7 +404,7 @@ public class EditConnectionConnectivityController extends AnchorPane implements 
 	// ===============================
 	
 	@Override
-	public void setParent(final EditConnectionController controller)
+	public void setParent(final EditMqttConnectionController controller)
 	{
 		this.parent = controller;
 	}

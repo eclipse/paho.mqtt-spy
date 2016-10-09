@@ -6,7 +6,7 @@ function replay()
 	// If repeat = true, only read the message log once
 	if (messageCount == 0)
 	{
-		messageCount = messageLog.readFromFile("/home/kamil/Programming/Git/mqtt-spy-logger/src/test/resources/mqtt-spy-daemon.messages");		
+		messageCount = messageLog.readFromFile("/home/kamil/Programming/Source/mqtt-spy/mqtt-spy-daemon/src/test/resources/mqtt-spy-daemon.messages");		
 		messageLog.setSpeed(2);		
 	}
 	
@@ -35,7 +35,7 @@ function replay()
 			}
 			
 			// When ready, publish the message
-			mqttspy.publish(messageLog.getMessage(i).getTopic(), messageLog.getMessage(i).getMessage(), 0, false);				
+			mqttspy.publish(messageLog.getMessage(i).getTopic(), messageLog.getMessage(i).getRawMessage(), 0, false);				
 		}
 	}
 	else

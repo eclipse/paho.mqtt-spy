@@ -38,6 +38,8 @@ public class TimeUtils
 	
 	public final static String DATE_FORMAT_WITH_SECONDS = "yyyy/MM/dd HH:mm:ss";
 	
+	public final static String DATE_FORMAT_WITH_SECONDS_FILENAME = "yyyyMMdd_HHmmss";
+	
 	public final static String DATE_FORMAT_NO_TIME = "yyyy/MM/dd";
 	
 	public final static String TIME_FORMAT = "HH:mm:ss";
@@ -45,6 +47,8 @@ public class TimeUtils
 	public final static SimpleDateFormat DATE_WITH_MILLISECONDS_SDF = new SimpleDateFormat(DATE_FORMAT_WITH_MILLISECONDS);
 	
 	public final static SimpleDateFormat DATE_WITH_SECONDS_SDF = new SimpleDateFormat(DATE_FORMAT_WITH_SECONDS);
+	
+	public final static SimpleDateFormat DATE_WITH_SECONDS_FILENAME_SDF = new SimpleDateFormat(DATE_FORMAT_WITH_SECONDS_FILENAME);
 	
 	public final static SimpleDateFormat DATE_SDF = new SimpleDateFormat(DATE_FORMAT_NO_TIME);
 	

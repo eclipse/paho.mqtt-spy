@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2015 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="246.0" prefWidth="590.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.edit.EditConnectionConnectivityController">
+   <children>  
+            
+      <!-- Broker URI -->
+      <Label layoutX="23.0" layoutY="53.0" text="Server URI(s)" />
+      <TextField fx:id="brokerAddressText" layoutX="260.0" layoutY="51.0" prefHeight="26.0" prefWidth="164.0" promptText="tcp://localhost:1883" text="127.0.0.1" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="166.0" />
+      
+      <Label styleClass="vsmall-font" layoutX="48.0" layoutY="67.0" text="[e.g. localhost or mybroker:1883]" />
+      
+      <Label layoutX="23.0" layoutY="98.0" text="Client ID" />
+      <!-- onKeyReleased="#updateClientId" -->
+      <TextField fx:id="clientIdText" layoutX="260.0" layoutY="92.0" prefHeight="25.0" prefWidth="227.0" promptText="e.g. your name" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="107.0" />
+	  
+	  <Label fx:id="lengthLabel" styleClass="vsmall-font" alignment="CENTER_RIGHT" layoutX="383.0" layoutY="116.0" prefHeight="14.0" prefWidth="100.0" text="Length = 0/23" AnchorPane.rightAnchor="107.0" />
+                       
+      <Label layoutX="23.0" layoutY="147.0" text="Clean session" />
+      <CheckBox fx:id="cleanSession" layoutX="181.0" layoutY="144.0" mnemonicParsing="false" selected="true" />
+      <Label styleClass="vsmall-font" layoutX="48.0" layoutY="113.0" text="[keep it unique to avoid disconnections]" />
+
+      <Label fx:id="timeoutLabel" layoutX="265.0" layoutY="147.0" text="Connection timeout [s]" AnchorPane.leftAnchor="265.0" />
+      <Label fx:id="keepAliveLabel" layoutX="265.0" layoutY="179.0" text="Keep alive interval [s]" AnchorPane.leftAnchor="265.0" />
+      <TextField fx:id="connectionTimeout" layoutX="437.0" layoutY="140.0" prefHeight="25.0" prefWidth="46.0" />
+      <TextField fx:id="keepAlive" layoutX="437.0" layoutY="174.0" prefHeight="25.0" prefWidth="46.0" />
+      <Button fx:id="addTimestampButton" focusTraversable="false" layoutX="489.0" layoutY="92.0" mnemonicParsing="false" onAction="#addTimestamp" prefHeight="25.0" prefWidth="87.0" text="Generate" textAlignment="CENTER" wrapText="true" AnchorPane.rightAnchor="14.0" />
+      <CheckBox fx:id="reconnect" layoutX="181.0" layoutY="177.0" mnemonicParsing="false" />
+      <Label fx:id="resubscribeLabel" layoutX="23.0" layoutY="213.0" text="Resubscribe on failure" />
+      <TextField fx:id="reconnectionInterval" layoutX="437.0" layoutY="207.0" prefHeight="25.0" prefWidth="46.0" />
+      <Label fx:id="reconnectIntervalLabel" layoutX="265.0" layoutY="212.0" text="Reconnection interval [s]" AnchorPane.leftAnchor="265.0" />
+      <CheckBox fx:id="resubscribe" layoutX="181.0" layoutY="210.0" mnemonicParsing="false" />
+      <Label layoutX="23.0" layoutY="180.0" text="Reconnect on failure" />
+      
+      <Label layoutX="23.0" layoutY="15.0" text="Protocol version" />
+      <ComboBox fx:id="protocolCombo" layoutX="431.0" layoutY="10.0" prefHeight="25.0" prefWidth="168.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="14.0" />
+      <ComboBox fx:id="connectionTypeCombo" layoutX="445.0" layoutY="51.0" prefHeight="26.0" prefWidth="143.0" AnchorPane.rightAnchor="14.0" />
+   </children>
+</AnchorPane>

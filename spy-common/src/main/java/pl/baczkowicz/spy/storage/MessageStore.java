@@ -23,8 +23,6 @@ import java.util.List;
 
 /**
  * Simple interface for access to a message store.
- * 
- * TODO: needs completing.
  */
 public interface MessageStore<T>
 {

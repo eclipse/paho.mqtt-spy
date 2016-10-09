@@ -23,12 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.mqttspy.connectivity.MqttAsyncConnection;
-import pl.baczkowicz.mqttspy.connectivity.MqttConnectionStatus;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttConnectionAttemptSuccessEvent;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttConnectionFailureEvent;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttConnectionLostEvent;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttDisconnectionAttemptSuccessEvent;
+import pl.baczkowicz.spy.connectivity.ConnectionStatus;
 import pl.baczkowicz.spy.events.SpyEvent;
+import pl.baczkowicz.spy.exceptions.ExceptionUtils;
 
 public class MqttEventHandler implements Runnable
 {
@@ -54,16 +55,16 @@ public class MqttEventHandler implements Runnable
 		{
 			final MqttConnectionFailureEvent mqttConnectionFailureEvent = (MqttConnectionFailureEvent) event;
 			
-			mqttConnectionFailureEvent.getConnection().setDisconnectionReason(mqttConnectionFailureEvent.getCause().getMessage());
-			mqttConnectionFailureEvent.getConnection().setConnectionStatus(MqttConnectionStatus.DISCONNECTED);
+			mqttConnectionFailureEvent.getConnection().setDisconnectionReason(ExceptionUtils.getInfo(mqttConnectionFailureEvent.getCause()));
+			mqttConnectionFailureEvent.getConnection().setConnectionStatus(ConnectionStatus.DISCONNECTED);
 		}
 		
 		if (event instanceof MqttConnectionAttemptSuccessEvent)
 		{
 			final MqttAsyncConnection connection = ((MqttConnectionAttemptSuccessEvent) event).getConnection(); 
 			
-			connection.setConnectionStatus(MqttConnectionStatus.CONNECTED);
 			connection.recordSuccessfulConnection();
+			connection.setConnectionStatus(ConnectionStatus.CONNECTED);			
 			
 			// This should restore any previously requested subscriptions
 			logger.info("About to resubscribe to all requested topics");			
@@ -76,7 +77,7 @@ public class MqttEventHandler implements Runnable
 			final MqttDisconnectionAttemptSuccessEvent mqttDisconnectionAttemptSuccessEvent = (MqttDisconnectionAttemptSuccessEvent) event;
 			
 			mqttDisconnectionAttemptSuccessEvent.getConnection().setDisconnectionReason("");
-			mqttDisconnectionAttemptSuccessEvent.getConnection().setConnectionStatus(MqttConnectionStatus.DISCONNECTED);
+			mqttDisconnectionAttemptSuccessEvent.getConnection().setConnectionStatus(ConnectionStatus.DISCONNECTED);
 		}
 	}
 }

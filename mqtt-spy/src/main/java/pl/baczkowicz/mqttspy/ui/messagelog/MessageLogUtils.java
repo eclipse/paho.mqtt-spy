@@ -47,7 +47,7 @@ public class MessageLogUtils
 			final FormattedMqttMessage message = messages.get(i);
 			
 			messagesAsString.append(SimpleMqttMessageLogComposer.createReceivedMessageLog(message, 
-					new MessageLog(MessageLogEnum.XML_WITH_PLAIN_PAYLOAD, "", true, true, false, false, false)));
+					new MessageLog(MessageLogEnum.XML_WITH_ENCODED_PAYLOAD, "", true, true, false, false, false)));
 			messagesAsString.append(System.lineSeparator());
 		}
 		

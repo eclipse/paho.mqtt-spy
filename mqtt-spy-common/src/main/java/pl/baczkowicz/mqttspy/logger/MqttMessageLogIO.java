@@ -141,7 +141,7 @@ public class MqttMessageLogIO implements IMqttMessageLogIO, Runnable
 	@Override
 	public void run()
 	{
-		ThreadingUtils.logThreadStarting("Message Log IO");
+		ThreadingUtils.logThreadStarting("Message Audit Log IO");
 		
 		while (running)
 		{

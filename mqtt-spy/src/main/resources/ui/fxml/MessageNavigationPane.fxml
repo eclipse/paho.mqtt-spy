@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="30.0" prefWidth="499.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.MessageNavigationController">
+	<children>      
+      <HBox fx:id="messageIndexBox" layoutX="8.0" layoutY="5.0" prefHeight="22.0" prefWidth="249.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="202.0">
+         <children>
+      		<Label fx:id="messageLabel" prefHeight="27.0" text="No messages" />
+         </children>
+      </HBox>
+      <CheckBox fx:id="showLatestBox" focusTraversable="false" layoutX="224.0" layoutY="7.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="96.0" selected="true" text="Show latest" wrapText="true" AnchorPane.rightAnchor="145" AnchorPane.topAnchor="7.0">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </CheckBox>
+      
+      <Button fx:id="showFirstButton" focusTraversable="false" layoutX="379.0" layoutY="2.0" mnemonicParsing="false" onAction="#showFirst" prefHeight="26" AnchorPane.rightAnchor="112" AnchorPane.topAnchor="2.0">
+          <graphic>
+      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+		         <image>
+		            <Image url="/ui/images/go-first.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+         <font>
+            <Font size="11.0" />
+         </font></Button>      
+               
+      <Button fx:id="lessRecentButton" focusTraversable="false" layoutX="449.0" layoutY="2.0" mnemonicParsing="false" onAction="#showLessRecent" prefHeight="26" AnchorPane.rightAnchor="42" AnchorPane.topAnchor="2.0">
+      <graphic>
+      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+		         <image>
+		            <Image url="/ui/images/go-next.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Button>
+
+      <Button fx:id="moreRecentButton" focusTraversable="false" layoutX="414.0" layoutY="2.0" mnemonicParsing="false" onAction="#showMoreRecent" prefHeight="26" AnchorPane.rightAnchor="77" AnchorPane.topAnchor="2.0">
+                <graphic>
+      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+		         <image>
+		            <Image url="/ui/images/go-previous.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Button>
+      
+      <Button fx:id="showLastButton" focusTraversable="false" layoutX="484.0" layoutY="2.0" mnemonicParsing="false" onAction="#showLast" prefHeight="26" AnchorPane.rightAnchor="7" AnchorPane.topAnchor="2.0">
+      	<graphic>
+      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+		         <image>
+		            <Image url="/ui/images/go-last.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Button>
+
+	</children>
+</AnchorPane>

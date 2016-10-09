@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="666.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.SearchPaneController">
+   <children>
+      <AnchorPane prefHeight="95.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="textLabel" layoutX="14.0" layoutY="28.0" text="Text to find" AnchorPane.leftAnchor="14.0" />
+            <TextField fx:id="searchField" prefHeight="27.0" promptText="type some text and press Enter to search" AnchorPane.leftAnchor="140" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="23.0" />
+            
+            <CheckBox fx:id="autoRefreshCheckBox" layoutX="140" layoutY="62.0" mnemonicParsing="false" onAction="#toggleAutoRefresh" prefHeight="25.0" prefWidth="240.0" text="Auto-search for new messages" wrapText="true" />
+            <CheckBox fx:id="caseSensitiveCheckBox" layoutX="380" layoutY="65.0" mnemonicParsing="false" text="Case sensitive" />
+            
+            <SplitMenuButton fx:id="searchButton" layoutX="524.0" layoutY="23.0" mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="130.0" text="Search" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="23.0">
+            	
+            	<!-- <padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding> -->
+	        	
+	        	<graphic>
+	      		<ImageView fx:id="searchIcon" fitHeight="17" fitWidth="17" pickOnBounds="true">
+			         <image>
+			            <Image url="/ui/images/edit-find-mail.png" />
+			         </image>
+			      </ImageView>
+	      		</graphic>
+	      		
+	      		<items>
+                  <RadioMenuItem fx:id="defaultSearch" mnemonicParsing="false" selected="true" onAction="#onMessagePayloadSearch" text="Search message payload (default)">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="searchMethod" />
+                     </toggleGroup>
+                  </RadioMenuItem>                  
+                  <SeparatorMenuItem />
+                  <Menu fx:id="searchWithScriptsMenu" mnemonicParsing="false" text="Search with script" />
+                  <RadioMenuItem fx:id="inlineScriptSearch" mnemonicParsing="false" toggleGroup="$searchMethod" onAction="#onInlineScriptSearch" text="Search with inline script" />
+            	</items>
+            	
+            </SplitMenuButton>
+         </children>
+      </AnchorPane>
+      <Separator prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+      
+      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+         <children>
+   	      <AnchorPane layoutX="-2.0" layoutY="4.0" prefHeight="31.0" prefWidth="554.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="5.0">
+   	      		<children>
+   	      			<fx:include fx:id="messageNavigationPane" source="MessageNavigationPane.fxml" />
+   	    		</children>
+   	      </AnchorPane>
+   	      
+   	      <MenuButton fx:id="toolsMenuButton" focusTraversable="false" mnemonicParsing="false" prefWidth="110.0" text="Tools" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
+	      	<graphic>
+	      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+			         <image>
+			            <Image url="/ui/images/tools.png"/>
+			         </image>
+			      </ImageView>
+	      	</graphic>
+	        <items>
+	        	
+	        	<Menu fx:id="filterMenu" mnemonicParsing="false" text="Filter">
+			      	<graphic>
+			      		<ImageView fitHeight="18" fitWidth="18" pickOnBounds="true">
+					         <image>
+					            <Image url="/ui/images/filter.png" />
+					         </image>
+					      </ImageView>
+			      	</graphic>
+			         <items>
+			            <CheckMenuItem fx:id="uniqueOnlyMenu" mnemonicParsing="false" text="Show only latest if the same" />
+			        </items>
+	      		</Menu>    
+	      		
+	        	<Menu fx:id="exportMenu" mnemonicParsing="false" text="Export">
+	            	<items>
+	            		<Menu text="Clipboard">
+	            			<items>
+	            				<MenuItem text="This message" onAction="#copyMessageToClipboard"/>
+	            				<MenuItem text="All browsed messages" onAction="#copyMessagesToClipboard"/>
+	            			</items>
+	            		</Menu>
+	            		
+	            		<Menu text="Message audit log file">
+	            			<items>
+	            				<MenuItem text="This message" onAction="#copyMessageToFile"/>
+	            				<MenuItem text="All browsed messages" onAction="#copyMessagesToFile"/>
+	            			</items>
+            			</Menu>
+	            	</items>
+	            </Menu>    
+	        </items>
+	         <font>
+	            <Font size="11.0" />
+	         </font>
+	      </MenuButton>
+      
+   	      <!--  dividerPositions="0.42"  -->
+   	      <SplitPane fx:id="splitPane" layoutX="11.0" layoutY="45.0" orientation="VERTICAL" prefHeight="229.0" prefWidth="636.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="38.0">
+   	         <items>
+   	         	<fx:include fx:id="messagePane" prefHeight="100.0" source="MessagePane.fxml" />
+   	            <!-- maxHeight="1000.0" prefHeight="151.0" SplitPane.resizableWithParent="false" -->
+   	            <TitledPane fx:id="summaryTitledPane" alignment="TOP_LEFT" animated="false" minHeight="26.0" prefHeight="1000.0" prefWidth="626.0" text="Found messages">
+   	              <content>
+   	              		<fx:include fx:id="messageListTablePane" minHeight="101.0" prefHeight="118.0" prefWidth="624.0" source="MessageListTablePane.fxml" />
+   	              </content>
+   	               <padding>
+   	                  <Insets top="5.0" />
+   	               </padding>
+   	            </TitledPane>
+   	         </items>
+   	      </SplitPane>
+         </children>
+	  </AnchorPane>
+   </children>
+</AnchorPane>

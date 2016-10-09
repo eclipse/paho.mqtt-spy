@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="485.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.SubscriptionController">
+	<children>
+      <SplitPane fx:id="splitPane" dividerPositions="0.5" layoutX="11.0" layoutY="45.0" orientation="VERTICAL" prefHeight="229.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="40.0">
+        <items>
+           <!-- Warning: adding a titled pane makes the fields blurry
+            <TitledPane animated="false" collapsible="false" text="Messages" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <content>
+               -->
+           <AnchorPane>
+                <children>
+                   <ScrollBar fx:id="messageIndexScrollBar" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+                   <VBox fx:id="messagesPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="0.0">
+                      <children>
+	                     <fx:include fx:id="messagePane" source="MessagePane.fxml" AnchorPane.bottomAnchor="-10.0" AnchorPane.leftAnchor="-10" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="-10" VBox.vgrow="ALWAYS" />
+                      </children>
+                   </VBox>
+
+                </children>
+             </AnchorPane>
+                  <!-- 
+              </content>
+            </TitledPane>
+             -->
+
+            <TitledPane fx:id="summaryTitledPane" alignment="TOP_LEFT" animated="false" minHeight="26.0" prefHeight="800.0" text="Received messages summary">
+                    <content>
+                    		<fx:include fx:id="summaryTablePane" minHeight="100.0" source="SubscriptionSummaryTablePane.fxml" />
+                    </content>
+            </TitledPane>
+
+        </items>
+      </SplitPane>
+      <AnchorPane prefHeight="30.0" prefWidth="860.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="5.0">
+      		<children>
+      			<fx:include fx:id="messageNavigationPane" source="MessageNavigationPane.fxml" />
+            <Slider fx:id="messageCountSlider" blockIncrement="1.0" layoutX="513.0" layoutY="3.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="1" prefHeight="16.0" prefWidth="75.0" showTickLabels="true" value="1.0" visible="false" AnchorPane.rightAnchor="272.0" />
+    		</children>
+      </AnchorPane>
+      
+                                          <MenuButton fx:id="formattingMenuButton" focusTraversable="false" mnemonicParsing="false" prefWidth="110.0" text="Tools" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0">
+      	<graphic>
+      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+		         <image>
+		            <Image url="/ui/images/tools.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+        <items>
+        	<Menu mnemonicParsing="false" text="Formatting">
+        		<graphic>
+		      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/tools-wizard.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+        		<items>
+
+		                  <RadioMenuItem mnemonicParsing="false" selected="true" text="Plain">
+		                     <toggleGroup>
+		                        <ToggleGroup fx:id="wholeMessageFormat" />
+		                     </toggleGroup>
+		                  </RadioMenuItem>
+		                  <SeparatorMenuItem />
+		                  <RadioMenuItem mnemonicParsing="false" text="Hex decoder" toggleGroup="$wholeMessageFormat" />
+		                  <RadioMenuItem mnemonicParsing="false" text="Hex encoder" toggleGroup="$wholeMessageFormat" />
+		                  <RadioMenuItem mnemonicParsing="false" text="Base64 decoder" toggleGroup="$wholeMessageFormat" />
+		                  <RadioMenuItem mnemonicParsing="false" text="Base64 encoder" toggleGroup="$wholeMessageFormat" />
+		                  <SeparatorMenuItem />
+		                  <RadioMenuItem mnemonicParsing="false" text="Pretty JSON" toggleGroup="$wholeMessageFormat" />
+		                  <RadioMenuItem mnemonicParsing="false" text="Pretty XML" toggleGroup="$wholeMessageFormat" />
+		                  <SeparatorMenuItem />
+		                  <RadioMenuItem mnemonicParsing="false" text="Eclipse Kura" toggleGroup="$wholeMessageFormat" />
+		                  <SeparatorMenuItem />
+		                  <Menu fx:id="customFormatterMenu" disable="true" mnemonicParsing="false" text="Custom" />
+		                  <MenuItem mnemonicParsing="false" onAction="#editFormatters" text="Formatters..." />
+		                
+        		</items>
+        	</Menu>        
+        	
+        	<Menu fx:id="layoutButton" mnemonicParsing="false" text="Layout">
+	         <graphic>
+	            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+	               <image>
+	                  <Image url="/ui/images/view-split-top-bottom.png" />
+	               </image>
+	            </ImageView>
+	         </graphic>
+	         <items>            
+	             <RadioMenuItem selected="true" text="Single message (original; top)">
+	             	<toggleGroup>
+		                        <ToggleGroup fx:id="messageBrowserLayout" />
+		            </toggleGroup>
+	             </RadioMenuItem>
+	             <RadioMenuItem text="Single message (bottom)" toggleGroup="$messageBrowserLayout" />
+	             <RadioMenuItem text="Single message (right)" toggleGroup="$messageBrowserLayout" />
+	             <RadioMenuItem text="Message list (top)" toggleGroup="$messageBrowserLayout" />
+	             <RadioMenuItem text="Message list (bottom)" toggleGroup="$messageBrowserLayout" />
+	             <RadioMenuItem text="Message list (right)" toggleGroup="$messageBrowserLayout" />
+	         </items>
+
+	      </Menu>    
+	      
+        	<Menu fx:id="filterMenu" mnemonicParsing="false" text="Filter">
+		      	<graphic>
+		      		<ImageView fitHeight="18" fitWidth="18" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/filter.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+		         <items>
+		            <CheckMenuItem fx:id="uniqueOnlyMenu" mnemonicParsing="false" text="Show only latest if the same" />
+		        </items>
+      		</Menu>    
+      		
+        	<Menu fx:id="exportMenu" mnemonicParsing="false" text="Export">
+        		<graphic>
+		      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/document-save-all.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+            	<items>
+            		<Menu text="Messages">
+	            		<graphic>
+				      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+						         <image>
+						            <Image url="/ui/images/mail-unread.png" />
+						         </image>
+						      </ImageView>
+				      	</graphic>
+            			<items>
+            				<Menu text="Clipboard">
+            					<items>
+            						<MenuItem onAction="#copyMessageToClipboard" text="This message" />
+		            				<MenuItem onAction="#copyMessagesToClipboard" text="All browsed messages" />
+            					</items>
+            				</Menu>
+            				
+                                    		            		<Menu text="Message audit log file">
+		            			<items>
+		            				<MenuItem onAction="#copyMessageToFile" text="This message" />
+		            				<MenuItem onAction="#copyMessagesToFile" text="All browsed messages" />		            				
+		            			</items>
+		            		</Menu>
+		            		
+                                    		            		<Menu text="Binary file">
+		            			<items>
+		            				<MenuItem onAction="#copyMessageToBinaryFile" text="This message" />
+		            			</items>
+		            		</Menu>		            		
+            			</items>
+            		</Menu>
+            		<Menu text="Topics">
+	            		<graphic>
+				      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+						         <image>
+						            <Image url="/ui/images/feed-subscribe.png" />
+						         </image>
+						      </ImageView>
+				      	</graphic>
+	            			<items>
+            				<Menu text="Clipboard">
+            					<items>
+            						<MenuItem onAction="#copyBrowsedTopic" text="This topic" />
+            						<MenuItem onAction="#copyBrowsedTopics" text="All browsed topics" />
+            						<MenuItem onAction="#copyFilteredTopics" text="All filtered topics" />
+            						<MenuItem onAction="#copyAllTopics" text="All topics" />
+            					</items>
+            				</Menu>            				
+            			</items>
+            		</Menu>
+            	</items>
+            </Menu>    
+        </items>
+         <font>
+            <Font size="11.0" />
+         </font>
+      </MenuButton>
+
+      <ToggleButton fx:id="searchButton" focusTraversable="false" graphicTextGap="6" mnemonicParsing="false" onAction="#showSearchWindow" prefHeight="26" prefWidth="90" text="Search" AnchorPane.rightAnchor="118.0" AnchorPane.topAnchor="7.0">
+       <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+        <graphic>
+      		<ImageView fitHeight="20" fitWidth="20" pickOnBounds="true">
+		         <image>
+		            <Image url="/ui/images/edit-find-mail.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+         <font>
+            <Font size="11.0" />
+         </font>
+      </ToggleButton>
+      
+	</children>
+</AnchorPane>

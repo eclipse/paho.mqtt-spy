@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import org.fxmisc.richtext.StyleClassedTextArea?>
+
+<AnchorPane prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.NewPublicationController">
+	<padding><Insets bottom="3" left="6" right="6" top="6" /></padding>
+	<children>
+            
+        <!-- Topic -->
+        <Label styleClass="normal-font" layoutX="14.0" layoutY="15.0" text="Topic" AnchorPane.topAnchor="5.0" />
+        
+        <ComboBox fx:id="publicationTopicText" editable="true" styleClass="normal-font" layoutX="53.0" layoutY="10.0" prefHeight="26.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="327" AnchorPane.topAnchor="0.0" />
+        
+        <!-- Data -->        
+        <Label fx:id="dataLabel" styleClass="normal-font" layoutX="14.0" text="Data" AnchorPane.topAnchor="31.0" />
+        	        
+        <Label fx:id="lengthLabel" styleClass="small-font" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" prefWidth="47.0" text="(0B)" AnchorPane.topAnchor="44.0" />			
+      	       		    
+        <StyleClassedTextArea fx:id="publicationData" styleClass="normal-font" prefHeight="25.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="326" AnchorPane.topAnchor="31.0" />
+        
+        <!-- Retained flag -->
+        <Label fx:id="retainedLabel" text="Retained" styleClass="normal-font" AnchorPane.rightAnchor="153" AnchorPane.topAnchor="5.0" />        	
+        
+        <CheckBox fx:id="retainedBox" styleClass="normal-font" mnemonicParsing="false" AnchorPane.rightAnchor="123" AnchorPane.topAnchor="4.0" />	         
+
+		<!-- QoS -->
+        <Label fx:id="publicationQosLabel" styleClass="normal-font" layoutX="473.0" layoutY="5.0" text="QoS" AnchorPane.rightAnchor="291" AnchorPane.topAnchor="5.0" />        	  
+             
+        <ChoiceBox fx:id="publicationQosChoice" styleClass="normal-font" prefHeight="25.0" prefWidth="14.0" value="0" AnchorPane.rightAnchor="244" AnchorPane.topAnchor="0.0">
+			<items>
+			   <FXCollections fx:factory="observableArrayList">
+			      <String fx:value="0" />
+			      <String fx:value="1" />
+			      <String fx:value="2" />
+			   </FXCollections>
+			</items>
+        </ChoiceBox>
+        
+        <MenuButton fx:id="formatMenu" styleClass="normal-font" mnemonicParsing="false" prefHeight="26.0" prefWidth="189.0" text="Input format: Plain" AnchorPane.rightAnchor="128" AnchorPane.topAnchor="32.0">
+			<items>
+			    <RadioMenuItem mnemonicParsing="false" text="Plain">
+			       <toggleGroup>
+			          <ToggleGroup fx:id="formatGroup" />
+			       </toggleGroup>
+			    </RadioMenuItem>
+			    <RadioMenuItem mnemonicParsing="false" text="Hex" toggleGroup="$formatGroup" />
+			    <RadioMenuItem mnemonicParsing="false" text="Base64" toggleGroup="$formatGroup" />
+			</items>
+		</MenuButton>        
+		
+		<SplitMenuButton fx:id="publishButton" disable="true" styleClass="normal-font" mnemonicParsing="false" onAction="#publish" prefHeight="58.0" prefWidth="120" text="Publish" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+			<graphic>
+	      		<ImageView fitHeight="24" fitWidth="24" pickOnBounds="true">
+			         <image>
+			            <Image url="/ui/images/mail-forward-6.png" />
+			         </image>
+			      </ImageView>
+	      	</graphic>
+	      	
+	      	<items>
+                  <RadioMenuItem mnemonicParsing="false" selected="true" text="Publish (default)">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="publishScript" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <SeparatorMenuItem />
+                  <Menu fx:id="publishWithScriptsMenu" mnemonicParsing="false" text="Publish with script" />
+                  <SeparatorMenuItem />
+                  <MenuItem fx:id="saveCurrentMenu" mnemonicParsing="false" onAction="#saveCurrentAsScript" text="Save current message as script" />
+                  <Menu fx:id="saveRecentMessagesMenu" disable="true" mnemonicParsing="false" text="Save recent message as script" />
+                  <SeparatorMenuItem />
+                  <Menu fx:id="recentMessagesMenu" disable="true" mnemonicParsing="false" text="Restore recent message" />
+            </items>
+		</SplitMenuButton>
+		
+   	</children>
+</AnchorPane>

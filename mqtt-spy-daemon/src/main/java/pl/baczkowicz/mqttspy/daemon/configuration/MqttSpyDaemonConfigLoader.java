@@ -21,6 +21,8 @@ package pl.baczkowicz.mqttspy.daemon.configuration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,6 +36,7 @@ import pl.baczkowicz.mqttspy.utils.MqttUtils;
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
 import pl.baczkowicz.spy.configuration.PropertyFileLoader;
 import pl.baczkowicz.spy.exceptions.XMLException;
+import pl.baczkowicz.spy.files.FileUtils;
 import pl.baczkowicz.spy.xml.XMLParser;
 
 /**
@@ -91,6 +94,35 @@ public class MqttSpyDaemonConfigLoader extends PropertyFileLoader
 		catch (FileNotFoundException e)
 		{
 			logger.error("Cannot read the configuration file from " + file.getAbsolutePath(), e);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Loads configuration from the file location.
+	 * 
+	 * @param configurationFile The file location to load from
+	 * 
+	 * @return True if all OK
+	 */
+	public boolean loadConfiguration(final String configurationFile)
+	{
+		try
+		{
+			final InputStream is = FileUtils.loadFileByName(configurationFile);
+			configuration = (MqttSpyDaemonConfiguration) parser.loadFromInputStream(is);	
+			populateDefaults();
+			
+			return true;
+		}
+		catch (XMLException e)
+		{							
+			logger.error("Cannot process the configuration from input stream", e);
+		}
+		catch (IOException e)
+		{
+			logger.error("Cannot read the configuration from input stream", e);
 		}
 		
 		return false;

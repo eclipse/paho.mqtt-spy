@@ -103,7 +103,7 @@ public class PublicationScriptProperties implements ScriptChangeObserver
 	 */
 	public String getName()
 	{
-		return script.getName();
+		return script.getNameWithSubdirectory();
 	}
 	
 	/**

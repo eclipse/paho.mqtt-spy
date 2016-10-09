@@ -19,13 +19,31 @@
  */
 package pl.baczkowicz.spy.formatting;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import pl.baczkowicz.spy.common.generated.ConversionFormatterDetails;
 import pl.baczkowicz.spy.common.generated.ConversionMethod;
@@ -439,12 +457,14 @@ public class FormattingUtils
 	 * 
 	 * @return FormatterDetails object
 	 */
-	public static FormatterDetails createBasicFormatter(final String id, final String name, final ConversionMethod conversionMethod)	
+	public static FormatterDetails createBasicFormatter(final String id, final String name, final String description, 
+			final ConversionMethod conversionMethod)	
 	{
 		final FormatterDetails formatter = new FormatterDetails();
 		
 		formatter.setID(id);
-		formatter.setName(name);		
+		formatter.setName(name);
+		formatter.setDescription(description);
 		formatter.getFunction().add(createBasicFormatterFunction(conversionMethod));
 		
 		return formatter;
@@ -452,18 +472,23 @@ public class FormattingUtils
 	
 	public static boolean isScriptBased(final FormatterDetails formatter)
 	{
-		return formatter.getID().startsWith(SCRIPT_PREFIX);
+		return formatter.getID().startsWith(SCRIPT_PREFIX) || formatter.getID().startsWith(DEFAULT_PREFIX + SCRIPT_PREFIX);
 	}
 	
 	public static List<FormatterDetails> createBaseFormatters()
 	{
 		final List<FormatterDetails> baseFormatters = new ArrayList<>();
 		
-		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX, 					"Plain", ConversionMethod.PLAIN));
-		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-hexDecoder", 	"HEX decoder", ConversionMethod.HEX_DECODE));
-		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-hexEncoder", 	"HEX encoder", ConversionMethod.HEX_ENCODE));
-		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-base64Decoder",	"Base64 decoder", ConversionMethod.BASE_64_DECODE));
-		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-base64Encoder",	"Base64 encoder", ConversionMethod.BASE_64_ENCODE));
+		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX, 					
+				"Plain", 		"No formatting - as received.", ConversionMethod.PLAIN));
+		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-hexDecoder", 	
+				"HEX decoder", 	"Decodes from a HEX string.", ConversionMethod.HEX_DECODE));
+		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-hexEncoder", 	
+				"HEX encoder", 	"Encodes the given value as a HEX string.", ConversionMethod.HEX_ENCODE));
+		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-base64Decoder",	
+				"Base64 decoder", "Decodes a Base64 string.", ConversionMethod.BASE_64_DECODE));
+		baseFormatters.add(FormattingUtils.createBasicFormatter(DEFAULT_PREFIX + "-base64Encoder",	
+				"Base64 encoder", "Encodes the given value to Base64.", ConversionMethod.BASE_64_ENCODE));
 		
 		return baseFormatters;
 	}
@@ -471,5 +496,31 @@ public class FormattingUtils
 	public static boolean isDefault(final FormatterDetails formatter)
 	{
 		return formatter.getID().startsWith(DEFAULT_PREFIX);
+	}
+	
+	public static String prettyXml(final Document document, final int indent) throws TransformerException
+	{
+		final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		
+		final Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(indent));
+		
+		final StringWriter writer = new StringWriter();
+		final Result result = new StreamResult(writer);
+		final Source source = new DOMSource(document);
+		transformer.transform(source, result);
+		
+		return writer.getBuffer().toString();
+	}
+	
+	public static String prettyXml(final String xml, final int indent) throws SAXException, IOException, TransformerException, ParserConfigurationException
+	{
+		final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+	    final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+	    final Document document = documentBuilder.parse(new InputSource(new StringReader(xml)));
+	    
+	    return prettyXml(document, indent);
 	}
 }

@@ -25,11 +25,14 @@ import java.util.concurrent.Executor;
 
 import org.slf4j.LoggerFactory;
 
+import pl.baczkowicz.mqttspy.audit.MqttAuditReplay;
 import pl.baczkowicz.mqttspy.connectivity.IMqttConnection;
 import pl.baczkowicz.mqttspy.logger.IMqttMessageLogIO;
 import pl.baczkowicz.mqttspy.logger.MqttMessageLogIO;
+import pl.baczkowicz.spy.audit.IAuditReplayIO;
+import pl.baczkowicz.spy.eventbus.IKBus;
+import pl.baczkowicz.spy.exceptions.SpyException;
 import pl.baczkowicz.spy.scripts.BaseScriptManager;
-import pl.baczkowicz.spy.scripts.IScriptEventManager;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.scripts.ScriptRunner;
 
@@ -44,19 +47,19 @@ public class MqttScriptManager extends BaseScriptManager
 	/**
 	 * Creates the script manager.
 	 * 
-	 * @param eventManager The event manager to be used
+	 * @param eventBus The event bus to be used
 	 * @param executor The executor to be used
 	 * @param connection The connection for which to run the scripts
 	 */
-	public MqttScriptManager(final IScriptEventManager eventManager, final Executor executor, final IMqttConnection connection)
+	public MqttScriptManager(final IKBus eventBus, final Executor executor, final IMqttConnection connection)
 	{
-		super(eventManager, executor);
+		super(eventBus, executor);
 		this.setConnection(connection);
 	}
 	
-	public void populateEngineVariables(final Script script)
+	public void populateEngineVariables(final Script script) throws SpyException
 	{
-		final MqttScriptIO scriptIO = new MqttScriptIO(connection, eventManager, script, executor); 
+		final MqttScriptIO scriptIO = new MqttScriptIO(connection, eventBus, script, executor); 
 		//script.setScriptIO(scriptIO);
 		
 		final Map<String, Object> scriptVariables = new HashMap<String, Object>();
@@ -71,9 +74,14 @@ public class MqttScriptManager extends BaseScriptManager
 		scriptVariables.put("logger", LoggerFactory.getLogger(ScriptRunner.class));
 		
 		final IMqttMessageLogIO mqttMessageLog = new MqttMessageLogIO();
+		scriptVariables.put("messageLog", mqttMessageLog);
+		
+		final IAuditReplayIO mqttAuditReplay = new MqttAuditReplay();
+		scriptVariables.put("auditReplay", mqttAuditReplay);
+		
 		// Add it to the script IO so that it gets stopped when requested
 		script.addTask(mqttMessageLog);			
-		scriptVariables.put("messageLog", mqttMessageLog);
+		script.addTask(mqttAuditReplay);		
 		
 		putJavaVariablesIntoEngine(script.getScriptEngine(), scriptVariables);
 	}

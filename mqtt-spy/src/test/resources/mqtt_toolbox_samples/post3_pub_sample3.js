@@ -1,0 +1,1 @@
+mqttspy.publish(message.getTopic(), message.getPayload() + " - " + new java.util.Date());

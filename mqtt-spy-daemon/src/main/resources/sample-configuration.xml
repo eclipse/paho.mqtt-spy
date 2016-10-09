@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mqttspydc:MqttSpyDaemonConfiguration xmlns:mqttspydc="http://baczkowicz.pl/mqtt-spy/daemon/configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <Connection>
+  
+	<!-- Port number is optional (default is 1883) -->
+	<ServerURI>localhost</ServerURI>
+  	  		
+  	<!-- Leave empty to auto-generate -->
+	<ClientID></ClientID>
+			
+	<MessageLog>DISABLED</MessageLog>
+	
+	<!-- Receive messages publish by the sample_publish script -->
+	<Subscription topic="mqtt-spy-daemon/#" />
+			
+	<!-- Publishing sample messages -->
+	<BackgroundScript>
+		<File>/sample-publish.js</File>
+	</BackgroundScript>
+
+	<!-- Exit the daemon when the script has finished -->
+	<RunningMode>SCRIPTS_ONLY</RunningMode>
+  </Connection>
+  
+</mqttspydc:MqttSpyDaemonConfiguration>

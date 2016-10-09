@@ -41,7 +41,7 @@ import pl.baczkowicz.spy.configuration.BaseConfigurationUtils;
 import pl.baczkowicz.spy.ui.configuration.ConfiguredConnectionGroupDetails;
 import pl.baczkowicz.spy.ui.events.observers.ItemsReorderedObserver;
 import pl.baczkowicz.spy.ui.properties.ConnectionTreeItemProperties;
-import pl.baczkowicz.spy.ui.properties.ModifiableItem;
+import pl.baczkowicz.spy.ui.properties.ModifiableConnection;
 import pl.baczkowicz.spy.ui.utils.ImageUtils;
 
 public class DragAndDropTreeViewCell extends TreeCell<ConnectionTreeItemProperties>
@@ -200,7 +200,7 @@ public class DragAndDropTreeViewCell extends TreeCell<ConnectionTreeItemProperti
 					}
 					else
 					{
-						final ModifiableItem connectionToMove = treeItemPropertiesToMove.getConnection();
+						final ModifiableConnection connectionToMove = treeItemPropertiesToMove.getConnection();
 						
 						// Remove old child
 						ConfiguredConnectionGroupDetails.removeFromGroup(connectionToMove, oldParentGroup);

@@ -1,0 +1,1 @@
+java.lang.Double.valueOf(com.jayway.jsonpath.JsonPath.read(content, "$.humidity")) >= 61.9

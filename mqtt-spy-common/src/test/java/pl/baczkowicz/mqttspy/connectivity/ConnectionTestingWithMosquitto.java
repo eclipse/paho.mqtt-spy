@@ -34,8 +34,8 @@ import org.junit.Test;
 import pl.baczkowicz.mqttspy.common.generated.MqttConnectionDetails;
 import pl.baczkowicz.mqttspy.common.generated.ProtocolVersionEnum;
 import pl.baczkowicz.mqttspy.common.generated.SecureSocketSettings;
-import pl.baczkowicz.mqttspy.common.generated.UserCredentials;
-import pl.baczkowicz.mqttspy.connectivity.reconnection.ReconnectionManager;
+import pl.baczkowicz.spy.common.generated.UserCredentials;
+import pl.baczkowicz.spy.connectivity.ReconnectionManager;
 import pl.baczkowicz.spy.common.generated.SecureSocketModeEnum;
 import pl.baczkowicz.spy.exceptions.SpyException;
 import pl.baczkowicz.spy.utils.ConversionUtils;
@@ -54,7 +54,10 @@ public class ConnectionTestingWithMosquitto
 	private Process startMosquitto(final String configurationFile) throws IOException
 	{
 		String execStr = "mosquitto -c " + configurationFile;
+		
+		System.out.println("Calling: " + execStr);
         Process proc = Runtime.getRuntime().exec(execStr);
+		
         System.out.println("Proc: " + proc);
         
         return proc;
@@ -62,9 +65,9 @@ public class ConnectionTestingWithMosquitto
 	
 	private void stopProcess(final Process mosquitto)
 	{
-		System.out.println("Destroying");
+		System.out.println("Destroying mosquitto");
         mosquitto.destroy();
-        System.out.println("Destroyed");
+        System.out.println("Mosquitto destroyed");
 	}
 	
 	private MqttCallback createTestCallback(final String connection)
@@ -98,8 +101,6 @@ public class ConnectionTestingWithMosquitto
 	private MqttConnectionDetails createMqttConnectionDetails(final String brokerAddress, final UserCredentials uc, final SecureSocketSettings ssl)
 	{
 		return new MqttConnectionDetails(
-				"id",
-				"test", 
 				ProtocolVersionEnum.MQTT_DEFAULT, 
 				Arrays.asList(brokerAddress), 
 				false,
@@ -280,7 +281,42 @@ public class ConnectionTestingWithMosquitto
 						"src/test/resources/mosquitto/ssl/ca.crt", 
 						"src/test/resources/mosquitto/ssl/bouncy_castle/client.crt", 
 						"src/test/resources/mosquitto/ssl/bouncy_castle/client.key", 
-						"", null, null, null, null, null, null));
+						"", true, null, null, null, null, null));
+		
+		final SimpleMqttConnection connection = new SimpleMqttConnection(reconnectionManager, "0", connectionDetails);
+		connection.createClient(createTestCallback("ssl://localhost:10011"));
+		assertTrue(connection.connect());
+		System.out.println("Connected...");
+		
+		assertTrue(connection.subscribe("/mqtt-spy/test/", 0));
+		System.out.println("Subscribed...");
+		
+		connection.publish("/mqtt-spy/test/", "message over SSL", 0, false);
+		System.out.println("Published...");
+		
+		// Waiting for message to be received now...
+		Thread.sleep(1000);
+		
+		connection.disconnect();
+		System.out.println("Disconnected");
+		
+		stopProcess(mosquitto);
+		Thread.sleep(2000);
+	}
+	
+	@Test
+	public void testServerAndClientAuthenticationWithLocalMosquittoIssue82() throws SpyException, InterruptedException, IOException
+	{			
+		final Process mosquitto = startMosquitto("src/test/resources/mosquitto/mosquitto_ssl_server_and_client_issue82.conf");
+				
+		final MqttConnectionDetails connectionDetails = createMqttConnectionDetails(
+				"ssl://localhost:10011", 
+				new UserCredentials("nopassword", ""),
+				new SecureSocketSettings(SecureSocketModeEnum.SERVER_AND_CLIENT, "TLSv1.2", 
+						"src/test/resources/mosquitto/issue82/ca-brix.crt", 
+						"src/test/resources/mosquitto/issue82/client2.crt", 
+						"src/test/resources/mosquitto/issue82/client2-pkcs8.key", 
+						"", false, null, null, null, null, null));
 		
 		final SimpleMqttConnection connection = new SimpleMqttConnection(reconnectionManager, "0", connectionDetails);
 		connection.createClient(createTestCallback("ssl://localhost:10011"));

@@ -55,6 +55,8 @@ public class FormattedMqttMessage extends BaseMqttMessage
 	public FormattedMqttMessage(final FormattedMqttMessage message)
 	{
 		this(message.getId(), message.getTopic(), copyMqttMessage(message.getRawMessage()), message.getConnection());
+		setPayload(new String(message.getPayload()));
+		setRawPayload(message.getRawPayload().clone());
 		setFormattedPayload(message.getFormattedPayload());
 		setLastUsedFormatter(message.getLastUsedFormatter());
 		setSubscription(message.getSubscription());
