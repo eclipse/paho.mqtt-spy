@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.CheckMenuItem?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.spy.ui.controllers.PieChartPaneController">
+   <children>
+      <AnchorPane fx:id="chartPane" prefHeight="40.0" prefWidth="599.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+         
+            <Button fx:id="refreshButton" layoutX="14.0" layoutY="9.0" prefHeight="25.0" prefWidth="100.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+            	<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+		        <graphic>
+		      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/refresh.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+            </Button>
+            
+            <CheckBox fx:id="autoRefreshCheckBox" focusTraversable="false" layoutY="10.0" mnemonicParsing="false" text="Auto-refresh" AnchorPane.leftAnchor="120.0" />		      
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

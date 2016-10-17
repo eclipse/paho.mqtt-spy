@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.spy.ui.controllers.LineChartPaneController">
+   <children>
+      <AnchorPane fx:id="splitPane" prefHeight="308.0" prefWidth="680.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+         
+            <Label fx:id="showRangeLabel" layoutX="368.0" layoutY="11.0" text="Show" AnchorPane.rightAnchor="285.0" />
+            <ComboBox fx:id="showRangeBox" focusTraversable="false" layoutY="7.0" prefHeight="25.0" prefWidth="150.0" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="7.0" />
+            
+            <Button fx:id="refreshButton" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" onAction="#refresh" prefHeight="25.0" prefWidth="100.0" text="Refresh" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+            	<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+		        <graphic>
+		      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/refresh.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+            </Button>
+            
+            <CheckBox fx:id="autoRefreshCheckBox" focusTraversable="false" layoutY="10.0" mnemonicParsing="false" text="Auto-refresh" AnchorPane.leftAnchor="120.0" />
+
+			<MenuButton fx:id="optionsButton" focusTraversable="false" mnemonicParsing="false" prefWidth="110.0" text="Options" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
+		      	<graphic>
+		      		<ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/settings.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+		        <items>
+		        	<CheckMenuItem fx:id="displaySymbolsCheckBox" text="Display points and tooltips" />   
+		            <SeparatorMenuItem mnemonicParsing="false" />
+		            <MenuItem onAction="#reset" text="Reset chart" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <Menu mnemonicParsing="false" text="Export">
+                    <items>
+                    	<Menu mnemonicParsing="false" text="Chart as PNG image">
+                   			<MenuItem mnemonicParsing="false" onAction="#exportAsImage" text="Save as..." />
+                   			<SeparatorMenuItem mnemonicParsing="false" />
+                   			<Menu fx:id="autoImageExport" disable="true" mnemonicParsing="false" text="Auto-export">                   			
+                   				<CheckMenuItem fx:id="saveImageOnMessage" onAction="#updateSaveOnMessage" text="Export on new message" />
+                   				<CheckMenuItem fx:id="saveImageAtInterval" onAction="#updateSaveOnInterval" text="Export at fixed interval..." />
+                   				<CheckMenuItem fx:id="addTimestampOnExport" onAction="#addTimestampOnAutoExport" text="Append timestamp on export" />
+                   			</Menu>
+                    	</Menu>
+                    </items>
+                  </Menu>
+		        </items>
+		      </MenuButton>
+            <SplitPane dividerPositions="0.352622061482821" orientation="VERTICAL" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+              <items>
+                <AnchorPane fx:id="seriesPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TableView fx:id="seriesTable" editable="true" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
+                          <columns>
+                            <TableColumn fx:id="nameColumn" minWidth="100.0" prefWidth="150.0" text="Series name" />
+                            <TableColumn fx:id="topicColumn" editable="false" minWidth="100.0" prefWidth="133.0" text="Topic" visible="false" />
+                              <TableColumn fx:id="typeColumn" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Type" />
+                              <TableColumn fx:id="expressionColumn" editable="false" minWidth="100.0" prefWidth="260.0" text="Value expression" />
+                              <TableColumn fx:id="visibleColumn" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Visible" />
+                              <TableColumn fx:id="statusColumn" maxWidth="200.0" minWidth="150.0" prefWidth="150.0" text="Last updated" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <Button fx:id="removeSeriesButton" disable="true" focusTraversable="false" mnemonicParsing="false" onAction="#removeSeries" prefHeight="25.0" prefWidth="145" text="Remove" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="7.0">
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                           <graphic>
+                              <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+                                 <image>
+                                    <Image url="/ui/images/button-delete.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="duplicateSeriesButton" focusTraversable="false" mnemonicParsing="false" onAction="#duplicateSeries" prefHeight="25.0" prefWidth="145" text="Duplicate" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="159.0">
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                           <graphic>
+                              <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+                                 <image>
+                                    <Image url="/ui/images/button-copy.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="addSeriesButton" focusTraversable="false" layoutX="494.0" layoutY="159.0" mnemonicParsing="false" onAction="#addSeries" prefHeight="25.0" prefWidth="145" text="Add" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="311.0">
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                           <graphic>
+                              <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+                                 <image>
+                                    <Image url="/ui/images/button-add.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane fx:id="chartPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+              </items>
+            </SplitPane>
+		      
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

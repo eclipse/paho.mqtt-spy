@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2014 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="editConnectionsWindow" minWidth="850.0" prefHeight="420" prefWidth="945.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.spy.ui.controllers.EditConnectionsController">
+   <children>
+   	
+   	  <SplitPane styleClass="normal-font" dividerPositions="0.2" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+			<AnchorPane minWidth="340.0">
+			
+				  <TreeView fx:id="connectionList" focusTraversable="false" AnchorPane.bottomAnchor="98.0" AnchorPane.leftAnchor="-15" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0.0" />
+      
+			      <AnchorPane fx:id="buttonArea" layoutX="-7.0" layoutY="270.0" prefHeight="86.0" prefWidth="335.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0">
+			         <children>
+			            <Button fx:id="importButton" disable="true" focusTraversable="false" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#importConnections" prefHeight="28" prefWidth="100.0" text="Import" visible="false" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="230.0" />
+			            
+			            <Button fx:id="applyAllButton" disable="true" focusTraversable="false" layoutX="230" layoutY="47.0" mnemonicParsing="false" onAction="#applyAll" prefHeight="28" prefWidth="100.0" text="Apply all">
+				            <padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+					        <graphic>
+					      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+							         <image>
+							            <Image url="/ui/images/button-apply.png" />
+							         </image>
+							      </ImageView>
+					      	</graphic>
+			            </Button>
+			            
+			            <Button fx:id="undoAllButton" disable="true" focusTraversable="false" layoutX="122.0" layoutY="47.0" mnemonicParsing="false" onAction="#undoAll" prefHeight="28" prefWidth="100.0" text="Undo all">
+			            	<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+					        <graphic>
+					      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+							         <image>
+							            <Image url="/ui/images/button-undo.png" />
+							         </image>
+							      </ImageView>
+					      	</graphic>
+			            </Button>
+			            
+			            <Button fx:id="deleteConnectionButton" disable="true" focusTraversable="false" layoutX="230.0" layoutY="13.0" mnemonicParsing="false" onAction="#deleteConnection" prefHeight="28" prefWidth="100.0" text="Delete">
+			            	<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+					        <graphic>
+					      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+							         <image>
+							            <Image url="/ui/images/button-delete.png" />
+							         </image>
+							      </ImageView>
+					      	</graphic>
+			            </Button>
+			            
+			            <Button fx:id="duplicateConnectionButton" disable="true" focusTraversable="false" layoutX="122.0" layoutY="13.0" mnemonicParsing="false" onAction="#duplicateConnection" prefHeight="28" prefWidth="100.0" text="Duplicate">
+			            	<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+					        <graphic>
+					      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+							         <image>
+							            <Image url="/ui/images/button-copy.png" />
+							         </image>
+							      </ImageView>
+					      	</graphic>
+			            </Button>
+			      
+			            <MenuButton fx:id="newConnectionButton" focusTraversable="false" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" prefHeight="28" prefWidth="100.0" text="New" AnchorPane.leftAnchor="14.0">
+			            	<padding><Insets bottom="1.0" left="1.0" right="1.0" top="1.0" /></padding>
+					        <graphic>
+					      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+							         <image>
+							            <Image url="/ui/images/button-add.png" />
+							         </image>
+							      </ImageView>
+					      	</graphic>
+					      	 <items>		        	
+					      	 	<!-- 
+			        			<MenuItem onAction="#newMqttConnection" text="Create new MQTT connection">
+			        				<graphic>
+							      		<ImageView fitHeight="18" fitWidth="18" pickOnBounds="true">
+									         <image>
+									            <Image url="/ui/images/mqtt-icon.png" />
+									         </image>
+									      </ImageView>
+							      	</graphic>
+			        			</MenuItem>
+			        			 -->
+			        			<SeparatorMenuItem />
+			        			<MenuItem onAction="#newGroup" text="Create new connection group">
+			        				<graphic>
+							      		<ImageView fitHeight="18" fitWidth="18" pickOnBounds="true">
+									         <image>
+									            <Image url="/ui/images/folder-new.png" />
+									         </image>
+									      </ImageView>
+							      	</graphic>
+			        			</MenuItem>        	               
+					        </items>
+			            </MenuButton>
+			         </children>
+			      </AnchorPane>
+			      <Label styleClass="vsmall-font" fx:id="changesDetectedLabel" layoutX="14.0" layoutY="304.0" text="Note: to save the changes, click the &quot;Apply all&quot; button" textFill="#f20303" AnchorPane.bottomAnchor="80.0" />
+   			
+			</AnchorPane>
+          
+          	<AnchorPane fx:id="connectionDetailsPane" minWidth="600.0">
+	      		<children>
+	   	      			<fx:include fx:id="editConnectionGroupPane" source="EditConnectionGroupPane.fxml" visible="false" />   	      			
+	   	    	</children>
+      		</AnchorPane>
+        </items>
+      </SplitPane>   
+
+   </children>
+</AnchorPane>

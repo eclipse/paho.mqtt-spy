@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2015 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.*?>
+
+<AnchorPane prefHeight="384.0" prefWidth="570.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.spy.ui.controllers.TestCaseExecutionController">
+   <children>
+      <TableView fx:id="stepsView" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="45.0">
+        <columns>
+          	<TableColumn fx:id="stepNumberColumn" maxWidth="85.0" minWidth="85.0" prefWidth="85.0" resizable="false" text="Step no." />
+          	<TableColumn fx:id="descriptionColumn" minWidth="100.0" prefWidth="400.0" text="Description" />
+            <TableColumn fx:id="statusColumn" maxWidth="70" minWidth="70" prefWidth="70" resizable="false" text="Status" />
+            <TableColumn fx:id="infoColumn" minWidth="100.0" prefWidth="400.0" text="Additional information" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Button fx:id="startButton" disable="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#startTestCase" prefHeight="25.0" prefWidth="115.0" text="Run">
+      	<graphic>
+      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+		         <image>
+		            <Image url="/ui/images/testcase_play.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+      </Button>
+      <Button fx:id="stopButton" disable="true" layoutX="135.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopTestCase" prefHeight="25.0" prefWidth="115.0" text="Stop">
+      	      	<graphic>
+      		<ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+		         <image>
+		            <Image url="/ui/images/testcase_stop.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+      </Button>
+      <MenuButton layoutX="440.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Tools" AnchorPane.rightAnchor="10.0">
+	    <graphic>
+      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+		         <image>
+		            <Image url="/ui/images/tools.png" />
+		         </image>
+		      </ImageView>
+      	</graphic>
+        <items>
+        	<!-- 
+        	<CheckMenuItem mnemonicParsing="false" text="Repeat test steps when finished">
+   		      	<graphic>
+		      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/testcase_repeat.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+        	</CheckMenuItem>
+        	<SeparatorMenuItem />
+        	 -->
+            <CheckMenuItem fx:id="autoExport" mnemonicParsing="false" selected="true" text="Automatically export result of each test case run">
+            	<graphic>
+		      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/save.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+            </CheckMenuItem>
+          	<MenuItem mnemonicParsing="false" text="Export result of this test case run" onAction="#exportResult">
+          		<graphic>
+		      		<ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true">
+				         <image>
+				            <Image url="/ui/images/save.png" />
+				         </image>
+				      </ImageView>
+		      	</graphic>
+          	</MenuItem>
+        </items>
+      </MenuButton>
+   </children>
+</AnchorPane>

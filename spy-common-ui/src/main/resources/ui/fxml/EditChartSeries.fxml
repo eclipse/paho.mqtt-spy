@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/***********************************************************************************
+ * 
+ * Copyright (c) 2015 Kamil Baczkowicz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *    
+ * The Eclipse Distribution License is available at
+ *   http://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ * 
+ *    Kamil Baczkowicz - initial API and implementation and/or initial documentation
+ *    
+ */
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="590.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.66" fx:controller="pl.baczkowicz.spy.ui.controllers.EditChartSeriesController">
+   <children>  
+      
+      <Label layoutX="23.0" layoutY="21.0" text="Series name" />      
+      <TextField fx:id="nameText" layoutX="260.0" layoutY="16.0" prefHeight="26.0" prefWidth="316.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="14.0" />
+      
+      <Label layoutX="24.0" layoutY="62.0" text="Topic" />
+      <TextField fx:id="topicText" layoutX="260.0" layoutY="57.0" prefHeight="26.0" prefWidth="316.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="14.0" />
+      
+      <Label layoutX="25.0" layoutY="103.0" text="Type" />
+      <ComboBox fx:id="typeCombo" layoutX="260.0" layoutY="98.0" prefHeight="26.0" prefWidth="316.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="14.0" />
+                       
+      <Label layoutX="24.0" layoutY="144.0" text="Value expression" />
+      <TextField fx:id="expressionText" layoutX="260.0" layoutY="139.0" prefHeight="26.0" prefWidth="316.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="14.0" />      
+            
+      <Button fx:id="saveButton" focusTraversable="false" layoutX="356.0" layoutY="181.0" mnemonicParsing="false" onAction="#save" prefHeight="26.0" prefWidth="102.0" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="130.0">
+         <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+         <graphic>
+            <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true">
+               <image>
+                  <Image url="/ui/images/save.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      
+      <Button fx:id="cancelButton" cancelButton="true" focusTraversable="false" layoutX="192.0" layoutY="317.0" mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="102.0" text="Cancel" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+   </children>
+</AnchorPane>
