@@ -1,11 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>pl.baczkowicz.spy</groupId>
+	<groupId>org.eclipse.paho.mqttspy</groupId>
 	<artifactId>spy-common-ui</artifactId>
-	<version>0.1.0</version>
+	<version>0.6.0</version>
 
 	<name>spy-common-ui</name>
-
+	<url>https://github.com/eclipse/paho.mqtt-spy</url>
+	
 	<scm>
 		<connection>scm:git:../.git</connection>
 		<url>../.git</url>
@@ -31,12 +32,16 @@
 
 	<dependencies>
 
+		<!--=== mqtt-spy === -->
+		
 		<dependency>
-			<groupId>pl.baczkowicz.spy</groupId>
+			<groupId>org.eclipse.paho.mqttspy</groupId>
 			<artifactId>spy-common</artifactId>
-			<version>0.4.0</version>
+			<version>0.6.0</version>
 		</dependency>	
 		
+		<!--=== Other === -->
+				
 		<dependency>
 			<groupId>org.fxmisc.richtext</groupId>
 			<artifactId>richtextfx</artifactId>
@@ -47,6 +52,15 @@
 			<groupId>org.gillius</groupId>
 			<artifactId>jfxutils</artifactId>
 			<version>0.4-SNAPSHOT</version>
+		</dependency>
+		
+		<!--=== TEST === -->
+	
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 		
 	</dependencies>

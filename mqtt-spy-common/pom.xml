@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>pl.baczkowicz.mqttspy</groupId>
+	<groupId>org.eclipse.paho.mqttspy</groupId>
 	<artifactId>mqtt-spy-common</artifactId>
-	<version>0.2.0</version>
+	<version>0.6.0</version>
 	
 	<name>mqtt-spy-common</name>
-	<url>http://kamilfb.github.io/mqtt-spy/</url>
+	<url>https://github.com/eclipse/paho.mqtt-spy</url>
   
   	<properties>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  		
@@ -49,9 +49,9 @@
   	<dependencies>
 
 		<dependency>
-			<groupId>pl.baczkowicz.spy</groupId>
+			<groupId>org.eclipse.paho.mqttspy</groupId>
 			<artifactId>spy-common</artifactId>
-			<version>0.4.0</version>
+			<version>0.6.0</version>
 		</dependency>		
 		
 		<dependency>
@@ -257,7 +257,7 @@
 			                <catalogs>
 			                	<catalog>
 			                		<dependencyResource>
-			                			<groupId>pl.baczkowicz.spy</groupId>
+										<groupId>org.eclipse.paho.mqttspy</groupId>
 			                			<artifactId>spy-common</artifactId>
 			                			<resource>spy-common.catalog</resource>
 			                		</dependencyResource>
@@ -268,7 +268,7 @@
 			                
 			                <episodes>
 			                	<episode>
-			                		<groupId>pl.baczkowicz.spy</groupId>
+									<groupId>org.eclipse.paho.mqttspy</groupId>
 			                		<artifactId>spy-common</artifactId>
 			                	</episode>
 			                </episodes>
