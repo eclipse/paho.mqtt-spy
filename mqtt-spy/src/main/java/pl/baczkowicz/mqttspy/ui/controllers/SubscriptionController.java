@@ -312,14 +312,22 @@ public class SubscriptionController implements Initializable, TabController
 			{		
 				int newNumber = newValue.intValue();
 				
-				messageCountSlider.setValue(newNumber);
-				
-				updateMessagesDisplayed(newNumber);
-				
-				// TODO: update scroll bar
-				
-				// Update message index field range
-				messageNavigationPaneController.updateRange(messagesDisplayed);
+				if (newNumber >= 1)
+				{				
+					messageCountSlider.setValue(newNumber);
+					
+					updateMessagesDisplayed(newNumber);
+					
+					// TODO: update scroll bar
+					
+					// Update message index field range
+					messageNavigationPaneController.updateRange(messagesDisplayed);
+				}
+				else
+				{
+					// If we don't do this, the slider looses the UI value blob
+					messageCountSlider.setValue(1);
+				}
 			}
 		});
 		
@@ -327,10 +335,25 @@ public class SubscriptionController implements Initializable, TabController
 		{
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-			{
-				logger.debug("Height = " + newValue.intValue());
-				maxMessagesDisplayed = (int) Math.floor(newValue.intValue() / 85);
+			{								
+				final int prevMaxMessagesDisplayed = maxMessagesDisplayed;
+				
+				// Added the -10 margin for smoother transition
+				maxMessagesDisplayed = (int) Math.floor((newValue.intValue() - 10) / 85);
+				if (maxMessagesDisplayed <= 0)
+				{
+					maxMessagesDisplayed = 1;
+				}
+				
+				// logger.debug("Height = {}, prev/max messages = {}/{}", newValue.intValue(), prevMaxMessagesDisplayed, maxMessagesDisplayed);
+				
 				messageCountSlider.setMax(maxMessagesDisplayed);
+				
+				// Auto scale up/down
+				if (messageCountSlider.isVisible() && ((int) messageCountSlider.getValue() == prevMaxMessagesDisplayed))
+				{
+					messageCountSlider.setValue(maxMessagesDisplayed);
+				}
 			}
 		});
 
@@ -472,6 +495,7 @@ public class SubscriptionController implements Initializable, TabController
 
 	private void updateMessagesDisplayed(int newValue)
 	{
+		// logger.debug("Updating messages displayed. New val = {}", newValue);
 		while (newValue > messageControllers.size())
 		{
 			final FXMLLoader loader = FxmlUtils.createFxmlLoaderForProjectFile("MessagePane.fxml");
@@ -504,6 +528,8 @@ public class SubscriptionController implements Initializable, TabController
 				messagesDisplayed++;
 			}			
 		}
+		
+		// logger.debug("Updating messages displayed. New val = {}, msgs disp = {}", newValue, messagesDisplayed);
 		
 		// Refresh all messages to populate all panes
 		eventBus.publish(new MessageIndexChangeEvent((int) messageIndexScrollBar.getValue(), store, this));
