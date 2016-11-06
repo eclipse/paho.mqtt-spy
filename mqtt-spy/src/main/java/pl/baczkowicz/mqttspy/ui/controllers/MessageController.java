@@ -131,18 +131,6 @@ public class MessageController implements Initializable
 	
 	public void init()
 	{
-//		dataField.heightProperty().addListener(new ChangeListener<Number>()
-//		{
-//
-//			@Override
-//			public void changed(ObservableValue<? extends Number> observable,
-//					Number oldValue, Number newValue)
-//			{
-//				logger.info("New height = {}; pane height = {}", newValue, parentPane.getHeight());
-//				
-//			}
-//		});
-		
 		if (styled)
 		{		
 			styledDataField = new StyleClassedTextArea();
