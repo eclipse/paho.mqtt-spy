@@ -578,11 +578,19 @@ public class SubscriptionController implements Initializable, TabController
 		{
 			Platform.runLater(() -> 
 			{
-				updateWidth(summaryTitledPaneTargetWidth);
+				logger.debug("layout => updating width with target = {}", summaryTitledPaneTargetWidth);
+				updateWidth(null);
 			});
 		}
 		
 		orientation = newOrientation;
+		
+		// If not in multi mode, reset message count to 1
+		if (!multi)
+		{
+			messageCountSlider.setValue(1);
+			messageCountSlider.setMax(1);
+		}
 		messageCountSlider.setVisible(multi);
 		
 		// TODO: resize summaryTitledPane quicker
@@ -613,14 +621,13 @@ public class SubscriptionController implements Initializable, TabController
 				final double newV = (double) newValue;
 				
 				final Double diff = oldV - newV;
-				// If resizing down, jump at least by 10; otherwise no target
-				final Double target = (diff < 10 && diff > 0) ? newV - 10 : null; 
 				
-				logger.debug("Using target width of {}; requested {}; previously {}", target, newValue, oldValue);				
+				// logger.debug("Using target width of {}; requested {}; previously {}", diff, newValue, oldValue);				
 								
 				Platform.runLater(() -> 
 				{
-					updateWidth(target);
+					// logger.debug("listener => updating width with target = {}", diff);
+					updateWidth(diff);
 				});
 				
 			}
@@ -629,16 +636,19 @@ public class SubscriptionController implements Initializable, TabController
 	
 	private void updateWidth(final Double target)
 	{
-		// logger.debug("pane W={}, title X={}, W={}", summaryTitledPane.getWidth(), paneTitle.getLayoutX(), paneTitle.getWidth());
+		// logger.debug("1 pane W={}, title X={}, W={}, target = {}", summaryTitledPane.getWidth(), paneTitle.getLayoutX(), paneTitle.getWidth(), target);
 		
 		final double absoluteSearchBoxX = searchBox.getLayoutX() + topicFilterBox.getLayoutX() + titleBox.getLayoutX();
 		final double titledPaneWidth = MqttViewManager.updateTitleWidth(summaryTitledPane, paneTitle, MqttViewManager.TITLE_MARGIN, target);
 		
-		//logger.trace("New width = {}", titledPaneWidth);
+		// logger.debug("2 New width = {}, absolute X = {}, stats label pos = {}, width = {}", titledPaneWidth, absoluteSearchBoxX, statsLabel.getLayoutX(), statsLabel.getWidth());
+		AnchorPane.setRightAnchor(statsLabel, 5.0);
+		// logger.debug("3 New width = {}, absolute X = {}, stats label pos = {}, width = {}", titledPaneWidth, absoluteSearchBoxX, statsLabel.getLayoutX(), statsLabel.getWidth());
+		
 								
 		searchBox.setPrefWidth(titledPaneWidth - absoluteSearchBoxX - statsLabel.getWidth() - 100);
 		
-		//logger.debug("pane W={}, title X={}, W={}", summaryTitledPane.getWidth(), paneTitle.getLayoutX(), paneTitle.getWidth());
+		// logger.debug("4 pane W={}, title X={}, W={}", summaryTitledPane.getWidth(), paneTitle.getLayoutX(), paneTitle.getWidth());
 	}
 	
 	private void resetScrollBar()
@@ -911,6 +921,7 @@ public class SubscriptionController implements Initializable, TabController
 	@SuppressWarnings("unchecked")
 	public void updateSubscriptionStats()
 	{
+		// logger.debug("Stats label position = {}, width = {}", statsLabel.getLayoutX(), statsLabel.getWidth());
 		final int topicCount = store.getNonFilteredMessageList().getTopicSummary().getObservableMessagesPerTopic().size();
 		final int filteredTopicCount = getSummaryTablePaneController().getFilteredDataSize();
 		final int messageCount = store.getNonFilteredMessageList().getMessages().size(); 

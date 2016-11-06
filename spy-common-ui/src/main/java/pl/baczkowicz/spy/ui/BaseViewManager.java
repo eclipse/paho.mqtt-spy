@@ -22,6 +22,9 @@ package pl.baczkowicz.spy.ui;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -46,10 +49,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import pl.baczkowicz.spy.configuration.BaseConfigurationUtils;
 import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.scripts.BaseScriptManager;
@@ -472,34 +471,42 @@ public abstract class BaseViewManager
 		final double marginWithPositionOfset = margin + paneTitle.getLayoutX();
 				
 		double titledPaneWidth = titledPane.getWidth();
-		// logger.debug("{} titledPane.getWidth() = {}", titledPane, titledPaneWidth);
+		// logger.debug("{}; titledPane.getWidth() = {}, paneTitle.getWidth() = {}; margin = {}; target = {}", titledPane, titledPaneWidth, paneTitle.getWidth(), margin, target);
+		
 		
 		if (titledPane.getScene() != null)			
 		{
 			if (titledPane.getScene().getWidth() < titledPaneWidth)
 			{
 				titledPaneWidth = titledPane.getScene().getWidth();
-				logger.trace("Scene is smaller; {} titledPane.getScene().getWidth() = {}", titledPane, titledPaneWidth);				
+				logger.debug("Scene is smaller; {} titledPane.getScene().getWidth() = {}", titledPane, titledPaneWidth);				
 			}
 		}
 		
-		double width = 0;
+		double jump = 0;
+		final double newWidth = titledPaneWidth - marginWithPositionOfset;
 		
+		// If target specified, and the diff in resizing is less than X, adjust using the target. 
+		// This is a workaround for the JavaFX resizing behaviour, otherwise it would be less responsive on making the window smaller
 		if (target != null)
 		{
-			width = target - marginWithPositionOfset;
-		}
-		else
-		{
-			width = titledPaneWidth - marginWithPositionOfset;
+			if (paneTitle.getWidth() - newWidth < 30 && paneTitle.getWidth() - newWidth > 0)
+			{
+				jump = target;
+			}
 		}
 		
+		updatePaneTitleWidth(paneTitle, newWidth - jump);
+		
+		return titledPaneWidth;
+	}
+	
+	private static void updatePaneTitleWidth(final AnchorPane paneTitle, final double width)
+	{
 		logger.debug("Setting title pane width to {}", width);
 		
 		paneTitle.setPrefWidth(width);				
 		paneTitle.setMaxWidth(width);
-		
-		return titledPaneWidth;
 	}
 	
 	// ************
