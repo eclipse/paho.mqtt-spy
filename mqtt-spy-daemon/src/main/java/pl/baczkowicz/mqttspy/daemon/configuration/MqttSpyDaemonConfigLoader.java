@@ -47,7 +47,7 @@ public class MqttSpyDaemonConfigLoader extends PropertyFileLoader
 	/** Diagnostic logger. */
 	private final static Logger logger = LoggerFactory.getLogger(MqttSpyDaemonConfigLoader.class);
 	
-	private static String CLIENT_ID_REFIX = "mqttspy";
+	private static String CLIENT_ID_PREFIX = "mqttspy";
 	
 	/** XML config parser. */
 	private final XMLParser parser;
@@ -155,7 +155,7 @@ public class MqttSpyDaemonConfigLoader extends PropertyFileLoader
 				&& !ProtocolVersionEnum.MQTT_3_1_1.equals(connection.getProtocol()))
 		{
 			logger.info("Client ID is empty and protocol version is not 3.1.1, so going to generate one...");
-			connection.setClientID(MqttUtils.generateClientIdWithTimestamp(CLIENT_ID_REFIX, ProtocolVersionEnum.MQTT_3_1));
+			connection.setClientID(MqttUtils.generateClientIdWithTimestamp(CLIENT_ID_PREFIX, ProtocolVersionEnum.MQTT_3_1));
 			logger.info("Generated Client ID is " + connection.getClientID());
 		}
 	}
@@ -177,6 +177,6 @@ public class MqttSpyDaemonConfigLoader extends PropertyFileLoader
 	 */
 	public static void setClientIdPrefix(final String prefix)
 	{
-		CLIENT_ID_REFIX = prefix;
+		CLIENT_ID_PREFIX = prefix;
 	}
 }
