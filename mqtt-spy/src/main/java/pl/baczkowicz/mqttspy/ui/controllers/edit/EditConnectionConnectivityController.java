@@ -272,7 +272,8 @@ public class EditConnectionConnectivityController extends AnchorPane implements 
 		
 		if (addTimestamp)
 		{
-			newClientId = MqttUtils.generateClientIdWithTimestamp(newClientId, parent.getEditedConnectionDetails().getProtocol());
+			// Ignore previous client ID if generating a new one
+			newClientId = MqttUtils.generateClientIdWithTimestamp(System.getProperty("user.name").replaceAll("[^A-Za-z0-9]", ""), parent.getEditedConnectionDetails().getProtocol());
 		}
 		
 		if (!clientId.equals(newClientId))
