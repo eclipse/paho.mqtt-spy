@@ -88,7 +88,7 @@ public class MqttConnectionFactory implements IConnectionFactory
 //		{
 			final UserInterfaceMqttConnectionDetails baseConnection = new UserInterfaceMqttConnectionDetails();				
 			baseConnection.getServerURI().add("127.0.0.1");
-			baseConnection.setClientID(MqttUtils.generateClientIdWithTimestamp(System.getProperty("user.name"), ProtocolVersionEnum.MQTT_DEFAULT));
+			baseConnection.setClientID(MqttUtils.generateClientIdWithTimestamp(System.getProperty("user.name").replaceAll("[^A-Za-z0-9]", ""), ProtocolVersionEnum.MQTT_DEFAULT));
 			baseConnection.setName(ConnectionUtils.composeConnectionName(baseConnection.getClientID(), baseConnection.getServerURI()));
 			baseConnection.setAutoConnect(true);
 			
