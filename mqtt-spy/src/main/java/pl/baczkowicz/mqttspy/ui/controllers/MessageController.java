@@ -23,8 +23,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import org.fxmisc.richtext.StyleClassedTextArea;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,15 +39,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-
-import org.fxmisc.richtext.StyleClassedTextArea;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.spy.common.generated.FormatterDetails;
 import pl.baczkowicz.spy.formatting.FormattingManager;
-import pl.baczkowicz.spy.formatting.FormattingUtils;
 import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
 import pl.baczkowicz.spy.ui.configuration.UiProperties;
 import pl.baczkowicz.spy.ui.controls.StyledTextAreaWrapper;
@@ -104,10 +99,6 @@ public class MessageController implements Initializable
 	private BasicMessageStoreWithSummary<FormattedMqttMessage> store;
 	
 	private FormattedMqttMessage message;
-
-	private FormatterDetails selectionFormat = null;
-
-	private Tooltip tooltip;
 	
 	private Tooltip lengthTooltip;
 
@@ -151,15 +142,6 @@ public class MessageController implements Initializable
 		
 		dataFieldInteface.setEditable(false);
 		dataFieldInteface.setWrapText(true);
-		dataFieldInteface.selectedTextProperty().addListener(new ChangeListener<String>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue,
-					String newValue)
-			{
-				updateTooltipText();				
-			}
-		});		
 		
 		dataLabel.setOnMouseClicked(new EventHandler<MouseEvent>()
 		{
@@ -174,9 +156,6 @@ public class MessageController implements Initializable
 				}				
 			}
 		});
-		
-		tooltip = new Tooltip("");
-		tooltip.setWrapText(true);
 		
 		lengthTooltip = new Tooltip();
 		lengthLabel.setTooltip(lengthTooltip);
@@ -342,21 +321,6 @@ public class MessageController implements Initializable
 		lengthLabel.setText("(0)");
 		retainedField.setSelected(false);
 	}
-	
-	public void formatSelection(final FormatterDetails messageFormat)
-	{
-		this.selectionFormat = messageFormat;
-		
-		if (selectionFormat != null)
-		{
-			updateTooltipText();
-			dataFieldInteface.setTooltip(tooltip);
-		}
-		else			
-		{
-			dataFieldInteface.setTooltip(null);
-		}
-	}
 
 	private void showMessageData()
 	{
@@ -414,26 +378,7 @@ public class MessageController implements Initializable
 					}
 				}
 			}
-			
-			updateTooltipText();
 		}						
-	}
-	
-	private void updateTooltipText()
-	{
-		if (selectionFormat != null)
-		{
-			final String tooltipText = FormattingUtils.checkAndFormatText(selectionFormat, dataFieldInteface.getSelectedText());
-			
-			if (tooltipText.length() > 0)
-			{
-				tooltip.setText(tooltipText);
-			}
-			else
-			{
-				tooltip.setText("[select text to convert]");
-			}
-		}
 	}
 	
 	// ===============================
