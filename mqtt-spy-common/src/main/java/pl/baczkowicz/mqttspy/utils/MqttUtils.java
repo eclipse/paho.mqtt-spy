@@ -57,9 +57,6 @@ public class MqttUtils
 	/** Max client length for MQTT 3.1. */
 	public static final int MAX_CLIENT_LENGTH_FOR_3_1 = 23;
 
-	/** Client ID timestamp delimiter. */
-	private static final String CLIENT_ID_TIMESTAMP_DELIMITER = "_";
-
 	/** Client ID timestamp format. */
 	private static final String CLIENT_ID_TIMESTAMP_FORMAT = "HHmmssSSS";
 	
@@ -86,28 +83,21 @@ public class MqttUtils
 	/**
 	 * Generate client ID with timestamp.
 	 * 
-	 * @param clientId The client ID to use as source
+	 * @param prefix The client ID prefix to use
 	 * 
 	 * @return The generated client ID
 	 */
-	public static String generateClientIdWithTimestamp(final String clientId, final ProtocolVersionEnum protocol)
+	public static String generateClientIdWithTimestamp(final String prefix, final ProtocolVersionEnum protocol)
 	{
-		final int addedLength = CLIENT_ID_TIMESTAMP_FORMAT.length() + CLIENT_ID_TIMESTAMP_DELIMITER.length();
-		final int index = clientId.lastIndexOf(CLIENT_ID_TIMESTAMP_DELIMITER);
-		String newClientId = clientId;
-		
-		// for e.g. k-01; index = 1; added length = 3; length == 4
-		if (index >= 0 && (index + addedLength == newClientId.length()))
-		{
-			newClientId = newClientId.substring(0, index); 
-		}		
+		final int addedLength = CLIENT_ID_TIMESTAMP_FORMAT.length();
+		String newClientId = prefix;
 	
 		if (limitClientId(protocol) && newClientId.length() + addedLength > MAX_CLIENT_LENGTH_FOR_3_1)
 		{
 			newClientId = newClientId.substring(0, MAX_CLIENT_LENGTH_FOR_3_1 - addedLength);
 		}
 
-		newClientId = newClientId + CLIENT_ID_TIMESTAMP_DELIMITER + CLIENT_ID_SDF.format(new Date());
+		newClientId = newClientId + CLIENT_ID_SDF.format(new Date());
 
 		return newClientId;
 	}
