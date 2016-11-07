@@ -65,8 +65,6 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 	private int preferredStoreSize;
 
 	private StatisticsManager statisticsManager;
-
-	// private final EventManager<FormattedMqttMessage> eventManager;
 	
 	private IKBus eventBus;
 
