@@ -53,7 +53,7 @@ import pl.baczkowicz.spy.formatting.FormattingManager;
 import pl.baczkowicz.spy.formatting.FormattingUtils;
 import pl.baczkowicz.spy.formatting.ScriptBasedFormatter;
 import pl.baczkowicz.spy.messages.FormattedMessage;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
 import pl.baczkowicz.spy.ui.events.FormattersChangedEvent;
@@ -124,7 +124,7 @@ public class FormattersController implements Initializable
 	@FXML
 	private AnchorPane formattersWindow;
 
-	private BaseScriptManager scriptManager;
+	private BaseScriptManagerInterface scriptManager;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -561,7 +561,7 @@ public class FormattersController implements Initializable
 		this.configurationManager = configurationManager;
 	}
 	
-	public void setScriptManager(final BaseScriptManager scriptManager)
+	public void setScriptManager(final BaseScriptManagerInterface scriptManager)
 	{
 		this.scriptManager = scriptManager;
 	}

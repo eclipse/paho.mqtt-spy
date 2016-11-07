@@ -50,7 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.spy.ui.testcases.InteractiveTestCaseManager;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.testcases.TestCaseManager;
 import pl.baczkowicz.spy.testcases.TestCaseStatus;
 import pl.baczkowicz.spy.ui.panes.PaneVisibilityStatus;
@@ -138,7 +138,7 @@ public class TestCasesExecutionController extends AnchorPane implements Initiali
 	
 	// private IKBus eventBus;
 	
-	private BaseScriptManager scriptManager;
+	private BaseScriptManagerInterface scriptManager;
 
 	private InteractiveTestCaseManager testCaseManager;
 
@@ -479,7 +479,7 @@ public class TestCasesExecutionController extends AnchorPane implements Initiali
 		return titleLabel;
 	}
 
-	public void setScriptManager(final BaseScriptManager scriptManager)
+	public void setScriptManager(final BaseScriptManagerInterface scriptManager)
 	{
 		this.scriptManager = scriptManager;		
 	}
