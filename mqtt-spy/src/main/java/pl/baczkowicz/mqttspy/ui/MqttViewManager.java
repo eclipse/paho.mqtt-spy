@@ -485,16 +485,6 @@ public class MqttViewManager extends BaseViewManager
 	}
 	
 	// ************
-
-	/**
-	 * Sets the configuration manager.
-	 * 
-	 * @param configurationManager the configurationManager to set
-	 */
-//	public void setConfigurationManager(MqttConfigurationManager configurationManager)
-//	{
-//		this.configurationManager = configurationManager;
-//	}
 	
 	public void setConnectionManager(final MqttConnectionViewManager connectionManager)
 	{
