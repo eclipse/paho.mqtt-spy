@@ -29,7 +29,7 @@
 <?import javafx.collections.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="30.0" prefWidth="499.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.MessageNavigationController">
+<AnchorPane prefHeight="30.0" prefWidth="499.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.spy.ui.controllers.MessageNavigationController">
 	<children>      
       <HBox fx:id="messageIndexBox" layoutX="8.0" layoutY="5.0" prefHeight="22.0" prefWidth="249.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="202.0">
          <children>

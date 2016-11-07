@@ -76,7 +76,7 @@
       </SplitPane>
       <AnchorPane prefHeight="30.0" prefWidth="860.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="5.0">
       		<children>
-      			<fx:include fx:id="messageNavigationPane" source="MessageNavigationPane.fxml" />
+      			<fx:include fx:id="messageNavigationPane" source="/ui/fxml/MessageNavigationPane.fxml" />
             <Slider fx:id="messageCountSlider" blockIncrement="1.0" layoutX="513.0" layoutY="3.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="1" prefHeight="16.0" prefWidth="75.0" showTickLabels="true" value="1.0" visible="false" AnchorPane.rightAnchor="272.0" />
     		</children>
       </AnchorPane>

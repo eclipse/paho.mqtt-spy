@@ -33,6 +33,7 @@ import pl.baczkowicz.mqttspy.messages.BaseMqttMessage;
 import pl.baczkowicz.mqttspy.ui.MqttViewManager;
 import pl.baczkowicz.mqttspy.ui.controllers.MqttSpyMainController;
 import pl.baczkowicz.spy.files.FileUtils;
+import pl.baczkowicz.spy.ui.storage.TaskWithProgressUpdater;
 import pl.baczkowicz.spy.utils.ThreadingUtils;
 
 /**

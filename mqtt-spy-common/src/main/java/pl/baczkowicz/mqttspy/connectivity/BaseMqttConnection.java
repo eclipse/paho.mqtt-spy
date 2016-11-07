@@ -39,7 +39,7 @@ import pl.baczkowicz.spy.common.generated.ScriptDetails;
 import pl.baczkowicz.spy.connectivity.ConnectionStatus;
 import pl.baczkowicz.spy.exceptions.ExceptionUtils;
 import pl.baczkowicz.spy.exceptions.SpyException;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.utils.TimeUtils;
 
@@ -80,7 +80,7 @@ public abstract class BaseMqttConnection implements IMqttConnection
 	private final TopicMatcher topicMatcher;
 
 	/** Used for calling subscription scripts. */
-	private BaseScriptManager scriptManager;
+	private BaseScriptManagerInterface scriptManager;
 	
 	/**
 	 * Instantiates the BaseMqttConnection.
@@ -566,7 +566,7 @@ public abstract class BaseMqttConnection implements IMqttConnection
 		this.client = client;
 	}
 	
-	public void setScriptManager(final BaseScriptManager scriptManager)
+	public void setScriptManager(final BaseScriptManagerInterface scriptManager)
 	{
 		this.scriptManager = scriptManager;
 	}

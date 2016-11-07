@@ -57,7 +57,7 @@ public class MqttScriptManager extends BaseScriptManager
 		this.setConnection(connection);
 	}
 	
-	public void populateEngineVariables(final Script script) throws SpyException
+	public static void populateEngineVariables(final Script script, final IMqttConnection connection, final IKBus eventBus, final Executor executor) throws SpyException
 	{
 		final MqttScriptIO scriptIO = new MqttScriptIO(connection, eventBus, script, executor); 
 		//script.setScriptIO(scriptIO);
@@ -84,6 +84,11 @@ public class MqttScriptManager extends BaseScriptManager
 		script.addTask(mqttAuditReplay);		
 		
 		putJavaVariablesIntoEngine(script.getScriptEngine(), scriptVariables);
+	}
+	
+	public void populateEngineVariables(final Script script) throws SpyException
+	{
+		populateEngineVariables(script, connection, eventBus, executor);
 	}
 
 	/**

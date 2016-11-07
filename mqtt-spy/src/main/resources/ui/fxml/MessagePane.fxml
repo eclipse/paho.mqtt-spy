@@ -26,7 +26,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="parentPane" prefHeight="79.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.MessageController">
+<AnchorPane fx:id="parentPane" prefHeight="79.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.baczkowicz.mqttspy.ui.controllers.MqttMessageController">
    <children>
    
 	  <TextField fx:id="topicField" styleClass="small-font" editable="false" layoutX="48.0" layoutY="10.0" prefHeight="22.0" prefWidth="196.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="342.0" AnchorPane.topAnchor="11.0" />
