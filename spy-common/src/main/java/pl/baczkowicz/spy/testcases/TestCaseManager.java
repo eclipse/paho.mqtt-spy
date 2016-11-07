@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
 import pl.baczkowicz.spy.files.FileUtils;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.ScriptRunningState;
 import pl.baczkowicz.spy.utils.ThreadingUtils;
 import pl.baczkowicz.spy.utils.TimeUtils;
@@ -53,7 +53,7 @@ public class TestCaseManager
 
 	private final static Logger logger = LoggerFactory.getLogger(TestCaseManager.class);
 	
-	protected final BaseScriptManager scriptManager;
+	protected final BaseScriptManagerInterface scriptManager;
 	
 	protected Map<String, TestCase> testCases = new HashMap<>();
 			
@@ -61,7 +61,7 @@ public class TestCaseManager
 	
 	private TestCaseOptions options = new TestCaseOptions();
 
-	public TestCaseManager(final BaseScriptManager scriptManager)	
+	public TestCaseManager(final BaseScriptManagerInterface scriptManager)	
 	{
 		this.scriptManager = scriptManager;
 	}

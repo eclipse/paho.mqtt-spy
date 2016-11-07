@@ -34,7 +34,7 @@ import pl.baczkowicz.spy.common.generated.FormatterFunction;
 import pl.baczkowicz.spy.common.generated.ScriptExecutionDetails;
 import pl.baczkowicz.spy.files.FileUtils;
 import pl.baczkowicz.spy.messages.FormattedMessage;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 
 public class FormattingManager
 {
@@ -42,7 +42,7 @@ public class FormattingManager
 	
 	private ScriptBasedFormatter scriptFormatter;
 	
-	public FormattingManager(final BaseScriptManager scriptManager)
+	public FormattingManager(final BaseScriptManagerInterface scriptManager)
 	{
 		this.scriptFormatter = new ScriptBasedFormatter(scriptManager);
 	}
