@@ -51,7 +51,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import pl.baczkowicz.spy.configuration.BaseConfigurationUtils;
 import pl.baczkowicz.spy.eventbus.IKBus;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.ui.configuration.BaseConfigurationManager;
 import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
 import pl.baczkowicz.spy.ui.connections.IConnectionFactory;
@@ -122,7 +122,7 @@ public abstract class BaseViewManager
 
 	protected EditChartSeriesController editChartSeriesController;
 
-	private BaseScriptManager genericScriptManager;
+	private BaseScriptManagerInterface genericScriptManager;
 	
 	public void init()
 	{
@@ -442,7 +442,7 @@ public abstract class BaseViewManager
 		return button;
 	}
 	
-	public static MenuButton createTitleButtons(final TitledPaneController controller, //final TitledPane pane, 
+	public static MenuButton createTitleButtons(final TitledPaneController controller,
 			final AnchorPane paneTitle, final PaneVisibilityManager paneVisibilityManager)	
 	{
 		final TitledPane pane = controller.getTitledPane();
@@ -546,7 +546,7 @@ public abstract class BaseViewManager
 		this.connectionFactory = connectionFactory;
 	}
 	
-	public void setGenericScriptManager(final BaseScriptManager genericBaseScriptManager)
+	public void setGenericScriptManager(final BaseScriptManagerInterface genericBaseScriptManager)
 	{
 		this.genericScriptManager = genericBaseScriptManager;
 	}
