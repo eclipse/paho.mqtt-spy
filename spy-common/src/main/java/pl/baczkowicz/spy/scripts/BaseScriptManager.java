@@ -48,7 +48,7 @@ import pl.baczkowicz.spy.messages.IBaseMessage;
 /**
  * This class manages script creation and execution.
  */
-public abstract class BaseScriptManager
+public abstract class BaseScriptManager implements BaseScriptManagerInterface
 {
 	/** Name of the variable in JS for received messages. */
 	public static final String RECEIVED_MESSAGE_PARAMETER = "receivedMessage";
@@ -119,13 +119,10 @@ public abstract class BaseScriptManager
 		return file.getAbsolutePath().replace(valueToReplace, "").replace(file.getName(), getScriptName(file));
 	}
 	
-	/**
-	 * Creates and records a script with the given details.
-	 * 
-	 * @param scriptDetails The script details
-	 * 
-	 * @return Created script
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addScript(pl.baczkowicz.spy.common.generated.ScriptDetails)
 	 */
+	@Override
 	public Script addScript(final ScriptDetails scriptDetails)
 	{
 		final File scriptFile = new File(scriptDetails.getFile());
@@ -140,19 +137,19 @@ public abstract class BaseScriptManager
 		return script;
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addScript(java.lang.String)
+	 */
+	@Override
 	public Script addScript(final String scriptLocation)
 	{
 		return addScript(new ScriptDetails(false, false, scriptLocation));
 	}
 	
-	/**
-	 * Creates and records a script with the given details.
-	 * 
-	 * @param scriptName The script name
-	 * @param content Script's content
-	 * 
-	 * @return Created script
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addInlineScript(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Script addInlineScript(final String scriptName, final String content)
 	{
 		final Script script = new Script();
@@ -168,11 +165,10 @@ public abstract class BaseScriptManager
 		return script;
 	}
 	
-	/**
-	 * Creates and records scripts with the given details.
-	 * 
-	 * @param scriptDetails The script details
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addScripts(java.util.List)
 	 */
+	@Override
 	public List<Script> addScripts(final List<ScriptDetails> scriptDetails)
 	{
 		final List<Script> addedScripts = new ArrayList<>();
@@ -185,11 +181,10 @@ public abstract class BaseScriptManager
 		return addedScripts;
 	}
 	
-	/**
-	 * Adds scripts from the given directory.
-	 * 
-	 * @param directory The directory to search for scripts
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addScripts(java.lang.String)
 	 */
+	@Override
 	public void addScripts(final String directory)
 	{
 		final List<File> files = new ArrayList<File>(); 
@@ -206,13 +201,10 @@ public abstract class BaseScriptManager
 		populateScriptsFromFileList(files);
 	}
 	
-	/**
-	 * Populates scripts from a list of files. This doesn't override existing files.
-	 * 
-	 * @param files List of script files
-	 * 
-	 * @return The list of created (newly added) script objects
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#populateScriptsFromFileList(java.util.List)
 	 */
+	@Override
 	public List<Script> populateScriptsFromFileList(final List<File> files)
 	{
 		final List<Script> addedScripts = new ArrayList<>();
@@ -235,13 +227,10 @@ public abstract class BaseScriptManager
 		return addedScripts;
 	}
 	
-	/**
-	 * Populates scripts from a list of script details.
-	 * 
-	 * @param scriptDetails List of script details
-	 * 
-	 * @return The list of created script objects
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#populateScripts(java.util.List)
 	 */
+	@Override
 	public List<Script> populateScripts(final List<ScriptDetails> scriptDetails)
 	{
 		final List<Script> addedScripts = new ArrayList<>();
@@ -275,14 +264,10 @@ public abstract class BaseScriptManager
 		return addedScripts;
 	}
 	
-	/**
-	 * Populates the script object with the necessary values and references.
-	 * 
-	 * @param script The script object to be populated
-	 * @param scriptFile The script's file name 
-	 * @param connection The connection for which this script will be running
-	 * @param scriptDetails Script details
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#createFileBasedScript(pl.baczkowicz.spy.scripts.Script, java.io.File, pl.baczkowicz.spy.common.generated.ScriptDetails)
 	 */
+	@Override
 	public void createFileBasedScript(final Script script, final File scriptFile, final ScriptDetails scriptDetails)
 	{
 		final String scriptName = BaseScriptManager.getScriptName(scriptFile);
@@ -292,17 +277,19 @@ public abstract class BaseScriptManager
 		script.setScriptDetails(scriptDetails);
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#setVariable(pl.baczkowicz.spy.scripts.Script, java.lang.String, java.lang.Object)
+	 */
+	@Override
 	public void setVariable(final Script script, final String name, final Object value)
 	{
 		script.getScriptEngine().put(name, value);
 	}
 		
-	/**
-	 * Populates the script object with the necessary values and references.
-	 * 
-	 * @param script The script object to be populated
-	 * @param scriptName The name of the script
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#createScript(pl.baczkowicz.spy.scripts.Script, java.lang.String)
 	 */
+	@Override
 	public void createScript(final Script script, final String scriptName)
 	{
 		try
@@ -329,6 +316,10 @@ public abstract class BaseScriptManager
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#populateEngineVariables(pl.baczkowicz.spy.scripts.Script)
+	 */
+	@Override
 	abstract public void populateEngineVariables(final Script script) throws SpyException;
 				
 	/**
@@ -350,24 +341,19 @@ public abstract class BaseScriptManager
 		engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 	}
 	
-	/**
-	 * Runs the given script in a synchronous or asynchronous way.
-	 * 
-	 * @param script The script to run
-	 * @param asynchronous Whether to run the script asynchronously or not
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#runScript(pl.baczkowicz.spy.scripts.Script, boolean)
 	 */
+	@Override
 	public void runScript(final Script script, final boolean asynchronous)
 	{
 		runScript(script, asynchronous, null);
 	}
 	
-	/**
-	 * Runs the given script in a synchronous or asynchronous way.
-	 * 
-	 * @param script The script to run
-	 * @param asynchronous Whether to run the script asynchronously or not
-	 * @param args Arguments/parameters passed onto the script
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#runScript(pl.baczkowicz.spy.scripts.Script, boolean, java.util.Map)
 	 */
+	@Override
 	public void runScript(final Script script, final boolean asynchronous, final Map<String, Object> args)
 	{
 		// Only start if not running already
@@ -399,6 +385,10 @@ public abstract class BaseScriptManager
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addAndRunScript(java.lang.String, boolean, java.util.Map)
+	 */
+	@Override
 	public Script addAndRunScript(final String scriptLocation, final boolean async, final Map<String, Object> args)
 	{
 		final Script script = addScript(scriptLocation);
@@ -406,12 +396,10 @@ public abstract class BaseScriptManager
 		return script;
 	}	
 	
-	/**
-	 * Runs the given script and passes the given message as a parameter. Defaults to the 'receivedMessage' parameter and synchronous execution.
-	 * 
-	 * @param script The script to run
-	 * @param message The message to be passed onto the script
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#runScriptFileWithReceivedMessage(java.lang.String, pl.baczkowicz.spy.messages.IBaseMessage)
 	 */
+	@Override
 	public void runScriptFileWithReceivedMessage(final String scriptFile, final IBaseMessage receivedMessage)
 	{
 		final Script script = getScriptObjectFromName(scriptFile);
@@ -426,12 +414,10 @@ public abstract class BaseScriptManager
 		}
 	}
 	
-	/**
-	 * Runs the given script and passes the given message as a parameter. Defaults to the 'receivedMessage' parameter and synchronous execution.
-	 * 
-	 * @param script The script to run
-	 * @param message The message to be passed onto the script
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#runScriptWithReceivedMessage(pl.baczkowicz.spy.scripts.Script, pl.baczkowicz.spy.messages.IBaseMessage)
 	 */
+	@Override
 	public boolean runScriptWithReceivedMessage(final Script script, final IBaseMessage receivedMessage)
 	{
 		setVariable(script, BaseScriptManager.RECEIVED_MESSAGE_PARAMETER, receivedMessage);
@@ -446,31 +432,29 @@ public abstract class BaseScriptManager
 		}		
 	}
 	
-	/**
-	 * Runs the given script and passes the given message as a parameter. Defaults to the 'message' parameter and asynchronous execution.
-	 * 
-	 * @param script The script to run
-	 * @param message The message to be passed onto the script
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#runScriptFileWithMessage(pl.baczkowicz.spy.scripts.Script, pl.baczkowicz.spy.messages.IBaseMessage)
 	 */
+	@Override
 	public void runScriptFileWithMessage(final Script script, final IBaseMessage message)
 	{				
 		runScriptFileParameter(script, BaseScriptManager.MESSAGE_PARAMETER, message, true);
 	}
 	
-	/**
-	 * Runs the given script and passes the given object as a parameter.
-	 * 
-	 * @param script The script to run
-	 * @param parameterName The name of the message parameter
-	 * @param message The message to be passed onto the script
-	 * @param asynchronous Whether the call should be asynchronous
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#runScriptFileParameter(pl.baczkowicz.spy.scripts.Script, java.lang.String, java.lang.Object, boolean)
 	 */
+	@Override
 	public void runScriptFileParameter(final Script script, final String parameterName, final Object parameter, final boolean asynchronous)
 	{	
 		setVariable(script, parameterName, parameter);
 		runScript(script, asynchronous);		
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#invokeBefore(pl.baczkowicz.spy.scripts.Script)
+	 */
+	@Override
 	public boolean invokeBefore(final Script script)
 	{
 		try
@@ -491,6 +475,10 @@ public abstract class BaseScriptManager
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#invokeAfter(pl.baczkowicz.spy.scripts.Script)
+	 */
+	@Override
 	public boolean invokeAfter(final Script script)
 	{
 		try
@@ -511,6 +499,10 @@ public abstract class BaseScriptManager
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#invokeFunction(pl.baczkowicz.spy.scripts.Script, java.lang.String, java.lang.Object)
+	 */
+	@Override
 	public Object invokeFunction(final Script script, final String function, final Object... args) throws NoSuchMethodException, ScriptException
 	{
 		final Invocable invocable = (Invocable) script.getScriptEngine();
@@ -533,6 +525,10 @@ public abstract class BaseScriptManager
 		return result;
 	}	
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#stopScript(pl.baczkowicz.spy.scripts.Script)
+	 */
+	@Override
 	public void stopScript(final Script script)
 	{
 		logger.debug("Stopping script " + script.getName());
@@ -548,6 +544,10 @@ public abstract class BaseScriptManager
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#stopScripts()
+	 */
+	@Override
 	public void stopScripts()
 	{
 		// Stop all scripts
@@ -561,23 +561,19 @@ public abstract class BaseScriptManager
 		}		
 	}
 	
-	/**
-	 * Gets script object for the given file.
-	 * 
-	 * @param scriptFile The file for which to get the script object
-	 * 
-	 * @return Script object or null if not found
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#getScriptObjectFromName(java.lang.String)
 	 */
+	@Override
 	public Script getScriptObjectFromName(final String scriptFile)
 	{
 		return scripts.get(scriptFile);
 	}
 
-	/**
-	 * Checks if any of the scripts is running.
-	 * 
-	 * @return True if any of the scripts is running
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#areScriptsRunning()
 	 */
+	@Override
 	public boolean areScriptsRunning()
 	{
 		for (final Script script : scripts.values())
@@ -592,36 +588,46 @@ public abstract class BaseScriptManager
 		return false;
 	}
 	
-	/**
-	 * Gets the name to script object mapping.
-	 *  
-	 * @return Script name to object mapping
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#getScriptsMap()
 	 */
+	@Override
 	public Map<String, Script> getScriptsMap()
 	{
 		return scripts;
 	}
 	
-	/**
-	 * Gets the collection of scripts.
-	 *  
-	 * @return All scripts
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#getScripts()
 	 */
+	@Override
 	public Collection<Script> getScripts()
 	{
 		return scripts.values();
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addScript(pl.baczkowicz.spy.scripts.Script)
+	 */
+	@Override
 	public void addScript(final Script script)
 	{
 		scripts.put(script.getScriptId(), script);
 	}
 	
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#containsScript(pl.baczkowicz.spy.scripts.Script)
+	 */
+	@Override
 	public boolean containsScript(final Script script)
 	{
 		return scripts.containsKey(script.getScriptId());
 	}
 
+	/* (non-Javadoc)
+	 * @see pl.baczkowicz.spy.scripts.BaseScriptManageInterface#addCustomParameters(java.util.Map)
+	 */
+	@Override
 	public void addCustomParameters(final Map<String, Object> parameters)
 	{
 		this.customParameters = parameters;
