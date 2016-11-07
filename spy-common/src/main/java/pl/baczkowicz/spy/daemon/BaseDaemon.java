@@ -32,7 +32,7 @@ import pl.baczkowicz.spy.common.generated.ScriptDetails;
 import pl.baczkowicz.spy.common.generated.TestCasesSettings;
 import pl.baczkowicz.spy.exceptions.SpyException;
 import pl.baczkowicz.spy.exceptions.XMLException;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.testcases.TestCaseManager;
 import pl.baczkowicz.spy.testcases.TestCaseOptions;
@@ -44,7 +44,7 @@ public abstract class BaseDaemon implements IDaemon
 	/** Diagnostic logger. */
 	private final static Logger logger = LoggerFactory.getLogger(BaseDaemon.class);
 	
-	protected BaseScriptManager scriptManager;
+	protected BaseScriptManagerInterface scriptManager;
 	
 	protected TestCaseManager testCaseManager;	
 
