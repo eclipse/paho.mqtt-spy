@@ -54,7 +54,7 @@ import pl.baczkowicz.mqttspy.ui.controllers.MqttConnectionController;
 import pl.baczkowicz.mqttspy.ui.events.queuable.UIEventHandler;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttConnectionAttemptFailureEvent;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttDisconnectionAttemptFailureEvent;
-import pl.baczkowicz.mqttspy.ui.scripts.InteractiveScriptManager;
+import pl.baczkowicz.mqttspy.ui.scripts.InteractiveMqttScriptManager;
 import pl.baczkowicz.mqttspy.ui.utils.ConnectivityUtils;
 import pl.baczkowicz.mqttspy.ui.utils.DialogUtils;
 import pl.baczkowicz.spy.common.generated.UserCredentials;
@@ -284,7 +284,7 @@ public class MqttConnectionViewManager implements IConnectionViewManager
 
 	public MqttAsyncConnection createConnection(final MqttRuntimeConnectionProperties connectionProperties, final EventQueueManager<FormattedMqttMessage> uiEventQueue)
 	{
-		final InteractiveScriptManager scriptManager = new InteractiveScriptManager(eventBus, null);
+		final InteractiveMqttScriptManager scriptManager = new InteractiveMqttScriptManager(eventBus, null);
 		final FormattingManager formattingManager = new FormattingManager(scriptManager);
 		final MqttAsyncConnection connection = new MqttAsyncConnection(reconnectionManager,
 				connectionProperties, ConnectionStatus.DISCONNECTED, 

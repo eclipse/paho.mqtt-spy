@@ -75,12 +75,13 @@ import pl.baczkowicz.mqttspy.ui.MqttSubscriptionViewManager;
 import pl.baczkowicz.mqttspy.ui.MqttViewManager;
 import pl.baczkowicz.mqttspy.ui.events.SubscriptionStatusChangeEvent;
 import pl.baczkowicz.mqttspy.ui.layout.MessageBrowserLayout;
-import pl.baczkowicz.mqttspy.ui.messagelog.MessageLogUtils;
+import pl.baczkowicz.mqttspy.ui.messagelog.MqttMessageAuditUtils;
 import pl.baczkowicz.spy.common.generated.FormatterDetails;
 import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.formatting.FormattingManager;
 import pl.baczkowicz.spy.formatting.FormattingUtils;
 import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
+import pl.baczkowicz.spy.ui.controllers.MessageNavigationController;
 import pl.baczkowicz.spy.ui.events.ClearTabEvent;
 import pl.baczkowicz.spy.ui.events.FormattersChangedEvent;
 import pl.baczkowicz.spy.ui.events.MessageAddedEvent;
@@ -145,7 +146,7 @@ public class SubscriptionController implements Initializable, TabController
 	 * Controller (i.e. <fx:id>Controller).
 	 */
 	@FXML
-	private MessageController messagePaneController;
+	private MqttMessageController messagePaneController;
 	
 	/**
 	 * The name of this field needs to be set to the name of the pane +
@@ -184,7 +185,7 @@ public class SubscriptionController implements Initializable, TabController
 	@FXML
 	private Slider messageCountSlider;
 	
-	private final List<MessageController> messageControllers = new ArrayList<>();
+	private final List<MqttMessageController> messageControllers = new ArrayList<>();
 
 	private ManagedMessageStoreWithFiltering<FormattedMqttMessage> store; 
 	
@@ -232,7 +233,7 @@ public class SubscriptionController implements Initializable, TabController
 	
 	private int messagesDisplayed = 1;
 
-	private Map<MessageController, AnchorPane> messagePanes = new HashMap<>();
+	private Map<MqttMessageController, AnchorPane> messagePanes = new HashMap<>();
 
 	private boolean detailedView;
 
@@ -392,6 +393,7 @@ public class SubscriptionController implements Initializable, TabController
 		
 		initialiseMessagePaneController(messagePaneController);
 		
+		messageNavigationPaneController.setMessageAuditUtils(new MqttMessageAuditUtils());
 		messageNavigationPaneController.setStore(store);
 		messageNavigationPaneController.setEventBus(eventBus);
 		messageNavigationPaneController.init();		
@@ -478,7 +480,7 @@ public class SubscriptionController implements Initializable, TabController
 		resetScrollBar();
 	}
 	
-	private void initialiseMessagePaneController(final MessageController controller)
+	private void initialiseMessagePaneController(final MqttMessageController controller)
 	{
 		controller.setStore(store);
 		controller.setConfingurationManager(configurationManager);
@@ -501,7 +503,7 @@ public class SubscriptionController implements Initializable, TabController
 			final FXMLLoader loader = FxmlUtils.createFxmlLoaderForProjectFile("MessagePane.fxml");
 			final AnchorPane messagePane = FxmlUtils.loadAnchorPane(loader);
 			
-			final MessageController controller = (MessageController) loader.getController();
+			final MqttMessageController controller = (MqttMessageController) loader.getController();
 			initialiseMessagePaneController(controller); 
 			
 			// Add X to displayed message index
@@ -520,7 +522,7 @@ public class SubscriptionController implements Initializable, TabController
 		
 		while (messagesDisplayed < newValue)
 		{
-			final MessageController mc = messageControllers.get(messagesDisplayed);
+			final MqttMessageController mc = messageControllers.get(messagesDisplayed);
 			
 			if (mc != null)
 			{
@@ -739,7 +741,7 @@ public class SubscriptionController implements Initializable, TabController
 		this.detailedView = detailedView;
 		
 		// TODO: add toggle menu to layout settings - or make the perspective change that
-		for (final MessageController controller : messageControllers)
+		for (final MqttMessageController controller : messageControllers)
 		{
 			controller.setViewVisibility(detailedView);
 		}
@@ -760,7 +762,7 @@ public class SubscriptionController implements Initializable, TabController
 	{
 		detailedView = !detailedView;
 		
-		for (final MessageController controller : messageControllers)
+		for (final MqttMessageController controller : messageControllers)
 		{
 			controller.toggleDetailedViewVisibility();
 		}
@@ -770,7 +772,7 @@ public class SubscriptionController implements Initializable, TabController
 	
 	public void onClearTab(final ClearTabEvent event)
 	{	
-		for (final MessageController controller : messageControllers)
+		for (final MqttMessageController controller : messageControllers)
 		{
 			controller.clear();
 		}
@@ -1045,21 +1047,21 @@ public class SubscriptionController implements Initializable, TabController
 	private void copyBrowsedTopics()
 	{
 		
-		UiUtils.copyToClipboard(MessageLogUtils.getAllTopicsAsString(
+		UiUtils.copyToClipboard(MqttMessageAuditUtils.getAllTopicsAsString(
 				store.getFilteredMessageStore().getBrowsedTopics()));
 	}
 	
 	@FXML
 	private void copyFilteredTopics()
 	{
-		UiUtils.copyToClipboard(MessageLogUtils.getAllTopicsAsString(
+		UiUtils.copyToClipboard(MqttMessageAuditUtils.getAllTopicsAsString(
 				getSummaryTablePaneController().getShownTopics()));
 	}
 	
 	@FXML
 	private void copyAllTopics()
 	{
-		UiUtils.copyToClipboard(MessageLogUtils.getAllTopicsAsString(
+		UiUtils.copyToClipboard(MqttMessageAuditUtils.getAllTopicsAsString(
 				store.getAllTopics()));
 	}
 	

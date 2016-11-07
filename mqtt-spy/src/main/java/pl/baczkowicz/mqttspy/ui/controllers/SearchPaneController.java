@@ -52,12 +52,14 @@ import org.slf4j.LoggerFactory;
 import pl.baczkowicz.mqttspy.connectivity.MqttAsyncConnection;
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
 import pl.baczkowicz.mqttspy.scripts.MqttScriptManager;
+import pl.baczkowicz.mqttspy.ui.messagelog.MqttMessageAuditUtils;
 import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.formatting.FormattingManager;
 import pl.baczkowicz.spy.messages.FormattedMessage;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
 import pl.baczkowicz.spy.ui.configuration.UiProperties;
+import pl.baczkowicz.spy.ui.controllers.MessageNavigationController;
 import pl.baczkowicz.spy.ui.events.MessageAddedEvent;
 import pl.baczkowicz.spy.ui.events.MessageFormatChangeEvent;
 import pl.baczkowicz.spy.ui.events.MessageIndexChangeEvent;
@@ -93,7 +95,7 @@ public class SearchPaneController implements Initializable
 	 * Controller (i.e. <fx:id>Controller).
 	 */
 	@FXML
-	private MessageController messagePaneController;
+	private MqttMessageController messagePaneController;
 	
 	/**
 	 * The name of this field needs to be set to the name of the pane +
@@ -222,6 +224,7 @@ public class SearchPaneController implements Initializable
 		eventBus.subscribe(messagePaneController, messagePaneController::onFormatChange, MessageFormatChangeEvent.class, 
 				new SimpleRunLaterExecutor(), foundMessageStore);
 		
+		messageNavigationPaneController.setMessageAuditUtils(new MqttMessageAuditUtils());
 		messageNavigationPaneController.setStore(foundMessageStore);		
 		messageNavigationPaneController.setEventBus(eventBus);
 		messageNavigationPaneController.init();		

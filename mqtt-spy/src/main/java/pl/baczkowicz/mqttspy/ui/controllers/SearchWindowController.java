@@ -46,6 +46,7 @@ import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.formatting.FormattingManager;
 import pl.baczkowicz.spy.messages.FormattedMessage;
 import pl.baczkowicz.spy.ui.configuration.IConfigurationManager;
+import pl.baczkowicz.spy.ui.controllers.MessageNavigationController;
 import pl.baczkowicz.spy.ui.events.MessageAddedEvent;
 import pl.baczkowicz.spy.ui.events.MessageListChangedEvent;
 import pl.baczkowicz.spy.ui.events.MessageRemovedEvent;

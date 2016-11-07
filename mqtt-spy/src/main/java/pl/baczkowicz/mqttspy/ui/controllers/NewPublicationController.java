@@ -64,7 +64,7 @@ import pl.baczkowicz.mqttspy.connectivity.MqttAsyncConnection;
 import pl.baczkowicz.mqttspy.messages.BaseMqttMessage;
 import pl.baczkowicz.mqttspy.scripts.MqttScriptManager;
 import pl.baczkowicz.mqttspy.ui.MqttViewManager;
-import pl.baczkowicz.mqttspy.ui.scripts.InteractiveScriptManager;
+import pl.baczkowicz.mqttspy.ui.scripts.InteractiveMqttScriptManager;
 import pl.baczkowicz.mqttspy.utils.MqttUtils;
 import pl.baczkowicz.spy.common.generated.ConversionMethod;
 import pl.baczkowicz.spy.eventbus.IKBus;
@@ -150,7 +150,7 @@ public class NewPublicationController implements Initializable, TitledPaneContro
 
 	private boolean detailedView;
 	
-	private InteractiveScriptManager scriptManager;
+	private InteractiveMqttScriptManager scriptManager;
 	
 	private Label titleLabel;
 
@@ -289,7 +289,7 @@ public class NewPublicationController implements Initializable, TitledPaneContro
 					payload = values.getPayload();
 				}
 				
-				MessageController.populatePayloadLength(lengthLabel, null, payload.length());
+				MqttMessageController.populatePayloadLength(lengthLabel, null, payload.length());
 				
 				lengthLabel.getStyleClass().removeAll("newLinesPresent", "noNewLines");
 				if (payload.contains(ConversionUtils.LINE_SEPARATOR_LINUX) 
@@ -727,7 +727,7 @@ public class NewPublicationController implements Initializable, TitledPaneContro
 				final String scriptName = response.get();
 				
 				final String configuredDirectory = connection.getProperties().getConfiguredProperties().getPublicationScripts();
-				final String directory = InteractiveScriptManager.getScriptDirectoryForConnection(configuredDirectory);
+				final String directory = InteractiveMqttScriptManager.getScriptDirectoryForConnection(configuredDirectory);
 				final File scriptFile = new File(directory + scriptName + MqttScriptManager.SCRIPT_EXTENSION);
 				
 				final Script script = scriptManager.getScriptObjectFromName(
@@ -853,7 +853,7 @@ public class NewPublicationController implements Initializable, TitledPaneContro
 		return retainedBox;
 	}
 	
-	public void setScriptManager(final InteractiveScriptManager scriptManager)
+	public void setScriptManager(final InteractiveMqttScriptManager scriptManager)
 	{
 		this.scriptManager = scriptManager;
 	}

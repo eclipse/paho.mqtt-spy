@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.mqttspy.logger.MqttMessageLogger;
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.mqttspy.ui.scripts.InteractiveScriptManager;
+import pl.baczkowicz.mqttspy.ui.scripts.InteractiveMqttScriptManager;
 import pl.baczkowicz.spy.common.generated.ScriptDetails;
 import pl.baczkowicz.spy.connectivity.ConnectionStatus;
 import pl.baczkowicz.spy.connectivity.ReconnectionManager;
@@ -70,13 +70,13 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 	
 	private IKBus eventBus;
 
-	private final InteractiveScriptManager scriptManager;
+	private final InteractiveMqttScriptManager scriptManager;
 
 	private MqttMessageLogger messageLogger;
 
 	public MqttAsyncConnection(final ReconnectionManager reconnectionManager, final MqttRuntimeConnectionProperties properties, 
 			final ConnectionStatus status, final IKBus eventBus,
-			final InteractiveScriptManager scriptManager, final FormattingManager formattingManager,
+			final InteractiveMqttScriptManager scriptManager, final FormattingManager formattingManager,
 			final EventQueueManager<FormattedMqttMessage> uiEventQueue, final int summaryMaxPayloadLength)
 	{ 
 		super(reconnectionManager, properties);
@@ -439,7 +439,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 		this.statisticsManager = statisticsManager;
 	}
 
-	public InteractiveScriptManager getScriptManager()
+	public InteractiveMqttScriptManager getScriptManager()
 	{
 		return this.scriptManager;
 	}

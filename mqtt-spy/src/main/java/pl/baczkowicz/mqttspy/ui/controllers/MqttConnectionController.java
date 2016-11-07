@@ -60,7 +60,7 @@ import pl.baczkowicz.mqttspy.connectivity.MqttSubscription;
 import pl.baczkowicz.mqttspy.ui.MqttConnectionViewManager;
 import pl.baczkowicz.mqttspy.ui.MqttViewManager;
 import pl.baczkowicz.mqttspy.ui.events.ShowNewMqttSubscriptionWindowEvent;
-import pl.baczkowicz.mqttspy.ui.scripts.InteractiveScriptManager;
+import pl.baczkowicz.mqttspy.ui.scripts.InteractiveMqttScriptManager;
 import pl.baczkowicz.mqttspy.ui.utils.DialogUtils;
 import pl.baczkowicz.mqttspy.ui.utils.MqttStylingUtils;
 import pl.baczkowicz.spy.connectivity.ConnectionStatus;
@@ -125,7 +125,7 @@ public class MqttConnectionController implements Initializable, TabController, P
 	 * Controller (i.e. <fx:id>Controller).
 	 */
 	@FXML
-	private PublicationScriptsController publicationScriptsPaneController;
+	private MqttPublicationScriptsController publicationScriptsPaneController;
 	
 	/**
 	 * The name of this field needs to be set to the name of the pane +
@@ -315,7 +315,7 @@ public class MqttConnectionController implements Initializable, TabController, P
 			
 			publicationScriptsPaneController.setConnection(connection);
 			publicationScriptsPaneController.setEventBus(eventBus);
-			publicationScriptsPaneController.setConnectionController(this);
+			publicationScriptsPaneController.setPaneVisibilityManager(this);
 			publicationScriptsPaneController.setTitledPane(scriptedPublicationsTitledPane);
 			publicationScriptsPaneController.init();	
 			
@@ -355,9 +355,7 @@ public class MqttConnectionController implements Initializable, TabController, P
 			testCasesTitledPane.setExpanded(false);
 			
 			testCasesPaneController = loader.getController();
-			// testCasesPaneController.setConnection(connection);
-			testCasesPaneController.setScriptManager(new InteractiveScriptManager(eventBus, connection));
-			// testCasesPaneController.setConnectionController(this);
+			testCasesPaneController.setScriptManager(new InteractiveMqttScriptManager(eventBus, connection));
 			
 			testCasesPaneController.setTitledPane(testCasesTitledPane);
 			testCasesPaneController.init();
@@ -821,7 +819,7 @@ public class MqttConnectionController implements Initializable, TabController, P
 	 * 
 	 * @return the publicationScriptsPaneController
 	 */
-	public PublicationScriptsController getPublicationScriptsPaneController()
+	public MqttPublicationScriptsController getPublicationScriptsPaneController()
 	{
 		return publicationScriptsPaneController;
 	}
