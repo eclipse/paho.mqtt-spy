@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import pl.baczkowicz.spy.common.generated.FormatterDetails;
 import pl.baczkowicz.spy.messages.FormattedMessage;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.BaseScriptManager;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.utils.ConversionUtils;
@@ -43,13 +44,13 @@ public class ScriptBasedFormatter
 
 	final static Logger logger = LoggerFactory.getLogger(ScriptBasedFormatter.class);	
 	
-	private BaseScriptManager scriptManager;
+	private BaseScriptManagerInterface scriptManager;
 	
 	private Map<FormatterDetails, Script> formattingScripts = new HashMap<>();
 	
 	private Map<FormatterDetails, Boolean> prettyFormattingAvailable = new HashMap<>();
 		
-	public ScriptBasedFormatter(final BaseScriptManager scriptManager)
+	public ScriptBasedFormatter(final BaseScriptManagerInterface scriptManager)
 	{
 		this.scriptManager = scriptManager;
 	}
