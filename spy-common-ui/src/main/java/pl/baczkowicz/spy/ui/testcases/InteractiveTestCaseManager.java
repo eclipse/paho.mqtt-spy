@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.ScriptRunningState;
 import pl.baczkowicz.spy.testcases.TestCase;
 import pl.baczkowicz.spy.testcases.TestCaseManager;
@@ -44,7 +44,7 @@ public class InteractiveTestCaseManager extends TestCaseManager
 
 	private TestCasesExecutionController testCasesExecutionController;
 		
-	public InteractiveTestCaseManager(final BaseScriptManager scriptManager, final TestCasesExecutionController testCasesExecutionController, final TestCaseExecutionController testCaseExecutionController)	
+	public InteractiveTestCaseManager(final BaseScriptManagerInterface scriptManager, final TestCasesExecutionController testCasesExecutionController, final TestCaseExecutionController testCaseExecutionController)	
 	{
 		super(scriptManager);
 		this.testCaseExecutionController = testCaseExecutionController;

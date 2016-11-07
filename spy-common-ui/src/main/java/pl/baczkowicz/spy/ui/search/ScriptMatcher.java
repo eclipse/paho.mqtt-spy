@@ -20,17 +20,18 @@
 package pl.baczkowicz.spy.ui.search;
 
 import pl.baczkowicz.spy.messages.FormattedMessage;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.BaseScriptManager;
 import pl.baczkowicz.spy.scripts.Script;
 import pl.baczkowicz.spy.ui.utils.DialogFactory;
 
 public class ScriptMatcher implements SearchMatcher
 {
-	private BaseScriptManager scriptManager;
+	private BaseScriptManagerInterface scriptManager;
 	
 	private Script script;
 
-	public ScriptMatcher(final BaseScriptManager scriptManager, final Script script)
+	public ScriptMatcher(final BaseScriptManagerInterface scriptManager, final Script script)
 	{
 		this.scriptManager = scriptManager;
 		this.script = script;

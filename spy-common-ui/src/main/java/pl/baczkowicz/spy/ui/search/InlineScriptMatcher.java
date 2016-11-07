@@ -19,17 +19,17 @@
  */
 package pl.baczkowicz.spy.ui.search;
 
-import pl.baczkowicz.spy.scripts.BaseScriptManager;
+import pl.baczkowicz.spy.scripts.BaseScriptManagerInterface;
 import pl.baczkowicz.spy.scripts.Script;
 
 public class InlineScriptMatcher extends ScriptMatcher
 {
-	public InlineScriptMatcher(final BaseScriptManager scriptManager, final String inlineScript)
+	public InlineScriptMatcher(final BaseScriptManagerInterface scriptManager, final String inlineScript)
 	{
 		super(scriptManager, addAndReturnScript(scriptManager, inlineScript));
 	}
 	
-	public static Script addAndReturnScript(final BaseScriptManager scriptManager, final String inlineScript)
+	public static Script addAndReturnScript(final BaseScriptManagerInterface scriptManager, final String inlineScript)
 	{
 		final Script script = scriptManager.addInlineScript("inline", 
 				"function search() "
