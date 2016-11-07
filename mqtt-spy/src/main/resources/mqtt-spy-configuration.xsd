@@ -96,35 +96,6 @@
 	        </xs:extension>		
         </xs:complexContent>
 	</xs:complexType>
-	<!-- 
-	<xs:complexType name="UserInterfaceMqttConnectionDetailsV010">
-		<xs:complexContent>
-			<xs:extension base="mqttspycommon:ConnectionDetails">
-				<xs:sequence>
-					<xs:element name="ServerURI" 			type="xs:string" />
-					<xs:element name="ClientID" 			type="xs:string" />
-					
-					<xs:element name="UserAuthentication" 	type="config:UserAuthentication" 	minOccurs="0" maxOccurs="1" />
-					<xs:element name="LastWillAndTestament" type="config:BaseMqttMessage" 		minOccurs="0" maxOccurs="1" />
-					
-					<xs:element name="AutoOpen" 			type="xs:boolean" 			minOccurs="0" maxOccurs="1" default="true" />
-					<xs:element name="AutoConnect" 			type="xs:boolean" 			minOccurs="0" maxOccurs="1" default="false" />
-					<xs:element name="CleanSession" 		type="xs:boolean" 			minOccurs="0" maxOccurs="1" />
-					<xs:element name="ConnectionTimeout" 	type="xs:int" 				minOccurs="0" maxOccurs="1" />
-					<xs:element name="KeepAliveInterval" 	type="xs:int" 				minOccurs="0" maxOccurs="1" />
-					
-					<xs:element name="Formatter" 			type="xs:IDREF" 			minOccurs="0" maxOccurs="1" />
-					<xs:element name="MinMessagesStoredPerTopic" 	type="xs:int" 		minOccurs="0" maxOccurs="1" />
-					<xs:element name="MaxMessagesStored" 	type="xs:int" 				minOccurs="0" maxOccurs="1" />
-					<xs:element name="PublicationScripts" 	type="xs:string" 			minOccurs="0" maxOccurs="1" />
-					
-					<xs:element name="Publication" 			type="mqttspycommon:PublicationDetails" 	minOccurs="0" maxOccurs="unbounded" />	
-					<xs:element name="Subscription" 		type="config:TabbedSubscriptionDetails" 	minOccurs="0" maxOccurs="unbounded" />	
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	 -->
 	 
 	<xs:complexType name="UserAuthenticationOptions">
 		<xs:sequence>
