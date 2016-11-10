@@ -1,1 +1,1 @@
-PUBLIC "http://baczkowicz.pl/mqtt-spy/daemon/configuration" "maven:pl.baczkowicz.mqttspy:mqtt-spy-daemon!/mqtt-spy-daemon-configuration.xsd"
+PUBLIC "http://baczkowicz.pl/mqtt-spy/daemon/configuration" "maven:org.eclipse.paho.mqttspy:mqtt-spy-daemon!/mqtt-spy-daemon-configuration.xsd"
