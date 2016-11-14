@@ -333,12 +333,7 @@ public class MqttConnectionController implements Initializable, TabController, P
 		}
 		
 		updateVisiblePanes();
-		//updateMenus();
 		updateMinHeights();
-		// connectionPane.setMaxWidth(500);
-		// subscriptionsTitledPane.setMaxWidth(500);
-		// subscriptionTabs.setMaxWidth(500);
-		// TODO: how not to resize the tab pane on too many tabs? All max sizes seems to be ignored...
 	}
 	
 	private void initialiseTestCasesPane()
