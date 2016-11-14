@@ -645,11 +645,6 @@ public class EditMqttConnectionController extends AnchorPane implements Initiali
 	// ===============================
 	// === Setters and getters =======
 	// ===============================
-	
-//	public void setMainController(MainController mainController)
-//	{
-//		this.mainController = mainController;
-//	}
 
 	public void setConfigurationManager(final IConfigurationManager configurationManager)
 	{
