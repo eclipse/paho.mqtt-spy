@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.paho.mqttspy</groupId>
 	<artifactId>spy-common-ui</artifactId>
-	<version>0.6.0</version>
+	<version>1.0.0</version>
 
 	<name>spy-common-ui</name>
 	<url>https://github.com/eclipse/paho.mqtt-spy</url>

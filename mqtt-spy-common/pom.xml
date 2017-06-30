@@ -3,7 +3,7 @@
 	
 	<groupId>org.eclipse.paho.mqttspy</groupId>
 	<artifactId>mqtt-spy-common</artifactId>
-	<version>0.6.0</version>
+	<version>1.0.0</version>
 	
 	<name>mqtt-spy-common</name>
 	<url>https://github.com/eclipse/paho.mqtt-spy</url>
@@ -51,13 +51,13 @@
 		<dependency>
 			<groupId>org.eclipse.paho.mqttspy</groupId>
 			<artifactId>spy-common</artifactId>
-			<version>0.6.0</version>
+			<version>1.0.0</version>
 		</dependency>		
 		
 		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>1.1.0</version>
 		</dependency> 
 		
 		<dependency>

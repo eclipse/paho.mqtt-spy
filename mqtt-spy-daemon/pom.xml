@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.paho.mqttspy</groupId>
 	<artifactId>mqtt-spy-daemon</artifactId>
-	<version>0.6.0-beta</version>
+	<version>1.0.0</version>
 
   	<name>mqtt-spy-daemon</name>
 	<url>https://github.com/eclipse/paho.mqtt-spy</url>
@@ -28,7 +28,7 @@
   		<dependency>
 			<groupId>org.eclipse.paho.mqttspy</groupId>
 			<artifactId>spy-common</artifactId>
-			<version>0.6.0</version>
+			<version>1.0.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>maven-jaxb2-plugin</artifactId>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>org.eclipse.paho.mqttspy</groupId>
 			<artifactId>mqtt-spy-common</artifactId>
-			<version>0.6.0</version>			 
+			<version>1.0.0</version>			 
 			<exclusions>
 				<exclusion>
 					<artifactId>maven-jaxb2-plugin</artifactId>
