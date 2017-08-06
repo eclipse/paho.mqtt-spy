@@ -32,22 +32,24 @@ import pl.baczkowicz.spy.ui.storage.MessageAuditUtils;
 
 public class MqttMessageAuditUtils implements MessageAuditUtils
 {
-	public String getCurrentMessageAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store, final int messageIndex)
+	public String getCurrentMessageAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store, final int messageIndex, final boolean encode)
 	{
 		final FormattedMessage message = store.getMessages().get(messageIndex);
+		final MessageLogEnum format = encode ? MessageLogEnum.XML_WITH_ENCODED_PAYLOAD : MessageLogEnum.XML_WITH_PLAIN_PAYLOAD;
 		
 		if (message instanceof FormattedMqttMessage)
 		{
 			return SimpleMqttMessageLogComposer.createReceivedMessageLog((FormattedMqttMessage) message, 
-				new MessageLog(MessageLogEnum.XML_WITH_PLAIN_PAYLOAD, "", true, true, false, false, false));
+				new MessageLog(format, "", true, true, false, false, false));
 		}
 		
 		return null;
 	}
 	
-	public String getAllMessagesAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store)
+	public String getAllMessagesAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store, final boolean encode)
 	{
 		final StringBuffer messagesAsString = new StringBuffer();
+		final MessageLogEnum format = encode ? MessageLogEnum.XML_WITH_ENCODED_PAYLOAD : MessageLogEnum.XML_WITH_PLAIN_PAYLOAD;
 		
 		final List<? extends FormattedMessage> messages = store.getMessages(); 
 		for (int i = messages.size() - 1; i >= 0; i--)
@@ -57,7 +59,7 @@ public class MqttMessageAuditUtils implements MessageAuditUtils
 				final FormattedMqttMessage message = (FormattedMqttMessage) messages.get(i);
 				
 				messagesAsString.append(SimpleMqttMessageLogComposer.createReceivedMessageLog(message, 
-						new MessageLog(MessageLogEnum.XML_WITH_ENCODED_PAYLOAD, "", true, true, false, false, false)));
+						new MessageLog(format, "", true, true, false, false, false)));
 			}
 			messagesAsString.append(System.lineSeparator());
 		}

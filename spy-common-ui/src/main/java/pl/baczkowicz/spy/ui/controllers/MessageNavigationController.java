@@ -486,13 +486,13 @@ public class MessageNavigationController implements Initializable
 	{
 		if (getSelectedMessageIndex() > 0)
 		{
-			UiUtils.copyToClipboard(messageAuditUtils.getCurrentMessageAsMessageLog(store, getSelectedMessageIndex() - 1));
+			UiUtils.copyToClipboard(messageAuditUtils.getCurrentMessageAsMessageLog(store, getSelectedMessageIndex() - 1, false));
 		}
 	}
 	
 	public void copyMessagesToClipboard()	
 	{
-		UiUtils.copyToClipboard(messageAuditUtils.getAllMessagesAsMessageLog(store));
+		UiUtils.copyToClipboard(messageAuditUtils.getAllMessagesAsMessageLog(store, false));
 	}
 	
 
@@ -518,7 +518,7 @@ public class MessageNavigationController implements Initializable
 	
 			if (selectedFile != null)
 			{
-				FileUtils.writeToFile(selectedFile, messageAuditUtils.getCurrentMessageAsMessageLog(store, getSelectedMessageIndex() - 1));
+				FileUtils.writeToFile(selectedFile, messageAuditUtils.getCurrentMessageAsMessageLog(store, getSelectedMessageIndex() - 1, true));
 			}
 		}
 	}
@@ -552,7 +552,7 @@ public class MessageNavigationController implements Initializable
 
 		if (selectedFile != null)
 		{
-			FileUtils.writeToFile(selectedFile, messageAuditUtils.getAllMessagesAsMessageLog(store));
+			FileUtils.writeToFile(selectedFile, messageAuditUtils.getAllMessagesAsMessageLog(store, true));
 		}
 	}
 

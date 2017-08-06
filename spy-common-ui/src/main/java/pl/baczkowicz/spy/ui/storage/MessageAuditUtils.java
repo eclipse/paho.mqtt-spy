@@ -24,7 +24,7 @@ import pl.baczkowicz.spy.messages.FormattedMessage;
 
 public interface MessageAuditUtils
 {
-	String getCurrentMessageAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store, final int messageIndex);
+	String getCurrentMessageAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store, final int messageIndex, final boolean encode);
 	
-	String getAllMessagesAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store);
+	String getAllMessagesAsMessageLog(final BasicMessageStoreWithSummary<? extends FormattedMessage> store, final boolean encode);
 }
