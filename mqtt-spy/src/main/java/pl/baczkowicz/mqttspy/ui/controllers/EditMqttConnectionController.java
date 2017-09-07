@@ -213,7 +213,7 @@ public class EditMqttConnectionController extends AnchorPane implements Initiali
 		}
 		else if (item.equals(SpyPerspective.DEFAULT))
 		{
-			return ("Default - simpified properties");
+			return ("Default - simplified properties");
 		}
 		else if (item.equals(SpyPerspective.DETAILED))
 		{
