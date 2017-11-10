@@ -753,6 +753,8 @@ public class LineChartPaneController<T extends FormattedMessage> implements Init
 		if (itemToDelete != null)
 		{
 			seriesTable.getItems().remove(itemToDelete);
+			allSeries.remove(itemToDelete);
+			unpopulateTopicToSeries(itemToDelete);
 		}
 		else
 		{
@@ -1245,6 +1247,14 @@ public class LineChartPaneController<T extends FormattedMessage> implements Init
 		}
 		
 		topicToSeries.get(series.getTopic()).add(series);
+	}
+	
+	private void unpopulateTopicToSeries(final ChartSeriesProperties series)
+	{
+		if (topicToSeries.get(series.getTopic()) != null)
+		{
+			topicToSeries.remove(series.getTopic());
+		}		
 	}
 	
 //	public void setSubscription(MqttSubscription subscription)
