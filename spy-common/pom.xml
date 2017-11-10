@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.paho.mqttspy</groupId>
 	<artifactId>spy-common</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 
 	<name>spy-common</name>
 	<url>https://github.com/eclipse/paho.mqtt-spy</url>
@@ -68,7 +68,7 @@
 		<dependency>
 		    <groupId>com.jayway.jsonpath</groupId>
 		    <artifactId>json-path</artifactId>
-		    <version>2.2.0</version>
+		    <version>2.4.0</version>
 		</dependency>
 		
 		<!--=== SCHEMAS/JAXB === -->

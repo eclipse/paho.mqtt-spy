@@ -797,10 +797,12 @@ public class LineChartPaneController<T extends FormattedMessage> implements Init
 			return new XYChart.Data<Number, Number>(message.getDate().getTime(), value);	
 		}
 		else if (ChartSeriesTypeEnum.PAYLOAD_JSON.equals(seriesProperties.typeProperty().get()))			
-		{			
-			final String jsonValue = String.valueOf(JsonPath.read(message.getFormattedPayload(), seriesProperties.valueExpressionProperty().get())); 			
-			final Double value = Double.valueOf(jsonValue);							
-			return new XYChart.Data<Number, Number>(message.getDate().getTime(), value);	
+		{	
+			final String expression = seriesProperties.valueExpressionProperty().get();
+			
+			final Double jsonValue = JsonPath.parse(message.getFormattedPayload()).read(expression, Double.class);			
+			
+			return new XYChart.Data<Number, Number>(message.getDate().getTime(), jsonValue);	
 		}
 		else if (ChartSeriesTypeEnum.PAYLOAD_XML.equals(seriesProperties.typeProperty().get()))
 		{
