@@ -134,19 +134,11 @@ public class TestCasesExecutionController extends AnchorPane implements Initiali
 		
 	private String scriptsLocation;
 	
-	// private EventManager<FormattedMqttMessage> eventManager;
-	
-	// private IKBus eventBus;
-	
 	private BaseScriptManagerInterface scriptManager;
 
 	private InteractiveTestCaseManager testCaseManager;
 
-	// private MqttAsyncConnection connection;
-
 	private MenuButton settingsButton;
-
-	// private ConnectionController connectionController;
 
 	private Label titleLabel;
 	
@@ -339,18 +331,15 @@ public class TestCasesExecutionController extends AnchorPane implements Initiali
 
 	public void init()
 	{
-		titleLabel = new Label(pane.getText());
+		// Don't populate the title if not embedded
+		if (pane != null)
+		{
+			titleLabel = new Label(pane.getText());
+		}
 		
-		// scriptManager = new InteractiveScriptManager(eventBus, connection);
 		testCaseManager = new InteractiveTestCaseManager(scriptManager, this, testCaseExecutionPaneController);
 		
 		testCaseExecutionPaneController.setTestCaseManager(testCaseManager);
-		
-//		if (connectionController != null)
-//		{
-//			// paneTitle = new AnchorPane();
-//			settingsButton = ViewManager.createTitleButtons(this, new AnchorPane(), connectionController);
-//		}
 	}	
 	
 	public void refreshInfo()
@@ -433,11 +422,6 @@ public class TestCasesExecutionController extends AnchorPane implements Initiali
 	// === Setters and getters =======
 	// ===============================
 	
-//	public void setEventBus(final IKBus eventBus)
-//	{
-//		this.eventBus = eventBus;
-//	}
-	
 	@Override
 	public TitledPane getTitledPane()
 	{
@@ -449,16 +433,6 @@ public class TestCasesExecutionController extends AnchorPane implements Initiali
 	{
 		this.pane = pane;
 	}
-
-//	public void setConnection(MqttAsyncConnection connection)
-//	{
-//		this.connection = connection;		
-//	}
-	
-//	public void setConnectionController(final ConnectionController connectionController)
-//	{
-//		this.connectionController = connectionController;
-//	}
 	
 	@Override
 	public void updatePane(PaneVisibilityStatus status)

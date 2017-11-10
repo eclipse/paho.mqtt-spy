@@ -188,7 +188,10 @@ public abstract class BaseViewManager
 		testCasesStage.setTitle("Test cases");		
 		testCasesStage.initOwner(parentWindow);
 		testCasesStage.setScene(scene);
-		((TestCasesExecutionController) loader.getController()).init();
+		
+		final TestCasesExecutionController testCasesExecutionController = (TestCasesExecutionController) loader.getController();
+		testCasesExecutionController.setScriptManager(genericScriptManager);
+		testCasesExecutionController.init();
 	}
 
 	private void initialiseFormattersWindow(final Window parentWindow)
