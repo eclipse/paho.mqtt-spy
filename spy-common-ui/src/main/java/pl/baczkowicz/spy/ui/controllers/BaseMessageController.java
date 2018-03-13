@@ -98,8 +98,12 @@ public abstract class BaseMessageController<T extends FormattedMessage>
 	
 	public void init()
 	{
+		// Styling won't work in Java 9 and version 0.8.2 of RichTextFX, so having to force it to false
+		styled = false;
+		
 		if (styled)
 		{		
+			// NOT USET due to RichTextFX not being compatible with Java 9
 			styledDataField = new StyleClassedTextArea();
 												
 			AnchorPane.setBottomAnchor(styledDataField, AnchorPane.getBottomAnchor(dataField) - 1);

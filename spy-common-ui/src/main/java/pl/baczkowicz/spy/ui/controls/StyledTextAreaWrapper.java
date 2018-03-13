@@ -55,7 +55,8 @@ public class StyledTextAreaWrapper implements TextAreaInterface
 	@Override
 	public void setTooltip(Tooltip tooltip)
 	{
-		dataField.setTooltip(tooltip);		
+		// NOT AVAILABLE in 0.8.2 of RichTextFX
+		// dataField.setTooltip(tooltip);		
 	}
 
 	@Override
@@ -73,7 +74,8 @@ public class StyledTextAreaWrapper implements TextAreaInterface
 	@Override
 	public void positionCaret(int position)
 	{
-		dataField.positionCaret(position);		
+		// NOT AVAILABLE in 0.8.2 of RichTextFX
+		// dataField.positionCaret(position);		
 	}
 
 	@Override

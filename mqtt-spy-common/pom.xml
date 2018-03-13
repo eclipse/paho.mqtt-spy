@@ -3,7 +3,7 @@
 	
 	<groupId>org.eclipse.paho.mqttspy</groupId>
 	<artifactId>mqtt-spy-common</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	
 	<name>mqtt-spy-common</name>
 	<url>https://github.com/eclipse/paho.mqtt-spy</url>
@@ -11,9 +11,13 @@
   	<properties>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  		
    		<timestamp>${maven.build.timestamp}</timestamp>
+   		
    		<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
    		<maven.compiler.source>1.8</maven.compiler.source>
     	<maven.compiler.target>1.8</maven.compiler.target>   		
+    	
+    	<jaxb2.plugin.version>0.12.1</jaxb2.plugin.version>
+		<jaxb2.basics.version>0.11.1</jaxb2.basics.version>
 	</properties>
 
   	<repositories>
@@ -51,7 +55,7 @@
 		<dependency>
 			<groupId>org.eclipse.paho.mqttspy</groupId>
 			<artifactId>spy-common</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>		
 		
 		<dependency>
@@ -69,19 +73,19 @@
 		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core.cloud</artifactId>
-			<version>1.0.6</version>	
+			<version>1.0.9</version>	
 		</dependency> 
 		
 		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core</artifactId>
-			<version>1.0.6</version>	
+			<version>1.0.9</version>	
 		</dependency> 
 		
 		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.api</artifactId>
-			<version>1.0.6</version>	
+			<version>1.0.9</version>	
 		</dependency> 
 				
 		<dependency>
@@ -162,7 +166,7 @@
 	    <dependency>
 	      <groupId>org.jvnet.jaxb2.maven2</groupId>
 	      <artifactId>maven-jaxb2-plugin</artifactId>
-	      <version>0.9.0</version>
+	      <version>${jaxb2.plugin.version}</version>
 	      <exclusions>
 	        <exclusion>
 	          <groupId>javax.xml.bind</groupId>
@@ -180,15 +184,15 @@
 		<dependency>
 			<groupId>org.jvnet.jaxb2_commons</groupId>
 			<artifactId>jaxb2-basics-runtime</artifactId>
-			<version>0.9.4</version>
+			<version>${jaxb2.basics.version}</version>
 		</dependency>	
 		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
-		</dependency>					
-
+		</dependency>		
+		
 		<!--=== TEST === -->
 	
 		<dependency>
@@ -229,12 +233,12 @@
 	        <plugin>
 	            <groupId>org.jvnet.jaxb2_commons</groupId>
 	            <artifactId>jaxb2-basics</artifactId>
-	            <version>0.9.4</version>
+	            <version>${jaxb2.basics.version}</version>
 	        </plugin>       
 			<plugin>
 			    <groupId>org.jvnet.jaxb2.maven2</groupId>
 			    <artifactId>maven-jaxb2-plugin</artifactId>
-			    <version>0.12.0</version>
+			    <version>${jaxb2.plugin.version}</version>
 			    <executions>						     
 			        
 			        <execution>
@@ -284,7 +288,7 @@
 								<plugin>
 									<groupId>org.jvnet.jaxb2_commons</groupId>
 									<artifactId>jaxb2-basics</artifactId>
-									<version>0.9.4</version>
+									<version>${jaxb2.basics.version}</version>
 								</plugin>
 							</plugins>
 			            </configuration>			            			          

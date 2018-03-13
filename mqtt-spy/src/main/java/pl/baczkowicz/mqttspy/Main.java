@@ -118,6 +118,8 @@ public class Main extends Application
 
 	public static void main(String[] args)
 	{
+		System.setProperty("javax.xml.bind.JAXBContextFactory", "org.eclipse.persistence.jaxb.JAXBContextFactory");
+		
 		launch(args);
 	}
 }

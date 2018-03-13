@@ -20,6 +20,9 @@
 		<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		
+		<jaxb2.plugin.version>0.12.1</jaxb2.plugin.version>
+		<jaxb2.basics.version>0.11.1</jaxb2.basics.version>
 	</properties>
 	
 	<repositories>
@@ -45,13 +48,13 @@
 		<dependency>
 			<groupId>org.fxmisc.richtext</groupId>
 			<artifactId>richtextfx</artifactId>
-			<version>0.6.10</version>
+			<version>0.8.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.gillius</groupId>
 			<artifactId>jfxutils</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>1.0</version>
 		</dependency>
 		
 		<!--=== TEST === -->
@@ -73,12 +76,12 @@
 	        <plugin>
 	            <groupId>org.jvnet.jaxb2_commons</groupId>
 	            <artifactId>jaxb2-basics</artifactId>
-	            <version>0.9.4</version>
+	            <version>${jaxb2.basics.version}</version>
 	        </plugin>        	
 			<plugin>
 			    <groupId>org.jvnet.jaxb2.maven2</groupId>
 			    <artifactId>maven-jaxb2-plugin</artifactId>
-			    <version>0.12.0</version>
+			    <version>${jaxb2.plugin.version}</version>
 			    <executions>
 			        
 			        <execution>
@@ -106,7 +109,7 @@
 								<plugin>
 									<groupId>org.jvnet.jaxb2_commons</groupId>
 									<artifactId>jaxb2-basics</artifactId>
-									<version>0.9.4</version>
+									<version>${jaxb2.basics.version}</version>
 								</plugin>
 							</plugins>
 			            </configuration>			            			          
