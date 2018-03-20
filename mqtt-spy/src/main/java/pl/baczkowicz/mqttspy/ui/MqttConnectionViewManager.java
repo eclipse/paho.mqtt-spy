@@ -72,6 +72,7 @@ import pl.baczkowicz.spy.ui.controllers.IConnectionController;
 import pl.baczkowicz.spy.ui.events.queuable.EventQueueManager;
 import pl.baczkowicz.spy.ui.properties.ModifiableConnection;
 import pl.baczkowicz.spy.ui.stats.StatisticsManager;
+import pl.baczkowicz.spy.ui.threading.SimpleRunLaterExecutor;
 import pl.baczkowicz.spy.ui.utils.DialogFactory;
 import pl.baczkowicz.spy.ui.utils.TabUtils;
 
@@ -284,7 +285,7 @@ public class MqttConnectionViewManager implements IConnectionViewManager
 
 	public MqttAsyncConnection createConnection(final MqttRuntimeConnectionProperties connectionProperties, final EventQueueManager<FormattedMqttMessage> uiEventQueue)
 	{
-		final InteractiveMqttScriptManager scriptManager = new InteractiveMqttScriptManager(eventBus, null);
+		final InteractiveMqttScriptManager scriptManager = new InteractiveMqttScriptManager(eventBus);
 		final FormattingManager formattingManager = new FormattingManager(scriptManager);
 		final MqttAsyncConnection connection = new MqttAsyncConnection(reconnectionManager,
 				connectionProperties, ConnectionStatus.DISCONNECTED, 
@@ -331,12 +332,11 @@ public class MqttConnectionViewManager implements IConnectionViewManager
 	{
 		try
 		{
-			connection.connect(new MqttCallbackHandler(connection), new MqttAsyncConnectionRunnable(connection));			
+			connection.connect(new MqttCallbackHandler(connection), new MqttAsyncConnectionRunnable(connection, new SimpleRunLaterExecutor()));			
 			return true;
 		}
 		catch (SpyException e)
 		{
-			// TODO: simplify this
 			Platform.runLater(new MqttEventHandler(new MqttConnectionAttemptFailureEvent(connection, e)));
 			logger.error(e.getMessage(), e);
 		}
@@ -353,11 +353,10 @@ public class MqttConnectionViewManager implements IConnectionViewManager
 	{				
 		try
 		{
-			connection.disconnect(new MqttDisconnectionResultHandler());
+			connection.disconnect(new MqttDisconnectionResultHandler(new SimpleRunLaterExecutor()));
 		}
 		catch (SpyException e)
 		{
-			// TODO: simplify this
 			Platform.runLater(new MqttEventHandler(new MqttDisconnectionAttemptFailureEvent(connection, e)));
 			logger.error(e.getMessage(), e);
 		}		

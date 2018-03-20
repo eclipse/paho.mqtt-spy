@@ -44,10 +44,9 @@ public class InteractiveMqttScriptManager extends InteractiveBaseScriptManager
 	/** Connection for which the script will be run. */
 	private IMqttConnection connection;
 	
-	public InteractiveMqttScriptManager(final IKBus eventBus, final IMqttConnection connection)
+	public InteractiveMqttScriptManager(final IKBus eventBus)
 	{
 		super(eventBus, new RunLaterExecutor());
-		this.connection = connection;
 	}
 	
 	/* (non-Javadoc)

@@ -237,10 +237,10 @@ public class ContextMenuUtils
 				if (!newColor.equals(subscription.getColor()))
 				{
 					subscription.setColor(newColor);
-					subscription.getSubscriptionController().getTab().setStyle(StylingUtils.createBaseRGBString(newColor));
+					subscriptionController.getTab().setStyle(StylingUtils.createBaseRGBString(newColor));
 					
 					// Update subscription tab
-					subscription.getSubscriptionController().getSummaryTablePaneController().refreshRowStyling();
+					subscriptionController.getSummaryTablePaneController().refreshRowStyling();
 					
 					// Update 'all' tab				
 					subscriptionManager.getSubscriptionControllersMap().

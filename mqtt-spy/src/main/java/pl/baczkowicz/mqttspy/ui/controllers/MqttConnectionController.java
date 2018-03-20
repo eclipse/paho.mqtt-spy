@@ -350,7 +350,9 @@ public class MqttConnectionController implements Initializable, TabController, P
 			testCasesTitledPane.setExpanded(false);
 			
 			testCasesPaneController = loader.getController();
-			testCasesPaneController.setScriptManager(new InteractiveMqttScriptManager(eventBus, connection));
+			final InteractiveMqttScriptManager scriptManager = new InteractiveMqttScriptManager(eventBus);
+			scriptManager.setConnection(connection);
+			testCasesPaneController.setScriptManager(scriptManager);
 			
 			testCasesPaneController.setTitledPane(testCasesTitledPane);
 			testCasesPaneController.init();
@@ -484,7 +486,10 @@ public class MqttConnectionController implements Initializable, TabController, P
 		{
 			if (sub instanceof MqttSubscription)
 			{
-				((MqttSubscription) sub).getSubscriptionController().updateContextMenu();
+				final MqttConnectionController connectionController = connectionManager.getConnectionControllersMapping().get(connection);
+				final SubscriptionController subscriptionController = connectionManager.getSubscriptionManager(connectionController).getSubscriptionControllersMap().get(sub.getTopic());
+				subscriptionController.updateContextMenu();
+				// ((MqttSubscription) sub).getSubscriptionController().updateContextMenu();
 			}
 		}
 		

@@ -19,7 +19,7 @@
  */
 package pl.baczkowicz.mqttspy.connectivity.handlers;
 
-import javafx.application.Platform;
+import java.util.concurrent.Executor;
 
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -35,18 +35,25 @@ public class MqttConnectionResultHandler implements IMqttActionListener
 {
 	private final static Logger logger = LoggerFactory.getLogger(MqttConnectionResultHandler.class);
 
+	private Executor executor;
+
+	public MqttConnectionResultHandler(final Executor executor)
+	{
+		this.executor = executor;
+	}
+	
 	public void onSuccess(IMqttToken asyncActionToken)
 	{
 		final MqttAsyncConnection connection = (MqttAsyncConnection) asyncActionToken.getUserContext();
 		StatisticsManager.newConnection();
-		Platform.runLater(new MqttEventHandler(new MqttConnectionAttemptSuccessEvent(connection)));
+		executor.execute(new MqttEventHandler(new MqttConnectionAttemptSuccessEvent(connection)));
 		logger.info(connection.getProperties().getName() + " connected");
 	}
 
 	public void onFailure(IMqttToken asyncActionToken, Throwable exception)
 	{
 		final MqttAsyncConnection connection = (MqttAsyncConnection) asyncActionToken.getUserContext();
-		Platform.runLater(new MqttEventHandler(new MqttConnectionAttemptFailureEvent(connection, exception)));
+		executor.execute(new MqttEventHandler(new MqttConnectionAttemptFailureEvent(connection, exception)));
 		logger.warn("Connecting to " + connection.getProperties().getName() + " failed", exception);
 	}
 }

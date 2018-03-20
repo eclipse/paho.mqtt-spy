@@ -19,7 +19,7 @@
  */
 package pl.baczkowicz.mqttspy.connectivity.handlers;
 
-import javafx.application.Platform;
+import java.util.concurrent.Executor;
 
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -33,14 +33,21 @@ import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttDisconnectionAt
 public class MqttDisconnectionResultHandler implements IMqttActionListener
 {
 	private final static Logger logger = LoggerFactory.getLogger(MqttDisconnectionResultHandler.class);
+	
+	private Executor executor;
 
+	public MqttDisconnectionResultHandler(final Executor executor)
+	{
+		this.executor = executor;
+	}
+	
 	public void onSuccess(IMqttToken asyncActionToken)
 	{
 		final MqttAsyncConnection connection = (MqttAsyncConnection) asyncActionToken.getUserContext();
 		try
 		{
 			logger.info(connection.getProperties().getName() + " disconnected");
-			Platform.runLater(new MqttEventHandler(new MqttDisconnectionAttemptSuccessEvent(connection)));
+			executor.execute(new MqttEventHandler(new MqttDisconnectionAttemptSuccessEvent(connection)));			
 		}
 		catch (IllegalStateException e)
 		{
@@ -51,7 +58,7 @@ public class MqttDisconnectionResultHandler implements IMqttActionListener
 	public void onFailure(IMqttToken asyncActionToken, Throwable exception)
 	{
 		final MqttAsyncConnection connection = (MqttAsyncConnection) asyncActionToken.getUserContext();
-		Platform.runLater(new MqttEventHandler(new MqttConnectionAttemptFailureEvent(connection, exception)));
+		executor.execute(new MqttEventHandler(new MqttConnectionAttemptFailureEvent(connection, exception)));
 		logger.warn("Disconnecting from " + connection.getProperties().getName() + " failed");
 	}
 }

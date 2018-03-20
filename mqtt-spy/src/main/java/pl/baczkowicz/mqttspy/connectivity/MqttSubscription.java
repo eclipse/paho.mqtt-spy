@@ -21,7 +21,6 @@ package pl.baczkowicz.mqttspy.connectivity;
 
 import javafx.scene.paint.Color;
 import pl.baczkowicz.mqttspy.messages.FormattedMqttMessage;
-import pl.baczkowicz.mqttspy.ui.controllers.SubscriptionController;
 import pl.baczkowicz.mqttspy.ui.events.SubscriptionStatusChangeEvent;
 import pl.baczkowicz.spy.eventbus.IKBus;
 import pl.baczkowicz.spy.formatting.FormattingManager;
@@ -32,8 +31,6 @@ public class MqttSubscription extends BaseMqttSubscription
 {
 	private Color color;
 	
-	private SubscriptionController subscriptionController;
-
 	private MqttAsyncConnection connection;
 	
 	private final ManagedMessageStoreWithFiltering<FormattedMqttMessage> store;
@@ -78,16 +75,6 @@ public class MqttSubscription extends BaseMqttSubscription
 	public void subscriptionStatusChanged()
 	{
 		eventBus.publish(new SubscriptionStatusChangeEvent(this));
-	}
-
-	public void setSubscriptionController(final SubscriptionController subscriptionController)
-	{
-		this.subscriptionController = subscriptionController;		
-	}
-	
-	public SubscriptionController getSubscriptionController()
-	{
-		return subscriptionController;
 	}
 
 	public void setConnection(final MqttAsyncConnection connection)

@@ -19,11 +19,12 @@
  */
 package pl.baczkowicz.mqttspy.connectivity;
 
+import java.util.concurrent.Executor;
+
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javafx.application.Platform;
 import pl.baczkowicz.mqttspy.connectivity.handlers.MqttConnectionResultHandler;
 import pl.baczkowicz.mqttspy.connectivity.handlers.MqttEventHandler;
 import pl.baczkowicz.mqttspy.ui.events.queuable.connectivity.MqttConnectionAttemptFailureEvent;
@@ -39,8 +40,11 @@ public class MqttAsyncConnectionRunnable implements Runnable
 	
 	private MqttAsyncConnection connection;
 
-	public MqttAsyncConnectionRunnable(final MqttAsyncConnection connection)
+	private Executor executor;
+
+	public MqttAsyncConnectionRunnable(final MqttAsyncConnection connection, final Executor executor)
 	{
+		this.executor = executor;	
 		this.connection = connection;
 	}
 	
@@ -66,13 +70,13 @@ public class MqttAsyncConnectionRunnable implements Runnable
 					connection.getProperties().getServerURI(), 
 					options.toString());
 			
-			connection.connect(options, connection, new MqttConnectionResultHandler());
+			connection.connect(options, connection, new MqttConnectionResultHandler(executor));
 			
 			// TODO: resubscribe when connection regained?
 		}
 		catch (SpyException e)
 		{
-			Platform.runLater(new MqttEventHandler(new MqttConnectionAttemptFailureEvent(connection, e)));
+			executor.execute(new MqttEventHandler(new MqttConnectionAttemptFailureEvent(connection, e)));
 			logger.error("Cannot connect to " + connection.getProperties().getServerURI(), e);
 		}				
 		
