@@ -21,7 +21,6 @@ package pl.baczkowicz.mqttspy.connectivity;
 
 import java.util.Properties;
 
-import org.apache.commons.codec.binary.Base64;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 import pl.baczkowicz.mqttspy.common.generated.MqttConnectionDetails;
@@ -132,7 +131,7 @@ public class MqttConnectionDetailsWithOptions extends MqttConnectionDetails
 		if (getLastWillAndTestament() != null)
 		{
 			options.setWill(getLastWillAndTestament().getTopic(), 
-					Base64.decodeBase64(getLastWillAndTestament().getValue()),
+					ConversionUtils.stringToArray(getLastWillAndTestament().getValue()),
 					getLastWillAndTestament().getQos(),
 					getLastWillAndTestament().isRetained());
 		}
