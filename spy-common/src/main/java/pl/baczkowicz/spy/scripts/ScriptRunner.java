@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.Executor;
 
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.slf4j.Logger;
@@ -142,8 +144,18 @@ public class ScriptRunner implements Runnable
 		// Script in a file
 		if (script.getScriptFile() != null)
 		{
-			lastReturnValue = script.getScriptEngine().eval(new InputStreamReader(FileUtils.loadFileByName(script.getScriptFile().getAbsolutePath())));
-			// lastReturnValue = script.getScriptEngine().eval(new FileReader(script.getScriptFile()));
+			// Add file name to the context so that it appears in stack traces
+			final ScriptContext scriptContext = script.getScriptEngine().getContext();
+			scriptContext.setAttribute(ScriptEngine.FILENAME, script.getScriptFile().getAbsolutePath(), ScriptContext.ENGINE_SCOPE);
+			try 
+			{
+			    lastReturnValue = script.getScriptEngine().eval(new InputStreamReader(FileUtils.loadFileByName(script.getScriptFile().getAbsolutePath())));
+			} 
+			finally 
+			{
+			    scriptContext.removeAttribute(ScriptEngine.FILENAME, ScriptContext.ENGINE_SCOPE); 
+			}
+			
 			logger.debug("Script {} returned with value {}", script.getName(), lastReturnValue);
 		}
 		// In-line script
