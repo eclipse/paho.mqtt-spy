@@ -284,6 +284,7 @@ public class MqttConfigurationManager extends BaseConfigurationManager
 	{
 		for (final ConfiguredMqttConnectionDetails connectionDetails : getConnections())
 		{		
+			// To avoid NPE below
 			if (connectionDetails.getFormatter() == null)
 			{
 				continue;
