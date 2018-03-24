@@ -107,7 +107,7 @@ public class MqttConnectionTest extends TestCase
 		context.checking(new Expectations()
 		{
 			{
-				oneOf(mockEventBus).publish(with(any(ConnectionStatusChangeEvent.class)));
+				exactly(0).of(mockEventBus).publish(with(any(ConnectionStatusChangeEvent.class)));
 			}
 		});
 		
@@ -174,7 +174,7 @@ public class MqttConnectionTest extends TestCase
 		context.checking(new Expectations()
 		{
 			{
-				oneOf(mockEventBus).publish(with(any(ConnectionStatusChangeEvent.class)));
+				exactly(0).of(mockEventBus).publish(with(any(ConnectionStatusChangeEvent.class)));
 			}
 		});
 		
