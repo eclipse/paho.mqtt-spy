@@ -54,8 +54,6 @@ public class UIEventHandler implements Runnable
 	final static Logger logger = LoggerFactory.getLogger(UIEventHandler.class);
 	
 	private final EventQueueManager<FormattedMqttMessage> uiEventQueue;
-	
-	// private final EventManager<FormattedMqttMessage> eventManager;
 
 	private IKBus eventBus;
 
@@ -157,17 +155,11 @@ public class UIEventHandler implements Runnable
 		{
 			eventBus.publish(new MessageAddedEvent<>((List<BrowseReceivedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
 					((BrowseReceivedMessageEvent<FormattedMqttMessage>) event).getList()));
-//			eventManager.notifyMessageAdded(
-//					(List<BrowseReceivedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
-//					((BrowseReceivedMessageEvent<FormattedMqttMessage>) event).getList());
 		}
 		else if (event instanceof BrowseRemovedMessageEvent)
 		{
 			eventBus.publish(new MessageRemovedEvent<>((List<BrowseRemovedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
 					event.getList()));
-//			eventManager.notifyMessageRemoved(
-//					(List<BrowseRemovedMessageEvent<FormattedMqttMessage>>)(Object)eventQueue, 
-//					event.getList());
 		}
 		else if (event instanceof TopicSummaryNewMessageEvent)
 		{

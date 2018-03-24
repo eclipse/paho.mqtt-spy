@@ -102,7 +102,7 @@ public abstract class MqttConnectionWithReconnection extends BaseMqttConnection 
 
 		// TODO: check if connected?
 
-		setConnectionStatus(ConnectionStatus.DISCONNECTING);
+		connectionState.setConnectionStatus(ConnectionStatus.DISCONNECTING);
 		unsubscribeAll(true);
 
 		try

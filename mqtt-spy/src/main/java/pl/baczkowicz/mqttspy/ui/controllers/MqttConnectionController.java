@@ -489,7 +489,6 @@ public class MqttConnectionController implements Initializable, TabController, P
 				final MqttConnectionController connectionController = connectionManager.getConnectionControllersMapping().get(connection);
 				final SubscriptionController subscriptionController = connectionManager.getSubscriptionManager(connectionController).getSubscriptionControllersMap().get(sub.getTopic());
 				subscriptionController.updateContextMenu();
-				// ((MqttSubscription) sub).getSubscriptionController().updateContextMenu();
 			}
 		}
 		
@@ -790,7 +789,7 @@ public class MqttConnectionController implements Initializable, TabController, P
 		if (connection != null)
 		{
 			
-			onConnectionStatusChanged(new ConnectionStatusChangeEvent(connection, connection.getName(), connection.getConnectionStatus()));
+			onConnectionStatusChanged(new ConnectionStatusChangeEvent(connection, connection.getName(), connection.getId(), connection.getConnectionStatus()));
 		}
 	}
 

@@ -93,7 +93,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 		this.properties = properties;
 		this.eventBus = eventBus;
 		this.scriptManager = scriptManager;
-		setConnectionStatus(status);
+		connectionState.setConnectionStatus(status);
 	}
 	
 	public void messageReceived(final FormattedMqttMessage receivedMessage)
@@ -118,7 +118,10 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 			messageLogger.getQueue().add(message);
 		}
 		
-		statisticsManager.messageReceived(getId(), matchingActiveSubscriptions);
+		if (statisticsManager != null)
+		{
+			statisticsManager.messageReceived(getId(), matchingActiveSubscriptions);
+		}
 
 		if (lastMatchingSubscription != null)
 		{
@@ -241,7 +244,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 
 	public void startBackgroundScripts()	
 	{
-		final boolean firstConnection = getConnectionAttempts() == 1;
+		final boolean firstConnection = connectionState.getConnectionAttempts() == 1;
 		
 		// Attempt starting background scripts
 		if (firstConnection)
@@ -269,7 +272,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 
 	public boolean resubscribeAll(final boolean requestedOnly)
 	{
-		final boolean firstConnection = getConnectionAttempts() == 1;
+		final boolean firstConnection = connectionState.getConnectionAttempts() == 1;
 		final boolean resubscribeEnabled = connectionDetails.getReconnectionSettings() != null 
 				&& connectionDetails.getReconnectionSettings().isResubscribe();
 		
@@ -363,9 +366,9 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 
 	public void setConnectionStatus(ConnectionStatus connectionStatus)
 	{
-		super.setConnectionStatus(connectionStatus);
+		connectionState.setConnectionStatus(connectionStatus);
 		
-		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getConnectionStatus()));
+		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getId(), this.getConnectionStatus()));
 	}
 
 	public MqttRuntimeConnectionProperties getProperties()
@@ -407,7 +410,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 	{
 		this.isOpened = isOpened;
 		
-		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getConnectionStatus()));
+		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getId(), this.getConnectionStatus()));
 	}
 
 	public boolean isOpening()
@@ -419,7 +422,7 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 	{
 		this.isOpening = isOpening;
 		
-		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getConnectionStatus()));
+		eventBus.publish(new ConnectionStatusChangeEvent(this, this.getName(), this.getId(), this.getConnectionStatus()));
 	}
 
 	public ManagedMessageStoreWithFiltering<FormattedMqttMessage> getStore()
@@ -450,5 +453,11 @@ public class MqttAsyncConnection extends MqttConnectionWithReconnection implemen
 	public MqttMessageLogger getMessageLogger()
 	{
 		return messageLogger;
+	}
+
+	@Override
+	public long getLastConnectionAttemptTimestamp()
+	{
+		return connectionState.getLastConnectionAttemptTimestamp();
 	}
 }

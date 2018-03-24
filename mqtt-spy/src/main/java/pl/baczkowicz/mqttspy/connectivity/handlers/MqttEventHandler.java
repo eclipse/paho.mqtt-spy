@@ -63,7 +63,7 @@ public class MqttEventHandler implements Runnable
 		{
 			final MqttAsyncConnection connection = ((MqttConnectionAttemptSuccessEvent) event).getConnection(); 
 			
-			connection.recordSuccessfulConnection();
+			connection.getConnectionState().recordSuccessfulConnection();
 			connection.setConnectionStatus(ConnectionStatus.CONNECTED);			
 			
 			// This should restore any previously requested subscriptions

@@ -60,18 +60,18 @@ public class SimpleMqttConnection extends MqttConnectionWithReconnection
 	 */
 	public boolean connect()
 	{
-		setConnectionStatus(ConnectionStatus.CONNECTING);				
+		connectionState.setConnectionStatus(ConnectionStatus.CONNECTING);				
 		try
 		{
 			connectAndWait(connectionDetails.getOptions());
 			logger.info("Successfully connected to {}", connectionDetails.getName());
-			setConnectionStatus(ConnectionStatus.CONNECTED);
+			connectionState.setConnectionStatus(ConnectionStatus.CONNECTED);
 			return true;
 		}
 		catch (SpyException e)
 		{
 			logger.error("Connection attempt failed", e);
-			setConnectionStatus(ConnectionStatus.NOT_CONNECTED);
+			connectionState.setConnectionStatus(ConnectionStatus.NOT_CONNECTED);
 		}
 		return false;
 	}
@@ -139,5 +139,10 @@ public class SimpleMqttConnection extends MqttConnectionWithReconnection
 	public boolean unsubscribeAll(boolean manualOverride)
 	{
 		throw new UnsupportedOperationException("This operation is not available");
+	}
+	
+	public long getLastConnectionAttemptTimestamp()
+	{
+		return connectionState.getLastConnectionAttemptTimestamp();
 	}
 }

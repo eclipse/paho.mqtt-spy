@@ -141,7 +141,6 @@ public class MqttSubscriptionViewManager
 		subscriptionController.init();
 		subscriptionController.onSubscriptionStatusChanged(new SubscriptionStatusChangeEvent(subscription));
 		
-		// subscription.setSubscriptionController(subscriptionController);
 		final SpyPerspective perspective = viewManager.getPerspective();
 		subscriptionController.setViewVisibility(MqttViewManager.getDetailedViewStatus(perspective), MqttViewManager.getBasicViewStatus(perspective));
 		subscriptionController.getTabStatus().setVisibility(PaneVisibilityStatus.ATTACHED);

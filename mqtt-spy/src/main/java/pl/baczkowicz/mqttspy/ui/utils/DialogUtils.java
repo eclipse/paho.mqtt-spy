@@ -78,7 +78,7 @@ public class DialogUtils
 		
 		if (ConnectionStatus.CONNECTED.equals(connection.getConnectionStatus()))
 		{
-			sb.append(" (" + connection.getLastSuccessfulyConnectionAttempt() + ")");
+			sb.append(" (" + connection.getLastSuccessfulConnectionAttempt() + ")");
 			
 			sb.append(System.getProperty("line.separator"));
 			final String sslStatus = connection.getProperties().getSSL() != null ? "on" : "off";
@@ -86,16 +86,16 @@ public class DialogUtils
 			sb.append("Security: TLS/SSL is " +  sslStatus + "; user authentication is " + userAuthStatus);
 		}
 		
-		if (connection.getConnectionAttempts() > 1)
+		if (connection.getConnectionState().getConnectionAttempts() > 1)
 		{
 			sb.append(System.getProperty("line.separator"));
-			sb.append("Connection attempts: " + connection.getConnectionAttempts());
+			sb.append("Connection attempts: " + connection.getConnectionState().getConnectionAttempts());
 		}
 				
-		if (connection.getDisconnectionReason() != null && !connection.getDisconnectionReason().isEmpty())
+		if (connection.getConnectionState().getDisconnectionReason() != null && !connection.getConnectionState().getDisconnectionReason().isEmpty())
 		{
 			sb.append(System.getProperty("line.separator"));
-			sb.append("Last error: " + connection.getDisconnectionReason().toLowerCase());
+			sb.append("Last error: " + connection.getConnectionState().getDisconnectionReason().toLowerCase());
 		}	
 		
 		tooltip.setText(sb.toString());

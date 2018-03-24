@@ -284,6 +284,11 @@ public class MqttConfigurationManager extends BaseConfigurationManager
 	{
 		for (final ConfiguredMqttConnectionDetails connectionDetails : getConnections())
 		{		
+			if (connectionDetails.getFormatter() == null)
+			{
+				continue;
+			}
+			
 			if (formatter.getID().equals(((FormatterDetails) connectionDetails.getFormatter()).getID()))
 			{
 				connectionDetails.setFormatter(null);
