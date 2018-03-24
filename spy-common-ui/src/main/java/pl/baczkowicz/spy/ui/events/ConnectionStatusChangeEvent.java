@@ -28,13 +28,16 @@ public class ConnectionStatusChangeEvent extends FilterableEvent
 	private String name;
 	
 	private ConnectionStatus status;
+	
+	private String connectionId;
 
-	public ConnectionStatusChangeEvent(final Object changedConnection, final String name, final ConnectionStatus status)
+	public ConnectionStatusChangeEvent(final Object changedConnection, final String name, final String connectionId, final ConnectionStatus status)
 	{
 		this.setFilter(changedConnection);
 		
 		this.name = name;
 		this.status = status;
+		this.connectionId = connectionId;
 	}
 	
 	public String getName() 
@@ -45,5 +48,10 @@ public class ConnectionStatusChangeEvent extends FilterableEvent
 	public ConnectionStatus getConnectionStatus()
 	{
 		return status;
+	}
+	
+	public String getConnectionId()
+	{
+		return connectionId;
 	}
 }

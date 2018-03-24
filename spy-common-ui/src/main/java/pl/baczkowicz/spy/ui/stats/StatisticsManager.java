@@ -62,46 +62,58 @@ public class StatisticsManager implements Runnable
 	
 	public static void newConnection()
 	{
-		stats.setConnections(stats.getConnections() + 1);		
+		if (stats != null)
+		{
+			stats.setConnections(stats.getConnections() + 1);		
+		}
 	}
 
 	public static void newSubscription()
 	{
-		stats.setSubscriptions(stats.getSubscriptions() + 1);		
+		if (stats != null)
+		{
+			stats.setSubscriptions(stats.getSubscriptions() + 1);
+		}
 	}
 	
 	public void messageReceived(final String connectionId, final List<String> subscriptions)
 	{
-		// Global stats (saved to XML)
-		stats.setMessagesReceived(stats.getMessagesReceived() + 1);
-
-		synchronized (runtimeMessagesReceived)
+		if (stats != null)
 		{
-			// Runtime stats
-			if (runtimeMessagesReceived.get(connectionId) == null)
+			// Global stats (saved to XML)
+			stats.setMessagesReceived(stats.getMessagesReceived() + 1);
+	
+			synchronized (runtimeMessagesReceived)
 			{
-				resetConnection(runtimeMessagesReceived, connectionId);
-			}		
-				
-			runtimeMessagesReceived.get(connectionId).runtimeStats.get(0).add(subscriptions);
+				// Runtime stats
+				if (runtimeMessagesReceived.get(connectionId) == null)
+				{
+					resetConnection(runtimeMessagesReceived, connectionId);
+				}		
+					
+				runtimeMessagesReceived.get(connectionId).runtimeStats.get(0).add(subscriptions);
+			}
 		}
 	}
 	
 	public void messagePublished(final String connectionId, final String topic)
 	{
-		// Global stats (saved to XML)
-		stats.setMessagesPublished(stats.getMessagesPublished() + 1);		
+		if (stats != null)
+		{					
+			// Global stats (saved to XML)
+			stats.setMessagesPublished(stats.getMessagesPublished() + 1);		
+						
+			synchronized (runtimeMessagesPublished)
+			{			
+				// Runtime stats
+				if (runtimeMessagesPublished.get(connectionId) == null)
+				{
+					runtimeMessagesPublished.put(connectionId, new ConnectionStats(periods));
+					runtimeMessagesPublished.get(connectionId).runtimeStats.add(new ConnectionIntervalStats());
+				}		
 					
-		synchronized (runtimeMessagesPublished)
-		{			
-			// Runtime stats
-			if (runtimeMessagesPublished.get(connectionId) == null)
-			{
-				runtimeMessagesPublished.put(connectionId, new ConnectionStats(periods));
-				runtimeMessagesPublished.get(connectionId).runtimeStats.add(new ConnectionIntervalStats());
-			}		
-				
-			runtimeMessagesPublished.get(connectionId).runtimeStats.get(0).add(topic);
+				runtimeMessagesPublished.get(connectionId).runtimeStats.get(0).add(topic);
+			}
 		}
 	}
 	
